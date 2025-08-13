@@ -4,11 +4,31 @@
   padding: 0;
 }
 
-/* Container principal - largeur complète */
+/* Container principal - largeur complète avec contenu centré */
 #root > div {
   width: 100%;
   margin: 0;
   padding: 0;
+}
+
+/* Contenu principal centré avec largeur maximale */
+#root > div > main {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Navigation en pleine largeur */
+#root > div > nav {
+  width: 100%;
+  max-width: none;
+}
+
+/* Footer en pleine largeur */
+#root > div > footer {
+  width: 100%;
+  max-width: none;
 }
 
 /* Fond d'arrière-plan "Petite Enfance" */
@@ -209,23 +229,20 @@ body {
   }
 }
 
-/* Suppression de toutes les contraintes de largeur */
-#root > div > *,
-#root > div > * > * {
-  max-width: none !important;
-  width: 100% !important;
+/* Règles spécifiques pour les éléments principaux */
+#root > div > main {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
 }
 
-/* S'assurer que le contenu principal utilise toute la largeur */
-main {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
+#root > div > nav {
+  width: 100%;
+  max-width: none;
 }
 
-/* Navigation en pleine largeur */
-nav {
-  width: 100% !important;
-  max-width: none !important;
+#root > div > footer {
+  width: 100%;
+  max-width: none;
 }
