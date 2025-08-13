@@ -12,32 +12,25 @@
 }
 
 /* Fond d'arrière-plan "Petite Enfance" */
-#root > div::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: -1;
+body {
   background: 
     /* Cercles colorés subtils */
-    radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 80% 20%, rgba(173, 216, 230, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 40% 40%, rgba(144, 238, 144, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 90% 90%, rgba(255, 218, 185, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 10% 30%, rgba(221, 160, 221, 0.1) 0%, transparent 50%),
-    radial-gradient(circle at 70% 70%, rgba(255, 255, 224, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(173, 216, 230, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(144, 238, 144, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 90% 90%, rgba(255, 218, 185, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 10% 30%, rgba(221, 160, 221, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 70% 70%, rgba(255, 255, 224, 0.15) 0%, transparent 50%),
     /* Motif de points enfantins */
-    radial-gradient(circle at 25% 25%, rgba(255, 105, 180, 0.08) 2px, transparent 2px),
-    radial-gradient(circle at 75% 75%, rgba(100, 149, 237, 0.08) 2px, transparent 2px),
-    radial-gradient(circle at 50% 10%, rgba(50, 205, 50, 0.08) 2px, transparent 2px),
-    radial-gradient(circle at 15% 85%, rgba(255, 165, 0, 0.08) 2px, transparent 2px),
-    radial-gradient(circle at 85% 35%, rgba(138, 43, 226, 0.08) 2px, transparent 2px),
-    radial-gradient(circle at 35% 65%, rgba(255, 215, 0, 0.08) 2px, transparent 2px),
+    radial-gradient(circle at 25% 25%, rgba(255, 105, 180, 0.12) 2px, transparent 2px),
+    radial-gradient(circle at 75% 75%, rgba(100, 149, 237, 0.12) 2px, transparent 2px),
+    radial-gradient(circle at 50% 10%, rgba(50, 205, 50, 0.12) 2px, transparent 2px),
+    radial-gradient(circle at 15% 85%, rgba(255, 165, 0, 0.12) 2px, transparent 2px),
+    radial-gradient(circle at 85% 35%, rgba(138, 43, 226, 0.12) 2px, transparent 2px),
+    radial-gradient(circle at 35% 65%, rgba(255, 215, 0, 0.12) 2px, transparent 2px),
     /* Vagues douces en bas */
-    linear-gradient(45deg, transparent 30%, rgba(255, 182, 193, 0.05) 30%, rgba(255, 182, 193, 0.05) 40%, transparent 40%),
-    linear-gradient(-45deg, transparent 30%, rgba(173, 216, 230, 0.05) 30%, rgba(173, 216, 230, 0.05) 40%, transparent 40%);
+    linear-gradient(45deg, transparent 30%, rgba(255, 182, 193, 0.08) 30%, rgba(255, 182, 193, 0.08) 40%, transparent 40%),
+    linear-gradient(-45deg, transparent 30%, rgba(173, 216, 230, 0.08) 30%, rgba(173, 216, 230, 0.08) 40%, transparent 40%);
   background-size: 
     100% 100%,
     100% 100%,
@@ -68,42 +61,30 @@
     37px 37px,
     0 0,
     60px 60px;
-  animation: gentleFloat 20s ease-in-out infinite;
-}
-
-/* Animation douce du fond */
-@keyframes gentleFloat {
-  0%, 100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-  33% {
-    transform: translateY(-10px) rotate(1deg);
-  }
-  66% {
-    transform: translateY(5px) rotate(-1deg);
-  }
+  background-attachment: fixed;
+  min-height: 100vh;
 }
 
 /* Version sombre du fond */
 @media (prefers-color-scheme: dark) {
-  #root > div::before {
+  body {
     background: 
       /* Cercles colorés subtils - version sombre */
-      radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 80% 20%, rgba(173, 216, 230, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 40% 40%, rgba(144, 238, 144, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 90% 90%, rgba(255, 218, 185, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 10% 30%, rgba(221, 160, 221, 0.15) 0%, transparent 50%),
-      radial-gradient(circle at 70% 70%, rgba(255, 255, 224, 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 20% 80%, rgba(255, 182, 193, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 80% 20%, rgba(173, 216, 230, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 40% 40%, rgba(144, 238, 144, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 90% 90%, rgba(255, 218, 185, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 10% 30%, rgba(221, 160, 221, 0.2) 0%, transparent 50%),
+      radial-gradient(circle at 70% 70%, rgba(255, 255, 224, 0.2) 0%, transparent 50%),
       /* Motif de points enfantins - version sombre */
-      radial-gradient(circle at 25% 25%, rgba(255, 105, 180, 0.12) 2px, transparent 2px),
-      radial-gradient(circle at 75% 75%, rgba(100, 149, 237, 0.12) 2px, transparent 2px),
-      radial-gradient(circle at 50% 10%, rgba(50, 205, 50, 0.12) 2px, transparent 2px),
-      radial-gradient(circle at 15% 85%, rgba(255, 165, 0, 0.12) 2px, transparent 2px),
-      radial-gradient(circle at 85% 35%, rgba(138, 43, 226, 0.12) 2px, transparent 2px),
-      radial-gradient(circle at 35% 65%, rgba(255, 215, 0, 0.12) 2px, transparent 2px),
+      radial-gradient(circle at 25% 25%, rgba(255, 105, 180, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 75% 75%, rgba(100, 149, 237, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 50% 10%, rgba(50, 205, 50, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 15% 85%, rgba(255, 165, 0, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 85% 35%, rgba(138, 43, 226, 0.15) 2px, transparent 2px),
+      radial-gradient(circle at 35% 65%, rgba(255, 215, 0, 0.15) 2px, transparent 2px),
       /* Vagues douces en bas - version sombre */
-      linear-gradient(45deg, transparent 30%, rgba(255, 182, 193, 0.08) 30%, rgba(255, 182, 193, 0.08) 40%, transparent 40%),
-      linear-gradient(-45deg, transparent 30%, rgba(173, 216, 230, 0.08) 30%, rgba(173, 216, 230, 0.08) 40%, transparent 40%);
+      linear-gradient(45deg, transparent 30%, rgba(255, 182, 193, 0.1) 30%, rgba(255, 182, 193, 0.1) 40%, transparent 40%),
+      linear-gradient(-45deg, transparent 30%, rgba(173, 216, 230, 0.1) 30%, rgba(173, 216, 230, 0.1) 40%, transparent 40%);
   }
 }
