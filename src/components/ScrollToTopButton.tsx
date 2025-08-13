@@ -41,8 +41,8 @@ export const ScrollToTopButton = () => {
         // Animation d'apparition/disparition
         'transform transition-all duration-300 ease-in-out',
         isVisible
-          ? 'translate-y-0 opacity-100 scale-100'
-          : 'translate-y-16 opacity-0 scale-75',
+          ? 'translate-y-0 scale-100 opacity-100'
+          : 'translate-y-16 scale-75 opacity-0',
         // Hover effects
         'hover:scale-110 hover:shadow-xl',
         // Focus states
