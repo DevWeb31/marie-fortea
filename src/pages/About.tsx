@@ -109,14 +109,14 @@ const About = () => {
             Professionnelle Expérimentée
           </Badge>
 
-          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl">
+          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl">
             À propos de
-            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-emerald-400">
               Marie Fortea
             </span>
           </h1>
 
-          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 sm:text-xl">
+          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
             Passionnée par la petite enfance depuis toujours, je mets mon
             expérience et ma bienveillance au service des familles toulousaines.
           </p>
@@ -130,12 +130,12 @@ const About = () => {
               alt="Marie Fortea portrait professionnel"
               className="aspect-[4/5] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
             />
-            <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
+            <div className="absolute -bottom-4 -right-4 rounded-xl bg-white dark:bg-zinc-800 p-3 shadow-lg sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
               <div className="text-center">
-                <div className="font-['Poppins'] text-xl font-bold text-blue-600 sm:text-2xl">
+                <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                   5+
                 </div>
-                <div className="text-xs text-gray-600 sm:text-sm">
+                <div className="text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
                   Années d'expérience
                 </div>
               </div>
@@ -144,11 +144,11 @@ const About = () => {
 
           <div className="space-y-6 sm:space-y-8">
             <div>
-              <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-6 sm:text-3xl">
+              <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
                 Mon Parcours
               </h2>
 
-              <div className="space-y-4 font-['Inter'] text-sm leading-relaxed text-gray-700 sm:space-y-6 sm:text-base">
+              <div className="space-y-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:space-y-6 sm:text-base">
                 <p>
                   Diplômée d'un CAP Petite Enfance, j'ai débuté ma carrière dans
                   une crèche municipale de Toulouse où j'ai eu l'opportunité de
@@ -173,11 +173,11 @@ const About = () => {
               </div>
             </div>
 
-            <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 p-4 sm:rounded-2xl sm:p-6">
-              <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 sm:mb-4 sm:text-xl">
+            <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 dark:from-zinc-900 dark:to-zinc-800 p-4 sm:rounded-2xl sm:p-6">
+              <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
                 Ma Philosophie
               </h3>
-              <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 sm:text-base">
+              <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
                 "Chaque enfant est unique et mérite d'être accompagné avec
                 bienveillance, respect et professionnalisme. Mon rôle est de
                 créer un environnement sécurisé et stimulant où il peut
@@ -189,7 +189,7 @@ const About = () => {
 
         {/* Qualifications */}
         <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-12 sm:text-3xl">
+          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
             Qualifications & Certifications
           </h2>
 
@@ -197,16 +197,16 @@ const About = () => {
             {qualifications.map((qual, index) => (
               <Card
                 key={index}
-                className="group border-2 border-gray-100 transition-all duration-300 hover:shadow-lg"
+                className="group border-2 border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg"
               >
                 <CardContent className="p-4 text-center sm:p-6">
-                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 transition-transform duration-300 group-hover:scale-110 sm:mb-4 sm:h-12 sm:w-12">
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 transition-transform duration-300 group-hover:scale-110 sm:mb-4 sm:h-12 sm:w-12">
                     {qual.icon}
                   </div>
-                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
+                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                     {qual.title}
                   </h3>
-                  <p className="font-['Inter'] text-xs text-gray-600 sm:text-sm">
+                  <p className="font-['Inter'] text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
                     {qual.description}
                   </p>
                 </CardContent>
@@ -217,7 +217,7 @@ const About = () => {
 
         {/* My Values */}
         <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-12 sm:text-3xl">
+          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
             Mes Valeurs
           </h2>
 
@@ -225,7 +225,7 @@ const About = () => {
             {values.map((value, index) => (
               <Card
                 key={index}
-                className={`${value.color} group transition-all duration-300 hover:shadow-lg`}
+                className={`${value.color} dark:bg-zinc-900 dark:border-zinc-800 group transition-all duration-300 hover:shadow-lg`}
               >
                 <CardContent className="p-6 sm:p-8">
                   <div className="flex items-start space-x-4">
@@ -233,10 +233,10 @@ const About = () => {
                       <div className="scale-75 sm:scale-100">{value.icon}</div>
                     </div>
                     <div>
-                      <h3 className="mb-2 font-['Poppins'] text-lg font-semibold text-gray-900 sm:mb-3 sm:text-xl">
+                      <h3 className="mb-2 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-3 sm:text-xl">
                         {value.title}
                       </h3>
-                      <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 sm:text-base">
+                      <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
                         {value.description}
                       </p>
                     </div>
@@ -287,7 +287,7 @@ const About = () => {
 
         {/* Testimonials */}
         <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-12 sm:text-3xl">
+          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
             Témoignages de Confiance
           </h2>
 
@@ -295,7 +295,7 @@ const About = () => {
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
-                className="border-2 border-gray-100 transition-all duration-300 hover:shadow-lg"
+                className="border-2 border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
@@ -306,17 +306,17 @@ const About = () => {
                       />
                     ))}
                   </div>
-                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-600 sm:mb-6 sm:text-base">
+                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:mb-6 sm:text-base">
                     "{testimonial.text}"
                   </p>
                   <div className="space-y-1 sm:space-y-2">
-                    <div className="font-['Poppins'] text-sm font-semibold text-gray-900 sm:text-base">
+                    <div className="font-['Poppins'] text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                       {testimonial.name}
                     </div>
-                    <div className="text-xs font-medium text-blue-600 sm:text-sm">
+                    <div className="text-xs font-medium text-blue-600 dark:text-blue-400 sm:text-sm">
                       {testimonial.service}
                     </div>
-                    <div className="flex items-center text-xs text-gray-500 sm:text-sm">
+                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
                       <MapPin className="mr-1 h-3 w-3 flex-shrink-0" />
                       {testimonial.location}
                     </div>
@@ -328,14 +328,14 @@ const About = () => {
         </div>
 
         {/* Service Area */}
-        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
-          <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-8 sm:text-3xl">
+        <div className="mb-12 rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
+          <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
             Zone d'Intervention
           </h2>
 
           <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 md:grid-cols-2">
             <div>
-              <h3 className="mb-4 font-['Poppins'] text-lg font-semibold text-gray-900 sm:text-xl">
+              <h3 className="mb-4 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">
                 Principalement dans la région toulousaine :
               </h3>
               <div className="grid grid-cols-2 gap-2 sm:gap-3">
@@ -351,21 +351,21 @@ const About = () => {
                 ].map((city, index) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-2 text-sm text-gray-700 sm:text-base"
+                    className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 sm:text-base"
                   >
-                    <CheckCircle className="h-4 w-4 text-green-600" />
+                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                     <span className="font-['Inter']">{city}</span>
                   </div>
                 ))}
               </div>
-              <p className="mt-4 font-['Inter'] text-sm text-gray-600 sm:text-base">
+              <p className="mt-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
                 <strong>Frais de déplacement :</strong> Gratuit dans un rayon de
                 10km, puis 0,50€/km au-delà.
               </p>
             </div>
             <div className="text-center">
-              <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-green-100 sm:h-48 sm:w-48">
-                <MapPin className="h-10 w-10 text-blue-600 sm:h-16 sm:w-16" />
+              <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-green-100 dark:from-blue-950/40 dark:to-emerald-950/40 sm:h-48 sm:w-48">
+                <MapPin className="h-10 w-10 text-blue-600 dark:text-blue-400 sm:h-16 sm:w-16" />
               </div>
             </div>
           </div>
@@ -373,10 +373,10 @@ const About = () => {
 
         {/* CTA */}
         <div className="text-center">
-          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 sm:text-2xl">
+          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
             Prêts à faire confiance à une professionnelle ?
           </h3>
-          <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 sm:mb-8 sm:text-base">
+          <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-base">
             Contactez-moi pour discuter de vos besoins et planifier votre
             prochaine garde d'enfants.
           </p>
