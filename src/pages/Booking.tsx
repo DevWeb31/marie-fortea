@@ -125,8 +125,8 @@ const Booking = () => {
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Form */}
           <div className="order-2 lg:order-1 lg:col-span-2">
-            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700 rounded-t-xl">
                 <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                   <Calendar className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400 sm:mr-3 sm:h-6 sm:w-6" />
                   Formulaire de Réservation
@@ -493,8 +493,8 @@ const Booking = () => {
           {/* Sidebar */}
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Contact Info */}
-            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white">
+                      <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg">
                   Contact Direct
                 </CardTitle>
@@ -526,8 +526,8 @@ const Booking = () => {
             </Card>
 
             {/* Pricing Info */}
-            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader>
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+              <CardHeader className="rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Tarifs & Conditions
                 </CardTitle>
@@ -557,8 +557,8 @@ const Booking = () => {
             </Card>
 
             {/* Process */}
-            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader>
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+              <CardHeader className="rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Processus de Réservation
                 </CardTitle>
