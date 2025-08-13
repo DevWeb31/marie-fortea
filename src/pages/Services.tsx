@@ -113,14 +113,14 @@ const Services = () => {
             Services Professionnels
           </Badge>
 
-          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl">
+          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl">
             Mes Services de
-            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-400">
               Garde d'Enfants
             </span>
           </h1>
 
-          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 sm:text-xl">
+          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
             Des solutions flexibles et professionnelles pour tous vos besoins de
             garde, avec l'expertise d'une éducatrice expérimentée.
           </p>
@@ -141,10 +141,10 @@ const Services = () => {
                     <div className="scale-75 sm:scale-100">{service.icon}</div>
                   </div>
                   <div>
-                    <CardTitle className="font-['Poppins'] text-lg font-bold text-gray-900 sm:text-xl lg:text-2xl">
+                    <CardTitle className="font-['Poppins'] text-lg font-bold text-gray-900 dark:text-white sm:text-xl lg:text-2xl">
                       {service.title}
                     </CardTitle>
-                    <p className="font-['Inter'] text-sm font-medium text-gray-600 sm:text-base">
+                    <p className="font-['Inter'] text-sm font-medium text-gray-600 dark:text-gray-300 sm:text-base">
                       {service.subtitle}
                     </p>
                   </div>
@@ -152,7 +152,7 @@ const Services = () => {
               </CardHeader>
 
               <CardContent className="space-y-4 sm:space-y-6">
-                <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 sm:text-base">
+                <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
                   {service.description}
                 </p>
 
@@ -160,7 +160,7 @@ const Services = () => {
                   {service.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center space-x-3">
                       <CheckCircle className="h-4 w-4 flex-shrink-0 text-green-600 sm:h-5 sm:w-5" />
-                      <span className="font-['Inter'] text-sm text-gray-700 sm:text-base">
+                      <span className="font-['Inter'] text-sm text-gray-700 dark:text-gray-300 sm:text-base">
                         {feature}
                       </span>
                     </div>
@@ -169,7 +169,7 @@ const Services = () => {
 
                 <div className="border-t border-gray-200 pt-4">
                   <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center sm:gap-0">
-                    <div className="font-['Poppins'] text-xl font-bold text-gray-900 sm:text-2xl">
+                    <div className="font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                       {service.pricing}
                     </div>
                     <Button
@@ -186,8 +186,8 @@ const Services = () => {
         </div>
 
         {/* Additional Services */}
-        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
-          <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 sm:mb-8 sm:text-3xl">
+        <div className="mb-12 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
+          <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
             Services Complémentaires
           </h2>
 

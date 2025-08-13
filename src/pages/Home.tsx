@@ -70,7 +70,7 @@ const Home = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10 dark:from-blue-400/5 dark:via-green-400/5 dark:to-yellow-400/5"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2">
             <div className="order-2 text-center lg:order-1 lg:text-left">
@@ -79,14 +79,14 @@ const Home = () => {
                 Professionnelle Expérimentée
               </Badge>
 
-              <h1 className="mb-4 font-['Poppins'] text-3xl font-bold leading-tight text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl">
+              <h1 className="mb-4 font-['Poppins'] text-3xl font-bold leading-tight text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl">
                 Garde d'enfants
-                <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+                <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-400">
                   de confiance
                 </span>
               </h1>
 
-              <p className="mb-6 px-4 font-['Inter'] text-lg leading-relaxed text-gray-600 sm:mb-8 sm:text-xl lg:px-0">
+              <p className="mb-6 px-4 font-['Inter'] text-lg leading-relaxed text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-xl lg:px-0">
                 Je suis Marie Fortea, professionnelle de la petite enfance avec
                 plus de 5 ans d'expérience en crèche. Je propose des services de
                 garde occasionnelle pour vos mariages, événements spéciaux et
@@ -117,28 +117,28 @@ const Home = () => {
 
               <div className="mt-8 flex flex-wrap items-center justify-center gap-4 px-4 sm:mt-12 sm:gap-8 lg:justify-start lg:px-0">
                 <div className="text-center">
-                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 sm:text-2xl">
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                     5+
                   </div>
-                  <div className="text-xs text-gray-600 sm:text-sm">
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                     Années d'expérience
                   </div>
                 </div>
-                <div className="hidden h-12 w-px bg-gray-300 sm:block"></div>
+                <div className="hidden h-12 w-px bg-gray-300 dark:bg-gray-600 sm:block"></div>
                 <div className="text-center">
-                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 sm:text-2xl">
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                     50+
                   </div>
-                  <div className="text-xs text-gray-600 sm:text-sm">
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                     Familles satisfaites
                   </div>
                 </div>
-                <div className="hidden h-12 w-px bg-gray-300 sm:block"></div>
+                <div className="hidden h-12 w-px bg-gray-300 dark:bg-gray-600 sm:block"></div>
                 <div className="text-center">
-                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 sm:text-2xl">
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                     24/7
                   </div>
-                  <div className="text-xs text-gray-600 sm:text-sm">
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
                     Disponibilité urgences
                   </div>
                 </div>
@@ -161,13 +161,13 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="bg-white py-12 sm:py-16 md:py-20">
+      <section className="bg-white dark:bg-slate-900 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
-            <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+            <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
               Mes Services de Garde
             </h2>
-            <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 sm:text-xl">
+            <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
               Des solutions flexibles adaptées à tous vos besoins, avec la
               sécurité et la bienveillance d'une professionnelle expérimentée.
             </p>
@@ -183,10 +183,10 @@ const Home = () => {
                   <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
                     {service.icon}
                   </div>
-                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
+                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                     {service.title}
                   </h3>
-                  <p className="font-['Inter'] text-xs text-gray-600 sm:text-sm">
+                  <p className="font-['Inter'] text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
                     {service.description}
                   </p>
                 </CardContent>
@@ -208,11 +208,11 @@ const Home = () => {
       </section>
 
       {/* Why Choose Me Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 sm:py-16 md:py-20">
+      <section className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <h2 className="mb-6 font-['Poppins'] text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+              <h2 className="mb-6 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
                 Pourquoi choisir Marie ?
               </h2>
 
@@ -222,44 +222,44 @@ const Home = () => {
                     <Shield className="h-5 w-5 text-blue-600 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      Expérience Professionnelle
-                    </h3>
-                    <p className="font-['Inter'] text-sm text-gray-600 sm:text-base">
-                      Plus de 5 ans d'expérience en crèche et formations
-                      spécialisées en petite enfance.
-                    </p>
-                  </div>
+                                      <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    Expérience Professionnelle
+                  </h3>
+                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                    Plus de 5 ans d'expérience en crèche et formations
+                    spécialisées en petite enfance.
+                  </p>
                 </div>
+              </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 sm:h-12 sm:w-12">
-                    <Heart className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" />
-                  </div>
-                  <div>
-                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      Approche Bienveillante
-                    </h3>
-                    <p className="font-['Inter'] text-sm text-gray-600 sm:text-base">
-                      Une attention particulière au bien-être et à
-                      l'épanouissement de chaque enfant.
-                    </p>
-                  </div>
+              <div className="flex items-start space-x-4">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 sm:h-12 sm:w-12">
+                  <Heart className="h-5 w-5 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
                 </div>
+                <div>
+                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    Approche Bienveillante
+                  </h3>
+                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                    Une attention particulière au bien-être et à
+                    l'épanouissement de chaque enfant.
+                  </p>
+                </div>
+              </div>
 
-                <div className="flex items-start space-x-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 sm:h-12 sm:w-12">
-                    <Clock className="h-5 w-5 text-yellow-600 sm:h-6 sm:w-6" />
-                  </div>
-                  <div>
-                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      Flexibilité & Fiabilité
-                    </h3>
-                    <p className="font-['Inter'] text-sm text-gray-600 sm:text-base">
-                      Disponible selon vos besoins, même en cas d'urgence ou
-                      d'imprévu.
-                    </p>
-                  </div>
+              <div className="flex items-start space-x-4">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30 sm:h-12 sm:w-12">
+                  <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400 sm:h-6 sm:w-6" />
+                </div>
+                <div>
+                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                    Flexibilité & Fiabilité
+                  </h3>
+                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                    Disponible selon vos besoins, même en cas d'urgence ou
+                    d'imprévu.
+                  </p>
+                </div>
                 </div>
               </div>
             </div>
@@ -276,13 +276,13 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-white py-12 sm:py-16 md:py-20">
+      <section className="bg-white dark:bg-slate-900 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
-            <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 sm:text-3xl md:text-4xl">
+            <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
               Ce que disent les parents
             </h2>
-            <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 sm:text-xl">
+            <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
               La confiance des familles est ma plus belle récompense.
             </p>
           </div>
@@ -302,15 +302,15 @@ const Home = () => {
                       />
                     ))}
                   </div>
-                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-600 sm:text-base">
+                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:text-base">
                     "{testimonial.text}"
                   </p>
                   <div className="flex items-center">
                     <div>
-                      <div className="font-['Poppins'] text-sm font-semibold text-gray-900 sm:text-base">
+                      <div className="font-['Poppins'] text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                         {testimonial.name}
                       </div>
-                      <div className="flex items-center text-sm text-gray-500">
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
                         <MapPin className="mr-1 h-3 w-3 flex-shrink-0" />
                         {testimonial.location}
                       </div>
