@@ -115,9 +115,9 @@ const Services = () => {
 
           <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl">
             Mes Services de
-            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-400">
-              Garde d'Enfants
-            </span>
+                            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-emerald-400">
+                  Garde d'Enfants
+                </span>
           </h1>
 
           <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
@@ -186,7 +186,7 @@ const Services = () => {
         </div>
 
         {/* Additional Services */}
-        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg dark:bg-slate-800 sm:mb-16 sm:rounded-3xl sm:p-8">
+        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-900 sm:mb-16 sm:rounded-3xl sm:p-8">
           <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
             Services Complémentaires
           </h2>

@@ -70,7 +70,7 @@ const Home = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10 dark:from-blue-400/5 dark:via-green-400/5 dark:to-yellow-400/5"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10 dark:from-blue-500/10 dark:via-emerald-500/10 dark:to-violet-500/10"></div>
         <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2">
             <div className="order-2 text-center lg:order-1 lg:text-left">
@@ -81,7 +81,7 @@ const Home = () => {
 
               <h1 className="mb-4 font-['Poppins'] text-3xl font-bold leading-tight text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl lg:text-6xl">
                 Garde d'enfants
-                <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-green-400">
+                <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-emerald-400">
                   de confiance
                 </span>
               </h1>
@@ -161,7 +161,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="bg-white py-12 dark:bg-slate-900 sm:py-16 md:py-20">
+      <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
@@ -208,7 +208,7 @@ const Home = () => {
       </section>
 
       {/* Why Choose Me Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 dark:from-slate-800 dark:to-slate-700 sm:py-16 md:py-20">
+      <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 dark:from-zinc-900 dark:to-zinc-800 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -218,8 +218,8 @@ const Home = () => {
 
               <div className="space-y-4 sm:space-y-6">
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 sm:h-12 sm:w-12">
-                    <Shield className="h-5 w-5 text-blue-600 sm:h-6 sm:w-6" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 sm:h-12 sm:w-12">
+                    <Shield className="h-5 w-5 text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6" />
                   </div>
                   <div>
                     <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
@@ -233,8 +233,8 @@ const Home = () => {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 sm:h-12 sm:w-12">
-                    <Heart className="h-5 w-5 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-emerald-950/40 sm:h-12 sm:w-12">
+                    <Heart className="h-5 w-5 text-green-600 dark:text-emerald-400 sm:h-6 sm:w-6" />
                   </div>
                   <div>
                     <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
@@ -248,8 +248,8 @@ const Home = () => {
                 </div>
 
                 <div className="flex items-start space-x-4">
-                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30 sm:h-12 sm:w-12">
-                    <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400 sm:h-6 sm:w-6" />
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-amber-950/40 sm:h-12 sm:w-12">
+                    <Clock className="h-5 w-5 text-yellow-600 dark:text-amber-400 sm:h-6 sm:w-6" />
                   </div>
                   <div>
                     <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
@@ -276,7 +276,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-white py-12 dark:bg-slate-900 sm:py-16 md:py-20">
+      <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">

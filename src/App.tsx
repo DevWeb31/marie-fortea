@@ -16,7 +16,7 @@ function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="marie-childcare-theme">
       <Router>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-slate-900 dark:to-slate-800">
+        <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-zinc-950 dark:to-zinc-900">
           <Navigation />
           <main>
             <Routes>
