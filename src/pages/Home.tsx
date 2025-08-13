@@ -161,7 +161,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
@@ -177,7 +177,7 @@ const Home = () => {
             {services.map((service, index) => (
               <Card
                 key={index}
-                className={`${service.color} group cursor-pointer transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900`}
+                className="group cursor-pointer border-2 border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:bg-zinc-900/90"
               >
                 <CardContent className="p-4 text-center sm:p-6">
                   <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
@@ -208,7 +208,7 @@ const Home = () => {
       </section>
 
       {/* Why Choose Me Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 dark:from-zinc-900 dark:to-zinc-800 sm:py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -276,7 +276,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-20">
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
@@ -291,7 +291,7 @@ const Home = () => {
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
-                className="border-2 border-gray-100 transition-all duration-300 hover:shadow-lg"
+                className="border-2 border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:bg-zinc-900/90"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
