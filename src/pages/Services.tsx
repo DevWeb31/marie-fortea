@@ -131,12 +131,12 @@ const Services = () => {
           {services.map((service, index) => (
             <Card
               key={index}
-              className={`${service.color} dark:bg-zinc-900 dark:border-zinc-800 group transition-all duration-300 hover:shadow-xl`}
+              className={`${service.color} group transition-all duration-300 hover:shadow-xl dark:border-zinc-800 dark:bg-zinc-900`}
             >
               <CardHeader className="pb-3 sm:pb-4">
                 <div className="mb-4 flex items-center space-x-4">
                   <div
-                    className={`h-12 w-12 sm:h-16 sm:w-16 ${service.iconBg} dark:bg-zinc-800 flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 sm:rounded-2xl`}
+                    className={`h-12 w-12 sm:h-16 sm:w-16 ${service.iconBg} flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 dark:bg-zinc-800 sm:rounded-2xl`}
                   >
                     <div className="scale-75 sm:scale-100">{service.icon}</div>
                   </div>
@@ -195,15 +195,15 @@ const Services = () => {
             {additionalServices.map((service, index) => (
               <div
                 key={index}
-                className="rounded-xl border border-gray-100 p-4 text-center transition-all duration-300 hover:shadow-md sm:rounded-2xl sm:p-6"
+                className="rounded-xl border border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 p-4 text-center transition-all duration-300 hover:shadow-md sm:rounded-2xl sm:p-6"
               >
-                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 sm:mb-4 sm:h-12 sm:w-12">
+                <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 sm:mb-4 sm:h-12 sm:w-12">
                   {service.icon}
                 </div>
-                <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
+                <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                   {service.title}
                 </h3>
-                <p className="font-['Inter'] text-xs text-gray-600 sm:text-sm">
+                <p className="font-['Inter'] text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
                   {service.description}
                 </p>
               </div>
@@ -212,35 +212,35 @@ const Services = () => {
         </div>
 
         {/* Pricing Note */}
-        <div className="rounded-xl bg-gradient-to-r from-blue-50 to-green-50 p-6 text-center sm:rounded-2xl sm:p-8">
-          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 sm:text-2xl">
+        <div className="rounded-xl bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-900 dark:to-zinc-800 p-6 text-center sm:rounded-2xl sm:p-8">
+          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
             Tarification Transparente
           </h3>
           <div className="mx-auto grid max-w-4xl grid-cols-1 gap-4 text-left sm:gap-6 md:grid-cols-2">
             <div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 sm:text-base">
+              <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                 Inclus dans tous mes services :
               </h4>
-              <ul className="space-y-1 text-sm text-gray-700 sm:space-y-2 sm:text-base">
+              <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-base">
                 <li className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                   <span>Activités adaptées à l'âge</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                   <span>Matériel pédagogique fourni</span>
                 </li>
                 <li className="flex items-center space-x-2">
-                  <CheckCircle className="h-4 w-4 text-green-600" />
+                  <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                   <span>Compte-rendu détaillé</span>
                 </li>
               </ul>
             </div>
             <div>
-              <h4 className="mb-2 text-sm font-semibold text-gray-900 sm:text-base">
+              <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                 Conditions :
               </h4>
-              <ul className="space-y-1 text-sm text-gray-700 sm:space-y-2 sm:text-base">
+              <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-base">
                 <li>• Durée minimum : 3 heures</li>
                 <li>• Frais de déplacement : 5€ au-delà de 10km</li>
                 <li>• Majoration nocturne : +5€/heure après 22h</li>
@@ -252,10 +252,10 @@ const Services = () => {
 
         {/* CTA */}
         <div className="mt-12 text-center sm:mt-16">
-          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 sm:text-2xl">
+          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
             Besoin d'un service personnalisé ?
           </h3>
-          <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 sm:mb-8 sm:text-base">
+          <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-base">
             Chaque famille est unique. Contactez-moi pour un devis adapté à vos
             besoins spécifiques.
           </p>
