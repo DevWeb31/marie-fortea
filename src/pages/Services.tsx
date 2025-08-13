@@ -131,12 +131,12 @@ const Services = () => {
           {services.map((service, index) => (
             <Card
               key={index}
-              className={`${service.color} group transition-all duration-300 hover:shadow-xl`}
+              className={`${service.color} dark:bg-zinc-900 dark:border-zinc-800 group transition-all duration-300 hover:shadow-xl`}
             >
               <CardHeader className="pb-3 sm:pb-4">
                 <div className="mb-4 flex items-center space-x-4">
                   <div
-                    className={`h-12 w-12 sm:h-16 sm:w-16 ${service.iconBg} flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 sm:rounded-2xl`}
+                    className={`h-12 w-12 sm:h-16 sm:w-16 ${service.iconBg} dark:bg-zinc-800 flex items-center justify-center rounded-xl transition-transform duration-300 group-hover:scale-110 sm:rounded-2xl`}
                   >
                     <div className="scale-75 sm:scale-100">{service.icon}</div>
                   </div>

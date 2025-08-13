@@ -130,7 +130,7 @@ const About = () => {
               alt="Marie Fortea portrait professionnel"
               className="aspect-[4/5] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
             />
-            <div className="absolute -bottom-4 -right-4 rounded-xl bg-white dark:bg-zinc-800 p-3 shadow-lg sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
+            <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
               <div className="text-center">
                 <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                   5+
@@ -173,7 +173,7 @@ const About = () => {
               </div>
             </div>
 
-            <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 dark:from-zinc-900 dark:to-zinc-800 p-4 sm:rounded-2xl sm:p-6">
+            <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 p-4 dark:from-zinc-900 dark:to-zinc-800 sm:rounded-2xl sm:p-6">
               <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
                 Ma Philosophie
               </h3>
@@ -197,10 +197,10 @@ const About = () => {
             {qualifications.map((qual, index) => (
               <Card
                 key={index}
-                className="group border-2 border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg"
+                className="group border-2 border-gray-100 transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
               >
                 <CardContent className="p-4 text-center sm:p-6">
-                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 transition-transform duration-300 group-hover:scale-110 sm:mb-4 sm:h-12 sm:w-12">
+                  <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 transition-transform duration-300 group-hover:scale-110 dark:bg-zinc-800 sm:mb-4 sm:h-12 sm:w-12">
                     {qual.icon}
                   </div>
                   <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
@@ -225,7 +225,7 @@ const About = () => {
             {values.map((value, index) => (
               <Card
                 key={index}
-                className={`${value.color} dark:bg-zinc-900 dark:border-zinc-800 group transition-all duration-300 hover:shadow-lg`}
+                className={`${value.color} group transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900`}
               >
                 <CardContent className="p-6 sm:p-8">
                   <div className="flex items-start space-x-4">
@@ -295,7 +295,7 @@ const About = () => {
             {testimonials.map((testimonial, index) => (
               <Card
                 key={index}
-                className="border-2 border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 transition-all duration-300 hover:shadow-lg"
+                className="border-2 border-gray-100 transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
@@ -328,7 +328,7 @@ const About = () => {
         </div>
 
         {/* Service Area */}
-        <div className="mb-12 rounded-2xl bg-white dark:bg-zinc-900 p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
+        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-900 sm:mb-16 sm:rounded-3xl sm:p-8">
           <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
             Zone d'Intervention
           </h2>

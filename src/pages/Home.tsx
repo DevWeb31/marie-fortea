@@ -177,7 +177,7 @@ const Home = () => {
             {services.map((service, index) => (
               <Card
                 key={index}
-                className={`${service.color} group cursor-pointer transition-all duration-300 hover:shadow-lg`}
+                className={`${service.color} dark:bg-zinc-900 dark:border-zinc-800 group cursor-pointer transition-all duration-300 hover:shadow-lg`}
               >
                 <CardContent className="p-4 text-center sm:p-6">
                   <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
