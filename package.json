@@ -3,6 +3,9 @@
   "private": true,
   "version": "1.0.0",
   "description": "Application Marie Fortea - Architecture DevWeb31",
+  "author": "Damien Oriente (Damiodev) - DevWeb31",
+  "license": "UNLICENSED",
+  "copyright": "© 2025 Damien Oriente (Damiodev) - DevWeb31. Tous droits réservés.",
   "type": "module",
   "scripts": {
     "dev": "vite",
