@@ -50,9 +50,7 @@ export function ThemeToggle() {
           >
             <Icon className="h-4 w-4" />
             {label}
-            {theme === value && (
-              <span className="ml-auto text-xs">✓</span>
-            )}
+            {theme === value && <span className="ml-auto text-xs">✓</span>}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

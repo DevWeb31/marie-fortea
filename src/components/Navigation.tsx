@@ -19,7 +19,7 @@ const Navigation = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/95 backdrop-blur-md dark:border-gray-700 dark:bg-gray-900/95">
+    <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/95 backdrop-blur-md dark:border-blue-200/20 dark:bg-slate-900/95">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-14 items-center justify-between sm:h-16">
           {/* Logo */}
@@ -38,16 +38,16 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                className={cn(
-                  'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
-                  isActive(item.href)
-                    ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-gray-600 hover:text-blue-600 dark:text-gray-300 dark:hover:text-blue-400'
-                )}
+                                  className={cn(
+                    'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
+                    isActive(item.href)
+                      ? 'text-blue-600 dark:text-blue-300'
+                      : 'text-gray-600 hover:text-blue-600 dark:text-slate-300 dark:hover:text-blue-300'
+                  )}
               >
                 {item.name}
                 {isActive(item.href) && (
-                  <div className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-blue-600 dark:bg-blue-400" />
+                  <div className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-blue-600 dark:bg-blue-300" />
                 )}
               </Link>
             ))}
@@ -77,8 +77,8 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-          <div className="lg:hidden">
-            <div className="space-y-1 border-t border-blue-100 bg-white px-2 pb-3 pt-2 shadow-lg dark:border-gray-700 dark:bg-gray-900">
+                      <div className="lg:hidden">
+              <div className="space-y-1 border-t border-blue-100 bg-white px-2 pb-3 pt-2 shadow-lg dark:border-blue-200/20 dark:bg-slate-900">
               {navigation.map(item => (
                 <Link
                   key={item.name}
@@ -87,15 +87,17 @@ const Navigation = () => {
                   className={cn(
                     'block rounded-lg px-3 py-2.5 text-base font-medium transition-colors duration-200',
                     isActive(item.href)
-                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-400'
-                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600 dark:text-gray-300 dark:hover:bg-blue-900/20 dark:hover:text-blue-400'
+                      ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300'
+                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600 dark:text-slate-300 dark:hover:bg-blue-900/30 dark:hover:text-blue-300'
                   )}
                 >
                   {item.name}
                 </Link>
               ))}
               <div className="flex items-center justify-between px-3 py-2">
-                <span className="text-sm text-gray-500 dark:text-gray-400">Thème :</span>
+                <span className="text-sm text-gray-500 dark:text-gray-400">
+                  Thème :
+                </span>
                 <ThemeToggle />
               </div>
               <Button

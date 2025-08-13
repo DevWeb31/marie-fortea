@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { ThemeDemo } from '@/components/theme-demo';
+
 import {
   Heart,
   Star,
@@ -323,10 +323,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Theme Demo Section */}
-      <section className="bg-gradient-to-br from-gray-50 to-blue-50 py-12 sm:py-16 md:py-20 dark:from-gray-900 dark:to-gray-800">
-        <ThemeDemo />
-      </section>
+
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-green-600 py-12 sm:py-16 md:py-20">
