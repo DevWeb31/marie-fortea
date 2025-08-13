@@ -19,9 +19,9 @@ const Navigation = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/95">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-14 items-center justify-between sm:h-16">
+            <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/95 backdrop-blur-md dark:border-zinc-800 dark:bg-zinc-950/95">
+          <div className="w-full px-4 sm:px-6 lg:px-8">
+            <div className="flex h-14 items-center justify-between sm:h-16">
           {/* Logo */}
           <Link to="/" className="group flex items-center space-x-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-green-400 transition-transform duration-200 group-hover:scale-105 sm:h-10 sm:w-10">

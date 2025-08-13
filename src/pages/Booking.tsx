@@ -101,7 +101,7 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen py-12 sm:py-16 md:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+              <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="mb-12 text-center">
           <Badge className="mb-6 bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200">
@@ -125,7 +125,7 @@ const Booking = () => {
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Form */}
           <div className="order-2 lg:order-1 lg:col-span-2">
-            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
+            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
               <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700">
                 <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                   <Calendar className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400 sm:mr-3 sm:h-6 sm:w-6" />
@@ -493,7 +493,7 @@ const Booking = () => {
           {/* Sidebar */}
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Contact Info */}
-            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
+            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
               <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg">
                   Contact Direct
@@ -526,9 +526,9 @@ const Booking = () => {
             </Card>
 
             {/* Pricing Info */}
-            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
+            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
               <CardHeader>
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg dark:text-white">
+                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Tarifs & Conditions
                 </CardTitle>
               </CardHeader>
@@ -557,43 +557,51 @@ const Booking = () => {
             </Card>
 
             {/* Process */}
-            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
+            <Card className="border-0 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
               <CardHeader>
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg dark:text-white">
+                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Processus de Réservation
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       1
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium dark:text-white">Demande envoyée</div>
+                      <div className="font-medium dark:text-white">
+                        Demande envoyée
+                      </div>
                       <div className="text-gray-600 dark:text-gray-300">
                         Formulaire reçu instantanément
                       </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       2
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium dark:text-white">Contact sous 24h</div>
+                      <div className="font-medium dark:text-white">
+                        Contact sous 24h
+                      </div>
                       <div className="text-gray-600 dark:text-gray-300">
                         Échange pour finaliser
                       </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-950/40 text-xs font-bold text-green-600 dark:text-green-400 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-600 dark:bg-green-950/40 dark:text-green-400 sm:h-6 sm:w-6 sm:text-sm">
                       3
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium dark:text-white">Confirmation</div>
-                      <div className="text-gray-600 dark:text-gray-300">Réservation validée</div>
+                      <div className="font-medium dark:text-white">
+                        Confirmation
+                      </div>
+                      <div className="text-gray-600 dark:text-gray-300">
+                        Réservation validée
+                      </div>
                     </div>
                   </div>
                 </div>

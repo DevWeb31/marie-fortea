@@ -71,7 +71,7 @@ const Home = () => {
       {/* Hero Section */}
       <section className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-32">
         <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10 dark:from-blue-500/10 dark:via-emerald-500/10 dark:to-violet-500/10"></div>
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="relative w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2">
             <div className="order-2 text-center lg:order-1 lg:text-left">
               <Badge className="mb-6 bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200">
@@ -162,7 +162,7 @@ const Home = () => {
 
       {/* Services Section */}
       <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
               Mes Services de Garde
@@ -209,7 +209,7 @@ const Home = () => {
 
       {/* Why Choose Me Section */}
       <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 dark:from-zinc-900 dark:to-zinc-800 sm:py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
               <h2 className="mb-6 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
@@ -277,7 +277,7 @@ const Home = () => {
 
       {/* Testimonials Section */}
       <section className="bg-white py-12 dark:bg-zinc-950 sm:py-16 md:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
               Ce que disent les parents
@@ -325,7 +325,7 @@ const Home = () => {
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-green-600 py-12 sm:py-16 md:py-20">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
+        <div className="w-full px-4 text-center sm:px-6 lg:px-8">
           <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-white sm:mb-6 sm:text-3xl md:text-4xl">
             Prêts à confier vos enfants à une professionnelle ?
           </h2>
