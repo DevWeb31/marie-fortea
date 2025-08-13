@@ -195,7 +195,7 @@ const Services = () => {
             {additionalServices.map((service, index) => (
               <div
                 key={index}
-                className="rounded-xl border border-gray-100 dark:border-zinc-800 dark:bg-zinc-900 p-4 text-center transition-all duration-300 hover:shadow-md sm:rounded-2xl sm:p-6"
+                className="rounded-xl border border-gray-100 p-4 text-center transition-all duration-300 hover:shadow-md dark:border-zinc-800 dark:bg-zinc-900 sm:rounded-2xl sm:p-6"
               >
                 <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-zinc-800 sm:mb-4 sm:h-12 sm:w-12">
                   {service.icon}
@@ -212,7 +212,7 @@ const Services = () => {
         </div>
 
         {/* Pricing Note */}
-        <div className="rounded-xl bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-900 dark:to-zinc-800 p-6 text-center sm:rounded-2xl sm:p-8">
+        <div className="rounded-xl bg-gradient-to-r from-blue-50 to-green-50 p-6 text-center dark:from-zinc-900 dark:to-zinc-800 sm:rounded-2xl sm:p-8">
           <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
             Tarification Transparente
           </h3>

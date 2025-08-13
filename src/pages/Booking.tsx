@@ -109,14 +109,14 @@ const Booking = () => {
             Réservation Simple & Rapide
           </Badge>
 
-          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 sm:mb-6 sm:text-4xl md:text-5xl">
+          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl">
             Réserver une
-            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-emerald-400">
               Garde d'Enfants
             </span>
           </h1>
 
-          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 sm:text-xl">
+          <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
             Remplissez ce formulaire détaillé pour que je puisse vous proposer
             le service le plus adapté à vos besoins et à vos enfants.
           </p>
@@ -125,10 +125,10 @@ const Booking = () => {
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Form */}
           <div className="order-2 lg:order-1 lg:col-span-2">
-            <Card className="border-0 shadow-lg">
-              <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50">
-                <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 sm:text-2xl">
-                  <Calendar className="mr-2 h-5 w-5 text-blue-600 sm:mr-3 sm:h-6 sm:w-6" />
+            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
+              <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700">
+                <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
+                  <Calendar className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400 sm:mr-3 sm:h-6 sm:w-6" />
                   Formulaire de Réservation
                 </CardTitle>
               </CardHeader>
@@ -140,8 +140,8 @@ const Booking = () => {
                 >
                   {/* Parent Information */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      <User className="mr-2 h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <User className="mr-2 h-4 w-4 text-blue-600 dark:text-blue-400 sm:h-5 sm:w-5" />
                       Informations des Parents
                     </h3>
 
@@ -149,7 +149,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="parentName"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Nom et Prénom *
                         </Label>
@@ -169,7 +169,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="parentPhone"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Téléphone *
                         </Label>
@@ -190,7 +190,7 @@ const Booking = () => {
                     <div>
                       <Label
                         htmlFor="parentEmail"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Email *
                       </Label>
@@ -210,7 +210,7 @@ const Booking = () => {
                     <div>
                       <Label
                         htmlFor="address"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Adresse de la garde *
                       </Label>
@@ -230,15 +230,15 @@ const Booking = () => {
 
                   {/* Service Details */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      <Heart className="mr-2 h-4 w-4 text-pink-600 sm:h-5 sm:w-5" />
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <Heart className="mr-2 h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
                       Détails du Service
                     </h3>
 
                     <div>
                       <Label
                         htmlFor="serviceType"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Type de service *
                       </Label>
@@ -276,7 +276,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="date"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Date *
                         </Label>
@@ -295,7 +295,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="startTime"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Heure de début *
                         </Label>
@@ -314,7 +314,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="endTime"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Heure de fin *
                         </Label>
@@ -334,15 +334,15 @@ const Booking = () => {
 
                   {/* Children Information */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      <Baby className="mr-2 h-4 w-4 text-green-600 sm:h-5 sm:w-5" />
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <Baby className="mr-2 h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
                       Informations sur les Enfants
                     </h3>
 
                     <div>
                       <Label
                         htmlFor="numberOfChildren"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Nombre d'enfants *
                       </Label>
@@ -368,7 +368,7 @@ const Booking = () => {
                     <div>
                       <Label
                         htmlFor="childrenDetails"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Détails des enfants (prénom, âge, particularités) *
                       </Label>
@@ -387,15 +387,15 @@ const Booking = () => {
 
                   {/* Special Instructions */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      <MessageSquare className="mr-2 h-4 w-4 text-purple-600 sm:h-5 sm:w-5" />
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <MessageSquare className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
                       Instructions Spéciales
                     </h3>
 
                     <div>
                       <Label
                         htmlFor="specialInstructions"
-                        className="text-xs font-medium text-gray-700 sm:text-sm"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
                         Instructions particulières (optionnel)
                       </Label>
@@ -416,8 +416,8 @@ const Booking = () => {
 
                   {/* Emergency Contact */}
                   <div className="space-y-4 sm:space-y-6">
-                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 sm:text-lg">
-                      <Phone className="mr-2 h-4 w-4 text-red-600 sm:h-5 sm:w-5" />
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <Phone className="mr-2 h-4 w-4 text-red-600 dark:text-red-400 sm:h-5 sm:w-5" />
                       Contact d'Urgence
                     </h3>
 
@@ -425,7 +425,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="emergencyContact"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Nom du contact d'urgence
                         </Label>
@@ -447,7 +447,7 @@ const Booking = () => {
                       <div>
                         <Label
                           htmlFor="emergencyPhone"
-                          className="text-xs font-medium text-gray-700 sm:text-sm"
+                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
                           Téléphone d'urgence
                         </Label>
@@ -493,7 +493,7 @@ const Booking = () => {
           {/* Sidebar */}
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Contact Info */}
-            <Card className="border-0 shadow-lg">
+            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
               <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg">
                   Contact Direct
@@ -526,9 +526,9 @@ const Booking = () => {
             </Card>
 
             {/* Pricing Info */}
-            <Card className="border-0 shadow-lg">
+            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
               <CardHeader>
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg">
+                <CardTitle className="font-['Poppins'] text-base sm:text-lg dark:text-white">
                   Tarifs & Conditions
                 </CardTitle>
               </CardHeader>
@@ -548,7 +548,7 @@ const Booking = () => {
                     </div>
                   ))}
                 </div>
-                <div className="space-y-1 border-t pt-3 text-xs text-gray-600 sm:space-y-2 sm:pt-4 sm:text-sm">
+                <div className="space-y-1 border-t pt-3 text-xs text-gray-600 dark:text-gray-300 sm:space-y-2 sm:pt-4 sm:text-sm">
                   <div>• Durée minimum : 3 heures</div>
                   <div>• Majoration nocturne : +5€/h après 22h</div>
                   <div>• Frais de déplacement : 5€ au-delà de 10km</div>
@@ -557,43 +557,43 @@ const Booking = () => {
             </Card>
 
             {/* Process */}
-            <Card className="border-0 shadow-lg">
+            <Card className="border-0 shadow-lg dark:bg-zinc-900 dark:border-zinc-800">
               <CardHeader>
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg">
+                <CardTitle className="font-['Poppins'] text-base sm:text-lg dark:text-white">
                   Processus de Réservation
                 </CardTitle>
               </CardHeader>
               <CardContent className="p-4 sm:p-6">
                 <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       1
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium">Demande envoyée</div>
-                      <div className="text-gray-600">
+                      <div className="font-medium dark:text-white">Demande envoyée</div>
+                      <div className="text-gray-600 dark:text-gray-300">
                         Formulaire reçu instantanément
                       </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-950/40 text-xs font-bold text-blue-600 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       2
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium">Contact sous 24h</div>
-                      <div className="text-gray-600">
+                      <div className="font-medium dark:text-white">Contact sous 24h</div>
+                      <div className="text-gray-600 dark:text-gray-300">
                         Échange pour finaliser
                       </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-600 sm:h-6 sm:w-6 sm:text-sm">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-950/40 text-xs font-bold text-green-600 dark:text-green-400 sm:h-6 sm:w-6 sm:text-sm">
                       3
                     </div>
                     <div className="text-xs sm:text-sm">
-                      <div className="font-medium">Confirmation</div>
-                      <div className="text-gray-600">Réservation validée</div>
+                      <div className="font-medium dark:text-white">Confirmation</div>
+                      <div className="text-gray-600 dark:text-gray-300">Réservation validée</div>
                     </div>
                   </div>
                 </div>
