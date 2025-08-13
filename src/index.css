@@ -103,40 +103,40 @@ button:focus-visible {
     /* Base colors - inspired by GitHub Dark, Discord, Linear */
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
-    
+
     /* Card system - multiple depth levels */
     --card: 0 0% 6%;
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 6%;
     --popover-foreground: 0 0% 98%;
-    
+
     /* Primary - sophisticated blue */
     --primary: 221.2 83.2% 53.3%;
     --primary-foreground: 0 0% 98%;
-    
+
     /* Secondary - elegant neutral */
     --secondary: 0 0% 9%;
     --secondary-foreground: 0 0% 98%;
-    
+
     /* Muted - subtle backgrounds */
     --muted: 0 0% 9%;
     --muted-foreground: 0 0% 63.9%;
-    
+
     /* Accent - refined highlight */
     --accent: 0 0% 9%;
     --accent-foreground: 0 0% 98%;
-    
+
     /* Destructive - sophisticated red */
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    
+
     /* Borders - multiple levels */
     --border: 0 0% 14.9%;
     --input: 0 0% 14.9%;
-    
+
     /* Ring - focus states */
     --ring: 221.2 83.2% 53.3%;
-    
+
     /* Chart colors - refined palette */
     --chart-1: 221.2 83.2% 53.3%;
     --chart-2: 142.1 76.2% 36.3%;

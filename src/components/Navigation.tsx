@@ -38,12 +38,12 @@ const Navigation = () => {
               <Link
                 key={item.name}
                 to={item.href}
-                                  className={cn(
-                    'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
-                    isActive(item.href)
-                      ? 'text-blue-600 dark:text-blue-400'
-                      : 'text-gray-600 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400'
-                  )}
+                className={cn(
+                  'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
+                  isActive(item.href)
+                    ? 'text-blue-600 dark:text-blue-400'
+                    : 'text-gray-600 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400'
+                )}
               >
                 {item.name}
                 {isActive(item.href) && (
@@ -77,8 +77,8 @@ const Navigation = () => {
 
         {/* Mobile Navigation */}
         {isOpen && (
-                      <div className="lg:hidden">
-              <div className="space-y-1 border-t border-blue-100 bg-white px-2 pb-3 pt-2 shadow-lg dark:border-zinc-800 dark:bg-zinc-950">
+          <div className="lg:hidden">
+            <div className="space-y-1 border-t border-blue-100 bg-white px-2 pb-3 pt-2 shadow-lg dark:border-zinc-800 dark:bg-zinc-950">
               {navigation.map(item => (
                 <Link
                   key={item.name}
