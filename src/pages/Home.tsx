@@ -161,7 +161,7 @@ const Home = () => {
       </section>
 
       {/* Services Section */}
-      <section className="bg-white dark:bg-slate-900 py-12 sm:py-16 md:py-20">
+      <section className="bg-white py-12 dark:bg-slate-900 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">
@@ -208,7 +208,7 @@ const Home = () => {
       </section>
 
       {/* Why Choose Me Section */}
-      <section className="bg-gradient-to-br from-blue-50 to-green-50 dark:from-slate-800 dark:to-slate-700 py-12 sm:py-16 md:py-20">
+      <section className="bg-gradient-to-br from-blue-50 to-green-50 py-12 dark:from-slate-800 dark:to-slate-700 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -222,44 +222,44 @@ const Home = () => {
                     <Shield className="h-5 w-5 text-blue-600 sm:h-6 sm:w-6" />
                   </div>
                   <div>
-                                      <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                    Expérience Professionnelle
-                  </h3>
-                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                    Plus de 5 ans d'expérience en crèche et formations
-                    spécialisées en petite enfance.
-                  </p>
+                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      Expérience Professionnelle
+                    </h3>
+                    <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                      Plus de 5 ans d'expérience en crèche et formations
+                      spécialisées en petite enfance.
+                    </p>
+                  </div>
                 </div>
-              </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 sm:h-12 sm:w-12">
-                  <Heart className="h-5 w-5 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
+                <div className="flex items-start space-x-4">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 sm:h-12 sm:w-12">
+                    <Heart className="h-5 w-5 text-green-600 dark:text-green-400 sm:h-6 sm:w-6" />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      Approche Bienveillante
+                    </h3>
+                    <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                      Une attention particulière au bien-être et à
+                      l'épanouissement de chaque enfant.
+                    </p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                    Approche Bienveillante
-                  </h3>
-                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                    Une attention particulière au bien-être et à
-                    l'épanouissement de chaque enfant.
-                  </p>
-                </div>
-              </div>
 
-              <div className="flex items-start space-x-4">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30 sm:h-12 sm:w-12">
-                  <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400 sm:h-6 sm:w-6" />
-                </div>
-                <div>
-                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                    Flexibilité & Fiabilité
-                  </h3>
-                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                    Disponible selon vos besoins, même en cas d'urgence ou
-                    d'imprévu.
-                  </p>
-                </div>
+                <div className="flex items-start space-x-4">
+                  <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full bg-yellow-100 dark:bg-yellow-900/30 sm:h-12 sm:w-12">
+                    <Clock className="h-5 w-5 text-yellow-600 dark:text-yellow-400 sm:h-6 sm:w-6" />
+                  </div>
+                  <div>
+                    <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      Flexibilité & Fiabilité
+                    </h3>
+                    <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
+                      Disponible selon vos besoins, même en cas d'urgence ou
+                      d'imprévu.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -276,7 +276,7 @@ const Home = () => {
       </section>
 
       {/* Testimonials Section */}
-      <section className="bg-white dark:bg-slate-900 py-12 sm:py-16 md:py-20">
+      <section className="bg-white py-12 dark:bg-slate-900 sm:py-16 md:py-20">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl">

@@ -186,7 +186,7 @@ const Services = () => {
         </div>
 
         {/* Additional Services */}
-        <div className="mb-12 rounded-2xl bg-white dark:bg-slate-800 p-6 shadow-lg sm:mb-16 sm:rounded-3xl sm:p-8">
+        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg dark:bg-slate-800 sm:mb-16 sm:rounded-3xl sm:p-8">
           <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
             Services Complémentaires
           </h2>
