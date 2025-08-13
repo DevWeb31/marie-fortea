@@ -323,8 +323,6 @@ const Home = () => {
         </div>
       </section>
 
-
-
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-green-600 py-12 sm:py-16 md:py-20">
         <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
