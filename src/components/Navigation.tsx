@@ -18,41 +18,41 @@ const Navigation = () => {
   const isActive = (href: string) => location.pathname === href;
 
   return (
-    <nav className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-blue-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 sm:h-16">
+    <nav className="sticky top-0 z-50 border-b border-blue-100 bg-white/95 backdrop-blur-md">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-14 items-center justify-between sm:h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-to-br from-blue-400 to-green-400 rounded-full flex items-center justify-center group-hover:scale-105 transition-transform duration-200">
-              <Baby className="w-4 h-4 sm:w-5 sm:h-5 text-white" />
+          <Link to="/" className="group flex items-center space-x-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-green-400 transition-transform duration-200 group-hover:scale-105 sm:h-10 sm:w-10">
+              <Baby className="h-4 w-4 text-white sm:h-5 sm:w-5" />
             </div>
-            <span className="font-bold text-lg sm:text-xl text-gray-800 font-['Poppins']">
+            <span className="font-['Poppins'] text-lg font-bold text-gray-800 sm:text-xl">
               Marie Fortea
             </span>
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-6 xl:space-x-8">
-            {navigation.map((item) => (
+          <div className="hidden items-center space-x-6 lg:flex xl:space-x-8">
+            {navigation.map(item => (
               <Link
                 key={item.name}
                 to={item.href}
                 className={cn(
-                  "text-sm font-medium transition-colors duration-200 relative whitespace-nowrap",
+                  'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
                   isActive(item.href)
-                    ? "text-blue-600"
-                    : "text-gray-600 hover:text-blue-600"
+                    ? 'text-blue-600'
+                    : 'text-gray-600 hover:text-blue-600'
                 )}
               >
                 {item.name}
                 {isActive(item.href) && (
-                  <div className="absolute -bottom-1 left-0 w-full h-0.5 bg-blue-600 rounded-full" />
+                  <div className="absolute -bottom-1 left-0 h-0.5 w-full rounded-full bg-blue-600" />
                 )}
               </Link>
             ))}
-            <Button 
-              asChild 
-              className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-4 xl:px-6 py-2 rounded-full shadow-lg hover:shadow-xl transition-all duration-200 text-sm whitespace-nowrap"
+            <Button
+              asChild
+              className="whitespace-nowrap rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-sm text-white shadow-lg transition-all duration-200 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl xl:px-6"
             >
               <Link to="/booking">Réserver maintenant</Link>
             </Button>
@@ -62,9 +62,13 @@ const Navigation = () => {
           <div className="lg:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-600 hover:text-gray-900 p-1.5 sm:p-2"
+              className="p-1.5 text-gray-600 hover:text-gray-900 sm:p-2"
             >
-              {isOpen ? <X className="w-5 h-5 sm:w-6 sm:h-6" /> : <Menu className="w-5 h-5 sm:w-6 sm:h-6" />}
+              {isOpen ? (
+                <X className="h-5 w-5 sm:h-6 sm:w-6" />
+              ) : (
+                <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+              )}
             </button>
           </div>
         </div>
@@ -72,25 +76,25 @@ const Navigation = () => {
         {/* Mobile Navigation */}
         {isOpen && (
           <div className="lg:hidden">
-            <div className="px-2 pt-2 pb-3 space-y-1 bg-white border-t border-blue-100 shadow-lg">
-              {navigation.map((item) => (
+            <div className="space-y-1 border-t border-blue-100 bg-white px-2 pb-3 pt-2 shadow-lg">
+              {navigation.map(item => (
                 <Link
                   key={item.name}
                   to={item.href}
                   onClick={() => setIsOpen(false)}
                   className={cn(
-                    "block px-3 py-2.5 text-base font-medium rounded-lg transition-colors duration-200",
+                    'block rounded-lg px-3 py-2.5 text-base font-medium transition-colors duration-200',
                     isActive(item.href)
-                      ? "text-blue-600 bg-blue-50"
-                      : "text-gray-600 hover:text-blue-600 hover:bg-blue-50"
+                      ? 'bg-blue-50 text-blue-600'
+                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600'
                   )}
                 >
                   {item.name}
                 </Link>
               ))}
-              <Button 
-                asChild 
-                className="w-full mt-3 bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white rounded-full py-2.5"
+              <Button
+                asChild
+                className="mt-3 w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-2.5 text-white hover:from-blue-600 hover:to-blue-700"
                 onClick={() => setIsOpen(false)}
               >
                 <Link to="/booking">Réserver maintenant</Link>

@@ -1,0 +1,22 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Vérification de la qualité du code..."
+
+# Formatage automatique avec Prettier
+echo "🎨 Formatage du code avec Prettier..."
+npm run format
+
+# Linting avec ESLint
+echo "🔍 Vérification du code avec ESLint..."
+npm run lint
+
+# Vérification TypeScript
+echo "🔍 Vérification TypeScript..."
+npm run type-check
+
+# Vérification des tests (optionnel - ne bloque pas le commit)
+echo "🧪 Vérification des tests..."
+npm run test:check || echo "⚠️  Tests échoués mais commit autorisé"
+
+echo "✅ Pre-commit checks terminés avec succès!"
