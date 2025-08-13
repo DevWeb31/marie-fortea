@@ -11,6 +11,7 @@ import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import Footer from '@/components/Footer';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import './App.css';
 
 // Composant wrapper pour le scroll automatique
@@ -32,6 +33,7 @@ function AppContent() {
       </main>
       <Footer />
       <Toaster />
+      <ScrollToTopButton />
     </div>
   );
 }

@@ -9,7 +9,7 @@ export const useScrollToTop = () => {
     window.scrollTo({
       top: 0,
       left: 0,
-      behavior: 'smooth' // Animation fluide
+      behavior: 'smooth', // Animation fluide
     });
   }, [pathname]); // Se déclenche à chaque changement de pathname
 };
