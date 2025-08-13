@@ -30,7 +30,7 @@ const Home = () => {
       icon: <Clock className="h-8 w-8 text-orange-500" />,
       title: 'Urgences',
       description: "Disponible rapidement en cas d'imprévu",
-      color: 'bg-pink-50 border-pink-200',
+      color: 'bg-orange-50 border-orange-200',
     },
     {
       icon: <Users className="h-8 w-8 text-blue-500" />,
@@ -101,51 +101,65 @@ const Home = () => {
                   className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-base font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
                 >
                   <Link to="/booking">
-                    <Calendar className="mr-2 h-5 w-5" />
+                    <Baby className="mr-2 h-5 w-5" />
                     Réserver maintenant
                   </Link>
                 </Button>
+
                 <Button
                   asChild
                   variant="outline"
                   size="lg"
-                  className="rounded-full border-2 border-gray-300 px-6 py-3 text-base font-medium text-gray-700 transition-all duration-300 hover:border-blue-500 hover:text-blue-600 sm:px-8 sm:py-4 sm:text-lg"
+                  className="rounded-full border-2 border-blue-200 px-6 py-3 text-base font-medium text-blue-600 transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
                 >
-                  <Link to="/services">En savoir plus</Link>
+                  <Link to="/about">En savoir plus</Link>
                 </Button>
               </div>
 
-              {/* Statistics */}
-              <div className="mt-8 grid grid-cols-3 gap-4 px-4 lg:px-0">
+              <div className="mt-8 flex flex-wrap items-center justify-center gap-4 px-4 sm:mt-12 sm:gap-8 lg:justify-start lg:px-0">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 sm:text-3xl">5+</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Années d'expérience</div>
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
+                    5+
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                    Années d'expérience
+                  </div>
                 </div>
+                <div className="hidden h-12 w-px bg-gray-300 dark:bg-gray-600 sm:block"></div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 sm:text-3xl">50+</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Familles satisfaites</div>
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
+                    50+
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                    Familles satisfaites
+                  </div>
                 </div>
+                <div className="hidden h-12 w-px bg-gray-300 dark:bg-gray-600 sm:block"></div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 sm:text-3xl">24/7</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Disponibilité urgences</div>
+                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
+                    24/7
+                  </div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">
+                    Disponibilité urgences
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div className="order-1 lg:order-2">
-              <div className="relative">
+            <div className="relative order-1 lg:order-2">
+              <div className="relative z-10">
                 <img
                   src="https://images.pexels.com/photos/8613313/pexels-photo-8613313.jpeg?auto=compress&cs=tinysrgb&w=600"
                   alt="Marie Fortea avec des enfants"
                   className="mx-auto aspect-[4/5] w-full max-w-sm rounded-2xl object-cover shadow-2xl sm:max-w-md sm:rounded-3xl lg:max-w-lg"
                 />
-                <div className="absolute -right-4 -top-4 h-20 w-20 animate-pulse rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 opacity-20 sm:-right-6 sm:-top-6 sm:h-32 sm:w-32"></div>
-                <div className="animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 animate-pulse rounded-full bg-gradient-to-br from-blue-400 to-green-400 opacity-20 sm:-bottom-6 sm:-left-6 sm:h-24 sm:w-24"></div>
               </div>
+              <div className="absolute -right-4 -top-4 h-20 w-20 animate-pulse rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 opacity-20 sm:-right-6 sm:-top-6 sm:h-32 sm:w-32"></div>
+              <div className="animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 animate-pulse rounded-full bg-gradient-to-br from-blue-400 to-green-400 opacity-20 sm:-bottom-6 sm:-left-6 sm:h-24 sm:w-24"></div>
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
       {/* Services Section */}
       <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.1}>
@@ -193,7 +207,7 @@ const Home = () => {
             </Button>
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
       {/* Why Choose Me Section */}
       <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.2}>
@@ -244,8 +258,8 @@ const Home = () => {
                       Flexibilité & Fiabilité
                     </h3>
                     <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                      Disponible en urgence et adaptable à tous vos besoins,
-                      même en dernière minute.
+                      Disponible selon vos besoins, même en cas d'urgence ou
+                      d'imprévu.
                     </p>
                   </div>
                 </div>
@@ -261,7 +275,7 @@ const Home = () => {
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
       {/* Testimonials Section */}
       <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.3}>
@@ -310,7 +324,7 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </AnimatedSection>
+      </section>
 
       {/* CTA Section */}
       <section className="bg-gradient-to-r from-blue-600 to-green-600 py-12 sm:py-16 md:py-20">
