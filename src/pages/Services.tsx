@@ -94,6 +94,11 @@ const Services = () => {
       title: 'Accompagnement sorties',
       description: 'Parc, cinéma, activités extérieures',
     },
+    {
+      icon: <Heart className="h-6 w-6 text-pink-600" />,
+      title: 'Animation événements',
+      description: 'Anniversaires, fêtes spéciales',
+    },
   ];
 
   return (
