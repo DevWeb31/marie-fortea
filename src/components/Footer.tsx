@@ -4,10 +4,8 @@ import {
   Baby,
   Heart,
   Phone,
-  Mail,
   MapPin,
-  Facebook,
-  Instagram,
+  Info,
 } from 'lucide-react';
 
 const Footer = () => {
@@ -95,8 +93,18 @@ const Footer = () => {
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-yellow-400 sm:h-5 sm:w-5" />
                 <div className="font-['Inter'] text-sm text-gray-300 sm:text-base">
                   <div>Montaigut sur Save</div>
-                  <div className="text-xs text-gray-400 sm:text-sm">
-                    Rayon de 20km
+                  <div className="text-xs text-gray-400 sm:text-sm flex items-center space-x-1">
+                    <span>Rayon de 20km</span>
+                    <div className="group relative">
+                      <Info className="h-3 w-3 text-blue-400 cursor-help" />
+                      <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-3 py-2 bg-gray-800 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap z-10">
+                        <div className="font-medium mb-1">Villes et villages :</div>
+                        <div>Toulouse, L'Isle-Jourdain,</div>
+                        <div>Grenade, Seysses, Muret,</div>
+                        <div>Plaisance-du-Touch, Cugnaux</div>
+                        <div className="absolute top-full left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-4 border-transparent border-t-gray-800"></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
