@@ -10,27 +10,39 @@ import Booking from '@/pages/Booking';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import Footer from '@/components/Footer';
+import { useScrollToTop } from '@/hooks/use-scroll-to-top';
+import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import './App.css';
+
+// Composant wrapper pour le scroll automatique
+function AppContent() {
+  useScrollToTop(); // Hook pour le scroll automatique
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-zinc-950 dark:to-zinc-900">
+      <Navigation />
+      <main>
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/services" element={<Services />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/admin" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+        </Routes>
+      </main>
+      <Footer />
+      <Toaster />
+      <ScrollToTopButton />
+    </div>
+  );
+}
 
 function App() {
   return (
     <ThemeProvider defaultTheme="light" storageKey="marie-childcare-theme">
       <Router>
-        <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-zinc-950 dark:to-zinc-900">
-          <Navigation />
-          <main>
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/services" element={<Services />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/booking" element={<Booking />} />
-              <Route path="/admin" element={<AdminLogin />} />
-              <Route path="/admin/dashboard" element={<AdminDashboard />} />
-            </Routes>
-          </main>
-          <Footer />
-          <Toaster />
-        </div>
+        <AppContent />
       </Router>
     </ThemeProvider>
   );

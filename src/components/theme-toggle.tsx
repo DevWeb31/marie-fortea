@@ -1,60 +1,131 @@
 import React from 'react';
 import { useTheme } from './theme-provider';
-import { Button } from './ui/button';
-import { Moon, Sun, Monitor } from 'lucide-react';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu';
+import { Button } from '@/components/ui/button';
+import ThemeSnackbar from './ThemeSnackbar';
+
+// Icônes SVG personnalisées modernes avec animations
+const SunIcon = () => (
+  <svg 
+    width="16" 
+    height="16" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    className="transition-all duration-500 ease-out group-hover:rotate-12 group-hover:scale-110"
+  >
+    <circle cx="12" cy="12" r="4" className="animate-pulse"/>
+    <path d="M12 2v2" className="transition-all duration-300"/>
+    <path d="M12 20v2" className="transition-all duration-300"/>
+    <path d="m4.93 4.93 1.41 1.41" className="transition-all duration-300"/>
+    <path d="m17.66 17.66 1.41 1.41" className="transition-all duration-300"/>
+    <path d="M2 12h2" className="transition-all duration-300"/>
+    <path d="M20 12h2" className="transition-all duration-300"/>
+    <path d="m6.34 17.66-1.41 1.41" className="transition-all duration-300"/>
+    <path d="m19.07 4.93-1.41 1.41" className="transition-all duration-300"/>
+  </svg>
+);
+
+const MoonIcon = () => (
+  <svg 
+    width="16" 
+    height="16" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    className="transition-all duration-500 ease-out group-hover:scale-110 group-hover:rotate-6"
+  >
+    <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" className="animate-pulse"/>
+  </svg>
+);
+
+const MonitorIcon = () => (
+  <svg 
+    width="16" 
+    height="16" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    stroke="currentColor" 
+    strokeWidth="2" 
+    strokeLinecap="round" 
+    strokeLinejoin="round"
+    className="transition-all duration-500 ease-out group-hover:scale-110"
+  >
+    <rect width="20" height="14" x="2" y="3" rx="2" ry="2" className="transition-all duration-300"/>
+    <line x1="8" x2="16" y1="21" y2="21" className="transition-all duration-300"/>
+    <line x1="12" x2="12" y1="17" y2="21" className="transition-all duration-300"/>
+  </svg>
+);
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
+  const [systemTheme, setSystemTheme] = React.useState<'light' | 'dark'>('light');
+  const [showSnackbar, setShowSnackbar] = React.useState(false);
 
-  const themes = [
-    {
-      value: 'light',
-      label: 'Thème clair',
-      icon: Sun,
-    },
-    {
-      value: 'dark',
-      label: 'Thème sombre',
-      icon: Moon,
-    },
-    {
-      value: 'system',
-      label: 'Système',
-      icon: Monitor,
-    },
-  ] as const;
+  React.useEffect(() => {
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const updateSystemTheme = () => setSystemTheme(mediaQuery.matches ? 'dark' : 'light');
+    
+    updateSystemTheme();
+    mediaQuery.addEventListener('change', updateSystemTheme);
+    
+    return () => mediaQuery.removeEventListener('change', updateSystemTheme);
+  }, []);
+
+  // Détermine l'icône à afficher
+  const getCurrentIcon = () => {
+    if (theme === 'dark') return <MoonIcon />;
+    if (theme === 'light') return <SunIcon />;
+    if (theme === 'system') return systemTheme === 'dark' ? <MoonIcon /> : <SunIcon />;
+    return <SunIcon />;
+  };
+
+  // Animation key pour forcer le re-render et l'animation
+  const [iconKey, setIconKey] = React.useState(0);
+
+  React.useEffect(() => {
+    setIconKey(prev => prev + 1);
+  }, [theme, systemTheme]);
+
+  // Fonction pour passer au thème suivant
+  const cycleToNextTheme = () => {
+    const themeOrder = ['light', 'dark', 'system'];
+    const currentIndex = themeOrder.indexOf(theme);
+    const nextIndex = (currentIndex + 1) % themeOrder.length;
+    const nextTheme = themeOrder[nextIndex] as 'light' | 'dark' | 'system';
+    
+    setTheme(nextTheme);
+    setShowSnackbar(true);
+  };
 
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button variant="outline" size="icon" className="h-9 w-9">
-          <Sun className="h-4 w-4 rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-          <Moon className="absolute h-4 w-4 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
-          <span className="sr-only">Changer le thème</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
-        {themes.map(({ value, label, icon: Icon }) => (
-          <DropdownMenuItem
-            key={value}
-            onClick={() => setTheme(value)}
-            className={`flex items-center gap-2 ${
-              theme === value ? 'bg-accent text-accent-foreground' : ''
-            }`}
-          >
-            <Icon className="h-4 w-4" />
-            {label}
-            {theme === value && <span className="ml-auto text-xs">✓</span>}
-          </DropdownMenuItem>
-        ))}
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <>
+      <Button 
+        variant="outline" 
+        size="icon" 
+        onClick={cycleToNextTheme}
+        className="h-9 w-9 bg-white dark:bg-zinc-800 hover:bg-gray-50 dark:hover:bg-zinc-700 transition-colors relative overflow-hidden group"
+      >
+        <div 
+          key={iconKey}
+          className="text-gray-700 dark:text-gray-300 transition-all duration-500 ease-out transform animate-in fade-in-0 zoom-in-95 slide-in-from-top-1"
+        >
+          {getCurrentIcon()}
+        </div>
+        <span className="sr-only">Changer le thème</span>
+      </Button>
+
+      <ThemeSnackbar
+        isVisible={showSnackbar}
+        theme={theme}
+        onClose={() => setShowSnackbar(false)}
+      />
+    </>
   );
 }
 
@@ -70,16 +141,16 @@ export function ThemeToggleButtons() {
         onClick={() => setTheme('light')}
         className="flex items-center gap-2"
       >
-        <Sun className="h-4 w-4" />
+        <SunIcon />
         Clair
       </Button>
       <Button
         variant={theme === 'dark' ? 'default' : 'outline'}
-        size="sm"
         onClick={() => setTheme('dark')}
+        size="sm"
         className="flex items-center gap-2"
       >
-        <Moon className="h-4 w-4" />
+        <MoonIcon />
         Sombre
       </Button>
       <Button
@@ -88,7 +159,7 @@ export function ThemeToggleButtons() {
         onClick={() => setTheme('system')}
         className="flex items-center gap-2"
       >
-        <Monitor className="h-4 w-4" />
+        <MonitorIcon />
         Système
       </Button>
     </div>

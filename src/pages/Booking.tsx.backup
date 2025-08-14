@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,14 +13,14 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
-import { AnimatedSection, AnimatedTitle } from '@/components/ScrollAnimation';
-import PhoneHoursDialog from '@/components/PhoneHoursDialog';
+import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
 import {
   Calendar,
   Clock,
   Baby,
   MapPin,
   Phone,
+  Mail,
   User,
   MessageSquare,
   CheckCircle,
@@ -32,13 +31,9 @@ import {
 const Booking = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
-
-  const handlePhoneClick = () => {
-    setIsPhoneDialogOpen(true);
-  };
   const [formData, setFormData] = useState({
     parentName: '',
+    parentEmail: '',
     parentPhone: '',
     address: '',
     serviceType: '',
@@ -73,6 +68,7 @@ const Booking = () => {
       // Reset form
       setFormData({
         parentName: '',
+        parentEmail: '',
         parentPhone: '',
         address: '',
         serviceType: '',
@@ -127,10 +123,11 @@ const Booking = () => {
           </p>
         </AnimatedSection>
 
-        <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
-          {/* Main Form */}
-          <div className="order-2 lg:order-1 lg:col-span-2">
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+        <AnimatedSection className="mb-8" delay={0.1}>
+          <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
+            {/* Main Form */}
+            <div className="order-2 lg:order-1 lg:col-span-2">
+              <AnimatedCard className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900" index={0}>
               <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700 rounded-t-xl">
                 <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                   <Calendar className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400 sm:mr-3 sm:h-6 sm:w-6" />
@@ -192,14 +189,32 @@ const Booking = () => {
                       </div>
                     </div>
 
-
+                    <div>
+                      <Label
+                        htmlFor="parentEmail"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
+                      >
+                        Email *
+                      </Label>
+                      <Input
+                        id="parentEmail"
+                        type="email"
+                        value={formData.parentEmail}
+                        onChange={e =>
+                          handleInputChange('parentEmail', e.target.value)
+                        }
+                        placeholder="marie.dupont@email.com"
+                        required
+                        className="mt-1"
+                      />
+                    </div>
 
                     <div>
                       <Label
                         htmlFor="address"
                         className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
-                        Adresse de garde *
+                        Adresse de la garde *
                       </Label>
                       <Input
                         id="address"
@@ -208,7 +223,7 @@ const Booking = () => {
                         onChange={e =>
                           handleInputChange('address', e.target.value)
                         }
-                        placeholder="123 Rue de la Paix, Toulouse"
+                        placeholder="123 Rue de la République, 31000 Toulouse"
                         required
                         className="mt-1"
                       />
@@ -218,42 +233,48 @@ const Booking = () => {
                   {/* Service Details */}
                   <div className="space-y-4 sm:space-y-6">
                     <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                      <Calendar className="mr-2 h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
+                      <Heart className="mr-2 h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
                       Détails du Service
                     </h3>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-                      <div>
-                        <Label
-                          htmlFor="serviceType"
-                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
-                        >
-                          Type de service *
-                        </Label>
-                        <Select
-                          value={formData.serviceType}
-                          onValueChange={value =>
-                            handleInputChange('serviceType', value)
-                          }
-                        >
-                          <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Sélectionnez un service" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {serviceTypes.map(service => (
-                              <SelectItem key={service.value} value={service.value}>
-                                <div className="flex items-center justify-between w-full">
-                                  <span>{service.label}</span>
-                                  <Badge variant="secondary" className="ml-2">
-                                    {service.price}
-                                  </Badge>
-                                </div>
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                    <div>
+                      <Label
+                        htmlFor="serviceType"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
+                      >
+                        Type de service *
+                      </Label>
+                      <Select
+                        value={formData.serviceType}
+                        onValueChange={value =>
+                          handleInputChange('serviceType', value)
+                        }
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Choisissez le type de garde" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {serviceTypes.map(service => (
+                            <SelectItem
+                              key={service.value}
+                              value={service.value}
+                            >
+                              <div className="flex w-full items-center justify-between text-sm">
+                                <span>{service.label}</span>
+                                <Badge
+                                  variant="secondary"
+                                  className="ml-2 text-xs"
+                                >
+                                  {service.price}
+                                </Badge>
+                              </div>
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
+                    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 md:grid-cols-3">
                       <div>
                         <Label
                           htmlFor="date"
@@ -272,9 +293,7 @@ const Booking = () => {
                           className="mt-1"
                         />
                       </div>
-                    </div>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
                       <div>
                         <Label
                           htmlFor="startTime"
@@ -318,36 +337,34 @@ const Booking = () => {
                   {/* Children Information */}
                   <div className="space-y-4 sm:space-y-6">
                     <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
-                      <Baby className="mr-2 h-4 w-4 text-pink-600 dark:text-pink-400 sm:h-5 sm:w-5" />
+                      <Baby className="mr-2 h-4 w-4 text-green-600 dark:text-green-400 sm:h-5 sm:w-5" />
                       Informations sur les Enfants
                     </h3>
 
-                    <div className="grid grid-cols-1 gap-3 sm:gap-4 md:grid-cols-2">
-                      <div>
-                        <Label
-                          htmlFor="numberOfChildren"
-                          className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
-                        >
-                          Nombre d'enfants *
-                        </Label>
-                        <Select
-                          value={formData.numberOfChildren}
-                          onValueChange={value =>
-                            handleInputChange('numberOfChildren', value)
-                          }
-                        >
-                          <SelectTrigger className="mt-1">
-                            <SelectValue placeholder="Sélectionnez" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {[1, 2, 3, 4, 5, 6].map(num => (
-                              <SelectItem key={num} value={num.toString()}>
-                                {num} enfant{num > 1 ? 's' : ''}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
+                    <div>
+                      <Label
+                        htmlFor="numberOfChildren"
+                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
+                      >
+                        Nombre d'enfants *
+                      </Label>
+                      <Select
+                        value={formData.numberOfChildren}
+                        onValueChange={value =>
+                          handleInputChange('numberOfChildren', value)
+                        }
+                      >
+                        <SelectTrigger className="mt-1">
+                          <SelectValue placeholder="Sélectionnez le nombre d'enfants" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {[1, 2, 3, 4, 5].map(num => (
+                            <SelectItem key={num} value={num.toString()}>
+                              {num} enfant{num > 1 ? 's' : ''}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
                     </div>
 
                     <div>
@@ -355,7 +372,7 @@ const Booking = () => {
                         htmlFor="childrenDetails"
                         className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
-                        Détails des enfants (âges, prénoms) *
+                        Détails des enfants (prénom, âge, particularités) *
                       </Label>
                       <Textarea
                         id="childrenDetails"
@@ -363,29 +380,38 @@ const Booking = () => {
                         onChange={e =>
                           handleInputChange('childrenDetails', e.target.value)
                         }
-                        placeholder="Ex: Emma, 4 ans - Lucas, 2 ans"
+                        placeholder="Ex: Lucas 4 ans (allergie aux noix), Emma 2 ans (sieste vers 14h), ..."
                         required
-                        className="mt-1"
-                        rows={3}
+                        className="mt-1 min-h-[100px]"
                       />
                     </div>
+                  </div>
+
+                  {/* Special Instructions */}
+                  <div className="space-y-4 sm:space-y-6">
+                    <h3 className="flex items-center font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                      <MessageSquare className="mr-2 h-4 w-4 text-purple-600 dark:text-purple-400 sm:h-5 sm:w-5" />
+                      Instructions Spéciales
+                    </h3>
 
                     <div>
                       <Label
                         htmlFor="specialInstructions"
                         className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                       >
-                        Instructions spéciales
+                        Instructions particulières (optionnel)
                       </Label>
                       <Textarea
                         id="specialInstructions"
                         value={formData.specialInstructions}
                         onChange={e =>
-                          handleInputChange('specialInstructions', e.target.value)
+                          handleInputChange(
+                            'specialInstructions',
+                            e.target.value
+                          )
                         }
-                        placeholder="Allergies, habitudes, préférences..."
-                        className="mt-1"
-                        rows={3}
+                        placeholder="Habitudes, jeux préférés, routine du coucher, médicaments, allergies, etc."
+                        className="mt-1 min-h-[100px]"
                       />
                     </div>
                   </div>
@@ -403,16 +429,19 @@ const Booking = () => {
                           htmlFor="emergencyContact"
                           className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
                         >
-                          Nom et prénom
+                          Nom du contact d'urgence
                         </Label>
                         <Input
                           id="emergencyContact"
                           type="text"
                           value={formData.emergencyContact}
                           onChange={e =>
-                            handleInputChange('emergencyContact', e.target.value)
+                            handleInputChange(
+                              'emergencyContact',
+                              e.target.value
+                            )
                           }
-                          placeholder="Jean Dupont"
+                          placeholder="Grand-mère, Oncle, etc."
                           className="mt-1"
                         />
                       </div>
@@ -440,12 +469,10 @@ const Booking = () => {
 
                   {/* Submit Button */}
                   <div className="border-t pt-4 sm:pt-6">
-                    <HarmoniousButton
+                    <Button
                       type="submit"
-                      variant="primary"
-                      size="lg"
                       disabled={isSubmitting}
-                      className="w-full"
+                      className="w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-3 text-base font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:py-4 sm:text-lg"
                     >
                       {isSubmitting ? (
                         <>
@@ -458,7 +485,7 @@ const Booking = () => {
                           Envoyer ma demande
                         </>
                       )}
-                    </HarmoniousButton>
+                    </Button>
                   </div>
                 </form>
               </CardContent>
@@ -468,31 +495,32 @@ const Booking = () => {
           {/* Sidebar */}
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Contact Info */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white rounded-t-xl">
+                      <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg">
                   Contact Direct
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-                
                 <div className="flex items-center space-x-3">
                   <Phone className="h-4 w-4 flex-shrink-0 text-blue-600 sm:h-5 sm:w-5" />
                   <div>
-                    <button
-                      onClick={handlePhoneClick}
-                      className="text-sm font-medium sm:text-base text-left hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
-                    >
-                      07 84 97 64 00
-                    </button>
+                    <div className="text-sm font-medium sm:text-base">
+                      06 12 34 56 78
+                    </div>
                     <div className="text-xs text-gray-600 sm:text-sm">
-                      Horaires d'appel :
+                      Réponse rapide
                     </div>
-                    <div className="text-xs text-gray-500 sm:text-sm">
-                      Lun-Ven : 19h-21h
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <Mail className="h-4 w-4 flex-shrink-0 text-green-600 sm:h-5 sm:w-5" />
+                  <div>
+                    <div className="break-all text-sm font-medium sm:text-base">
+                      marie.fortea@email.com
                     </div>
-                    <div className="text-xs text-gray-500 sm:text-sm">
-                      Week-end : 9h-21h
+                    <div className="text-xs text-gray-600 sm:text-sm">
+                      Réponse sous 24h
                     </div>
                   </div>
                 </div>
@@ -522,45 +550,60 @@ const Booking = () => {
                     </div>
                   ))}
                 </div>
-                <div className="border-t pt-3 text-xs text-gray-600 dark:text-gray-400">
-                  <p>• Durée minimum : 3h</p>
-                  <p>• Frais déplacement : +5€ au-delà de 10km</p>
-                  <p>• Majoration nocturne : +5€/h après 22h</p>
+                <div className="space-y-1 border-t pt-3 text-xs text-gray-600 dark:text-gray-300 sm:space-y-2 sm:pt-4 sm:text-sm">
+                  <div>• Durée minimum : 3 heures</div>
+                  <div>• Majoration nocturne : +5€/h après 22h</div>
+                  <div>• Frais de déplacement : 5€ au-delà de 10km</div>
                 </div>
               </CardContent>
             </Card>
 
-            {/* Process Steps */}
+            {/* Process */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
               <CardHeader className="rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Processus de Réservation
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-                <div className="space-y-3">
+              <CardContent className="p-4 sm:p-6">
+                <div className="space-y-3 sm:space-y-4">
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-900 dark:text-blue-400">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       1
                     </div>
-                    <div className="text-xs text-gray-700 dark:text-gray-300 sm:text-sm">
-                      Envoyez votre demande via ce formulaire
+                    <div className="text-xs sm:text-sm">
+                      <div className="font-medium dark:text-white">
+                        Demande envoyée
+                      </div>
+                      <div className="text-gray-600 dark:text-gray-300">
+                        Formulaire reçu instantanément
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-600 dark:bg-green-900 dark:text-green-400">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-600 dark:bg-blue-950/40 dark:text-blue-400 sm:h-6 sm:w-6 sm:text-sm">
                       2
                     </div>
-                    <div className="text-xs text-gray-700 dark:text-gray-300 sm:text-sm">
-                      Je vous contacte sous 24h pour confirmer
+                    <div className="text-xs sm:text-sm">
+                      <div className="font-medium dark:text-white">
+                        Contact sous 24h
+                      </div>
+                      <div className="text-gray-600 dark:text-gray-300">
+                        Échange pour finaliser
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
-                    <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 text-xs font-bold text-purple-600 dark:bg-purple-900 dark:text-purple-400">
+                    <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100 text-xs font-bold text-green-600 dark:bg-green-950/40 dark:text-green-400 sm:h-6 sm:w-6 sm:text-sm">
                       3
                     </div>
-                    <div className="text-xs text-gray-700 dark:text-gray-300 sm:text-sm">
-                      Réservation confirmée et planifiée
+                    <div className="text-xs sm:text-sm">
+                      <div className="font-medium dark:text-white">
+                        Confirmation
+                      </div>
+                      <div className="text-gray-600 dark:text-gray-300">
+                        Réservation validée
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -569,13 +612,6 @@ const Booking = () => {
           </div>
         </div>
       </div>
-
-      {/* Phone Hours Dialog */}
-      <PhoneHoursDialog
-        isOpen={isPhoneDialogOpen}
-        onClose={() => setIsPhoneDialogOpen(false)}
-        phoneNumber="07 84 97 64 00"
-      />
     </div>
   );
 };

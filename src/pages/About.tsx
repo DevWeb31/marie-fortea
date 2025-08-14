@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Link } from 'react-router-dom';
+import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
+import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import {
   Award,
   Heart,
@@ -20,6 +23,12 @@ import {
 } from 'lucide-react';
 
 const About = () => {
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    setIsPhoneDialogOpen(true);
+  };
+
   const qualifications = [
     {
       icon: <GraduationCap className="h-6 w-6 text-blue-600" />,
@@ -103,100 +112,103 @@ const About = () => {
     <div className="min-h-screen py-12 sm:py-16 md:py-20">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         {/* Header */}
-        <div className="mb-12 text-center sm:mb-16">
+        <AnimatedSection className="mb-12 text-center sm:mb-16">
           <Badge className="mb-6 bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200">
             <Award className="mr-2 h-4 w-4" />
             Professionnelle Expérimentée
           </Badge>
 
-          <h1 className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl">
+          <AnimatedTitle className="mb-4 font-['Poppins'] text-3xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-4xl md:text-5xl" delay={0.2}>
             À propos de
             <span className="block bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent dark:from-blue-400 dark:to-emerald-400">
               Marie Fortea
             </span>
-          </h1>
+          </AnimatedTitle>
 
           <p className="mx-auto max-w-3xl px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:text-xl">
             Passionnée par la petite enfance depuis toujours, je mets mon
             expérience et ma bienveillance au service des familles toulousaines.
           </p>
-        </div>
+        </AnimatedSection>
 
         {/* About Me Section */}
-        <div className="mb-12 grid gap-8 sm:mb-16 sm:gap-12 md:mb-20 lg:grid-cols-2 lg:gap-16">
-          <div className="relative">
-            <img
-              src="https://images.pexels.com/photos/8612990/pexels-photo-8612990.jpeg?auto=compress&cs=tinysrgb&w=800"
-              alt="Marie Fortea portrait professionnel"
-              className="aspect-[4/5] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
-            />
-            <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.1}>
+          <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+            <div className="relative">
+              <img
+                src="https://images.pexels.com/photos/8612990/pexels-photo-8612990.jpeg?auto=compress&cs=tinysrgb&w=800"
+                alt="Marie Fortea portrait professionnel"
+                className="aspect-[4/5] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
+              />
+                          <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
               <div className="text-center">
                 <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
-                  5+
+                  16
                 </div>
                 <div className="text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
                   Années d'expérience
                 </div>
               </div>
             </div>
-          </div>
+            </div>
 
-          <div className="space-y-6 sm:space-y-8">
-            <div>
-              <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
-                Mon Parcours
-              </h2>
+            <div className="space-y-6 sm:space-y-8">
+              <div>
+                <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
+                  Mon Parcours
+                </h2>
 
-              <div className="space-y-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:space-y-6 sm:text-base">
-                <p>
+                <div className="space-y-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:space-y-6 sm:text-base">
+                                  <p>
                   Diplômée d'un CAP Petite Enfance, j'ai débuté ma carrière dans
-                  une crèche municipale de Toulouse où j'ai eu l'opportunité de
+                  une crèche municipale où j'ai eu l'opportunité de
                   travailler avec des enfants de 3 mois à 6 ans pendant plus de
-                  5 années.
+                  16 années.
                 </p>
 
-                <p>
-                  Cette expérience m'a permis de développer une expertise solide
-                  dans l'accompagnement du développement de l'enfant, la gestion
-                  des besoins spécifiques de chaque âge, et l'importance d'une
-                  approche individualisée et bienveillante.
-                </p>
+                  <p>
+                    Cette expérience m'a permis de développer une expertise solide
+                    dans l'accompagnement du développement de l'enfant, la gestion
+                    des besoins spécifiques de chaque âge, et l'importance d'une
+                    approche individualisée et bienveillante.
+                  </p>
 
-                <p>
-                  Aujourd'hui, je souhaite mettre cette expérience au service
-                  des familles en proposant des services de garde occasionnelle
-                  de qualité, que ce soit pour vos événements spéciaux, vos
-                  urgences ou simplement pour vous offrir des moments de
-                  détente.
+                  <p>
+                    Aujourd'hui, je souhaite mettre cette expérience au service
+                    des familles en proposant des services de garde occasionnelle
+                    de qualité, que ce soit pour vos événements spéciaux, vos
+                    urgences ou simplement pour vous offrir des moments de
+                    détente.
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 p-4 dark:from-zinc-900 dark:to-zinc-800 sm:rounded-2xl sm:p-6">
+                <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
+                  Ma Philosophie
+                </h3>
+                <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                  "Chaque enfant est unique et mérite d'être accompagné avec
+                  bienveillance, respect et professionnalisme. Mon rôle est de
+                  créer un environnement sécurisé et stimulant où il peut
+                  s'épanouir pleinement."
                 </p>
               </div>
             </div>
-
-            <div className="rounded-xl bg-gradient-to-br from-blue-50 to-green-50 p-4 dark:from-zinc-900 dark:to-zinc-800 sm:rounded-2xl sm:p-6">
-              <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
-                Ma Philosophie
-              </h3>
-              <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
-                "Chaque enfant est unique et mérite d'être accompagné avec
-                bienveillance, respect et professionnalisme. Mon rôle est de
-                créer un environnement sécurisé et stimulant où il peut
-                s'épanouir pleinement."
-              </p>
-            </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Qualifications */}
-        <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.2}>
+          <AnimatedTitle className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl" delay={0.4}>
             Qualifications & Certifications
-          </h2>
+          </AnimatedTitle>
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-6 lg:grid-cols-4">
             {qualifications.map((qual, index) => (
-              <Card
+              <AnimatedCard
                 key={index}
+                index={index}
                 className="group border-2 border-gray-100 transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
               >
                 <CardContent className="p-4 text-center sm:p-6">
@@ -210,21 +222,22 @@ const About = () => {
                     {qual.description}
                   </p>
                 </CardContent>
-              </Card>
+              </AnimatedCard>
             ))}
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* My Values */}
-        <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.3}>
+          <AnimatedTitle className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl" delay={0.5}>
             Mes Valeurs
-          </h2>
+          </AnimatedTitle>
 
           <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2">
             {values.map((value, index) => (
-              <Card
+              <AnimatedCard
                 key={index}
+                index={index}
                 className={`${value.color} group transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900`}
               >
                 <CardContent className="p-6 sm:p-8">
@@ -242,60 +255,63 @@ const About = () => {
                     </div>
                   </div>
                 </CardContent>
-              </Card>
+              </AnimatedCard>
             ))}
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Statistics */}
-        <div className="mb-12 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 text-white sm:mb-16 sm:rounded-3xl sm:p-8 md:mb-20">
-          <div className="grid grid-cols-2 gap-4 text-center sm:gap-8 md:grid-cols-4">
-            <div>
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.4}>
+          <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 text-white sm:rounded-3xl sm:p-8">
+            <div className="grid grid-cols-2 gap-4 text-center sm:gap-8 md:grid-cols-4">
+                          <div>
               <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
-                5+
+                16
               </div>
               <div className="text-xs text-blue-100 sm:text-sm">
                 Années d'expérience
               </div>
             </div>
-            <div>
-              <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
-                50+
+              <div>
+                <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
+                  50+
+                </div>
+                <div className="text-xs text-blue-100 sm:text-sm">
+                  Familles satisfaites
+                </div>
               </div>
-              <div className="text-xs text-blue-100 sm:text-sm">
-                Familles satisfaites
+              <div>
+                <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
+                  200+
+                </div>
+                <div className="text-xs text-blue-100 sm:text-sm">
+                  Heures de garde
+                </div>
               </div>
-            </div>
-            <div>
-              <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
-                200+
-              </div>
-              <div className="text-xs text-blue-100 sm:text-sm">
-                Heures de garde
-              </div>
-            </div>
-            <div>
-              <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
-                100%
-              </div>
-              <div className="text-xs text-blue-100 sm:text-sm">
-                Familles qui recommandent
+              <div>
+                <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
+                  100%
+                </div>
+                <div className="text-xs text-blue-100 sm:text-sm">
+                  Familles qui recommandent
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Testimonials */}
-        <div className="mb-12 sm:mb-16 md:mb-20">
-          <h2 className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl">
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.5}>
+          <AnimatedTitle className="mb-8 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-12 sm:text-3xl" delay={0.7}>
             Témoignages de Confiance
-          </h2>
+          </AnimatedTitle>
 
           <div className="grid grid-cols-1 gap-6 sm:gap-8 md:grid-cols-2 lg:grid-cols-3">
             {testimonials.map((testimonial, index) => (
-              <Card
+              <AnimatedCard
                 key={index}
-                className="border-2 border-gray-100 transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
+                index={index}
+                className="group border-2 border-gray-100 transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
@@ -306,104 +322,109 @@ const About = () => {
                       />
                     ))}
                   </div>
-                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-600 dark:text-gray-300 sm:mb-6 sm:text-base">
+                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
                     "{testimonial.text}"
                   </p>
-                  <div className="space-y-1 sm:space-y-2">
-                    <div className="font-['Poppins'] text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
-                      {testimonial.name}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-['Poppins'] text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
+                        {testimonial.name}
+                      </div>
+                      <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                        <MapPin className="mr-1 h-3 w-3 flex-shrink-0" />
+                        {testimonial.location}
+                      </div>
                     </div>
-                    <div className="text-xs font-medium text-blue-600 dark:text-blue-400 sm:text-sm">
+                    <Badge variant="secondary" className="text-xs">
                       {testimonial.service}
-                    </div>
-                    <div className="flex items-center text-xs text-gray-500 dark:text-gray-400 sm:text-sm">
-                      <MapPin className="mr-1 h-3 w-3 flex-shrink-0" />
-                      {testimonial.location}
-                    </div>
+                    </Badge>
                   </div>
                 </CardContent>
-              </Card>
+              </AnimatedCard>
             ))}
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* Service Area */}
-        <div className="mb-12 rounded-2xl bg-white p-6 shadow-lg dark:bg-zinc-900 sm:mb-16 sm:rounded-3xl sm:p-8">
-          <h2 className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-8 sm:text-3xl">
-            Zone d'Intervention
-          </h2>
-
-          <div className="grid grid-cols-1 items-center gap-6 sm:gap-8 md:grid-cols-2">
-            <div>
-              <h3 className="mb-4 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">
-                Principalement dans la région toulousaine :
-              </h3>
-              <div className="grid grid-cols-2 gap-2 sm:gap-3">
-                {[
-                  'Toulouse',
-                  'Colomiers',
-                  'Blagnac',
-                  "L'Union",
-                  'Balma',
-                  'Ramonville',
-                  'Cugnaux',
-                  'Tournefeuille',
-                ].map((city, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center space-x-2 text-sm text-gray-700 dark:text-gray-300 sm:text-base"
-                  >
-                    <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
-                    <span className="font-['Inter']">{city}</span>
+        <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.6}>
+          <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-green-50 p-6 dark:from-zinc-900 dark:to-zinc-800 sm:rounded-3xl sm:p-8">
+            <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+              <div>
+                <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
+                  Zone d'Intervention
+                </h2>
+                <p className="mb-6 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                  Je me déplace dans un rayon de 20km autour de Montaigut sur Save pour
+                  assurer mes services de garde. Ma zone couvre principalement :
+                </p>
+                <div className="grid grid-cols-2 gap-3 text-sm sm:text-base">
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-blue-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Montaigut sur Save</span>
                   </div>
-                ))}
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-green-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Toulouse</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-purple-600" />
+                    <span className="text-gray-700 dark:text-gray-300">L'Isle-Jourdain</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-orange-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Grenade</span>
+                  </div>
+                </div>
               </div>
-              <p className="mt-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                <strong>Frais de déplacement :</strong> Gratuit dans un rayon de
-                10km, puis 0,50€/km au-delà.
-              </p>
-            </div>
-            <div className="text-center">
-              <div className="mx-auto flex h-32 w-32 items-center justify-center rounded-full bg-gradient-to-br from-blue-100 to-green-100 dark:from-blue-950/40 dark:to-emerald-950/40 sm:h-48 sm:w-48">
-                <MapPin className="h-10 w-10 text-blue-600 dark:text-blue-400 sm:h-16 sm:w-16" />
+
+              <div className="relative">
+                <img
+                  src="https://images.pexels.com/photos/8613098/pexels-photo-8613098.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt="Marie avec des enfants en activité"
+                  className="aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
+                />
               </div>
             </div>
           </div>
-        </div>
+        </AnimatedSection>
 
         {/* CTA */}
-        <div className="text-center">
-          <h3 className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
-            Prêts à faire confiance à une professionnelle ?
-          </h3>
+        <AnimatedSection className="text-center" delay={0.7}>
+          <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
+            Prêt à me faire confiance ?
+          </h2>
           <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-base">
-            Contactez-moi pour discuter de vos besoins et planifier votre
-            prochaine garde d'enfants.
+            Contactez-moi pour discuter de vos besoins et planifier une première
+            rencontre.
           </p>
           <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
-            <Button
+            <HarmoniousButton
               asChild
+              variant="primary"
               size="lg"
-              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-base text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
             >
               <Link to="/booking">
                 <Calendar className="mr-2 h-5 w-5" />
                 Faire une demande
               </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-full border-2 border-blue-200 px-6 py-3 text-base text-blue-600 transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
-            >
-              <a href="tel:+33123456789">
-                <Phone className="mr-2 h-5 w-5" />
-                06 12 34 56 78
-              </a>
-            </Button>
+            </HarmoniousButton>
+                            <HarmoniousButton
+                  variant="secondary"
+                  size="lg"
+                  onClick={handlePhoneClick}
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Appeler maintenant
+                </HarmoniousButton>
           </div>
-        </div>
+        </AnimatedSection>
+
+        {/* Phone Hours Dialog */}
+        <PhoneHoursDialog
+          isOpen={isPhoneDialogOpen}
+          onClose={() => setIsPhoneDialogOpen(false)}
+          phoneNumber="07 84 97 64 00"
+        />
       </div>
     </div>
   );
