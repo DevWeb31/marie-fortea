@@ -132,16 +132,16 @@ const About = () => {
                 alt="Marie Fortea portrait professionnel"
                 className="aspect-[4/5] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
               />
-              <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
-                <div className="text-center">
-                  <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
-                    5+
-                  </div>
-                  <div className="text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
-                    Années d'expérience
-                  </div>
+                          <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
+              <div className="text-center">
+                <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
+                  16
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
+                  Années d'expérience
                 </div>
               </div>
+            </div>
             </div>
 
             <div className="space-y-6 sm:space-y-8">
@@ -151,12 +151,12 @@ const About = () => {
                 </h2>
 
                 <div className="space-y-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:space-y-6 sm:text-base">
-                  <p>
-                    Diplômée d'un CAP Petite Enfance, j'ai débuté ma carrière dans
-                    une crèche municipale de Toulouse où j'ai eu l'opportunité de
-                    travailler avec des enfants de 3 mois à 6 ans pendant plus de
-                    5 années.
-                  </p>
+                                  <p>
+                  Diplômée d'un CAP Petite Enfance, j'ai débuté ma carrière dans
+                  une crèche municipale où j'ai eu l'opportunité de
+                  travailler avec des enfants de 3 mois à 6 ans pendant plus de
+                  16 années.
+                </p>
 
                   <p>
                     Cette expérience m'a permis de développer une expertise solide
@@ -256,14 +256,14 @@ const About = () => {
         <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.4}>
           <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 text-white sm:rounded-3xl sm:p-8">
             <div className="grid grid-cols-2 gap-4 text-center sm:gap-8 md:grid-cols-4">
-              <div>
-                <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
-                  5+
-                </div>
-                <div className="text-xs text-blue-100 sm:text-sm">
-                  Années d'expérience
-                </div>
+                          <div>
+              <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
+                16
               </div>
+              <div className="text-xs text-blue-100 sm:text-sm">
+                Années d'expérience
+              </div>
+            </div>
               <div>
                 <div className="mb-1 font-['Poppins'] text-2xl font-bold sm:mb-2 sm:text-3xl">
                   50+
@@ -346,25 +346,25 @@ const About = () => {
                   Zone d'Intervention
                 </h2>
                 <p className="mb-6 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
-                  Je me déplace dans un rayon de 20km autour de Toulouse pour
+                  Je me déplace dans un rayon de 20km autour de Montaigut sur Save pour
                   assurer mes services de garde. Ma zone couvre principalement :
                 </p>
                 <div className="grid grid-cols-2 gap-3 text-sm sm:text-base">
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-blue-600" />
-                    <span className="text-gray-700 dark:text-gray-300">Toulouse</span>
+                    <span className="text-gray-700 dark:text-gray-300">Montaigut sur Save</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-green-600" />
-                    <span className="text-gray-700 dark:text-gray-300">Colomiers</span>
+                    <span className="text-gray-700 dark:text-gray-300">Toulouse</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-purple-600" />
-                    <span className="text-gray-700 dark:text-gray-300">Blagnac</span>
+                    <span className="text-gray-700 dark:text-gray-300">L'Isle-Jourdain</span>
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-orange-600" />
-                    <span className="text-gray-700 dark:text-gray-300">Tournefeuille</span>
+                    <span className="text-gray-700 dark:text-gray-300">Grenade</span>
                   </div>
                 </div>
               </div>
@@ -406,7 +406,7 @@ const About = () => {
               size="lg"
               className="rounded-full border-2 border-blue-200 px-6 py-3 text-base text-blue-600 transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
             >
-              <a href="tel:+33123456789">
+              <a href="tel:+33784976400">
                 <Phone className="mr-2 h-5 w-5" />
                 Appeler maintenant
               </a>

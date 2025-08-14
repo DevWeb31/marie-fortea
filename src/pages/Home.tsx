@@ -118,7 +118,7 @@ const Home = () => {
               {/* Statistics */}
               <div className="mt-8 grid grid-cols-3 gap-4 px-4 lg:px-0">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 sm:text-3xl">5+</div>
+                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 sm:text-3xl">16</div>
                   <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Années d'expérience</div>
                 </div>
                 <div className="text-center">
@@ -126,8 +126,8 @@ const Home = () => {
                   <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Familles satisfaites</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 sm:text-3xl">24/7</div>
-                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Disponibilité urgences</div>
+                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 sm:text-3xl">20km</div>
+                  <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Rayon d'intervention</div>
                 </div>
               </div>
             </div>
@@ -214,7 +214,7 @@ const Home = () => {
                       Expérience Professionnelle
                     </h3>
                     <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                      Plus de 5 ans d'expérience en crèche et formations
+                      Plus de 16 ans d'expérience en crèche et formations
                       spécialisées en petite enfance.
                     </p>
                   </div>
@@ -341,7 +341,7 @@ const Home = () => {
               size="lg"
               className="rounded-full border-2 border-white px-6 py-3 text-base font-medium text-white transition-all duration-300 hover:bg-white hover:text-blue-600 sm:px-8 sm:py-4 sm:text-lg"
             >
-              <a href="tel:+33123456789">
+              <a href="tel:+33784976400">
                 <Phone className="mr-2 h-5 w-5" />
                 Appeler maintenant
               </a>

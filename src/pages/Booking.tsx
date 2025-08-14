@@ -487,11 +487,12 @@ const Booking = () => {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
+                
                 <div className="flex items-center space-x-3">
                   <Phone className="h-4 w-4 flex-shrink-0 text-blue-600 sm:h-5 sm:w-5" />
                   <div>
                     <div className="text-sm font-medium sm:text-base">
-                      06 12 34 56 78
+                      07 84 97 64 00
                     </div>
                     <div className="text-xs text-gray-600 sm:text-sm">
                       Réponse rapide
