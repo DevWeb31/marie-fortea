@@ -27,7 +27,7 @@ const Footer = () => {
             </Link>
 
             <p className="mb-4 max-w-md font-['Inter'] text-sm leading-relaxed text-gray-300 sm:mb-6 sm:text-base">
-              Professionnelle de la petite enfance avec plus de 5 ans
+              Professionnelle de la petite enfance avec plus de 16 ans
               d'expérience en crèche. Je propose des services de garde
               occasionnelle de qualité pour vos événements spéciaux et urgences.
             </p>
@@ -74,28 +74,19 @@ const Footer = () => {
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-400 sm:h-5 sm:w-5" />
                 <div>
                   <a
-                    href="tel:+33123456789"
+                    href="tel:+33784976400"
                     className="font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base"
                   >
-                    06 12 34 56 78
+                    07 84 97 64 00
                   </a>
                   <div className="text-xs text-gray-400 sm:text-sm">
-                    Disponible 7j/7
+                    Horaires d'appel :
                   </div>
-                </div>
-              </div>
-
-              <div className="flex items-start space-x-3">
-                <Mail className="mt-0.5 h-4 w-4 flex-shrink-0 text-green-400 sm:h-5 sm:w-5" />
-                <div>
-                  <a
-                    href="mailto:marie.fortea@email.com"
-                    className="break-all font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base"
-                  >
-                    marie.fortea@email.com
-                  </a>
                   <div className="text-xs text-gray-400 sm:text-sm">
-                    Réponse sous 24h
+                    Lun-Ven : 19h-21h
+                  </div>
+                  <div className="text-xs text-gray-400 sm:text-sm">
+                    Week-end : 9h-21h
                   </div>
                 </div>
               </div>
@@ -103,9 +94,9 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-yellow-400 sm:h-5 sm:w-5" />
                 <div className="font-['Inter'] text-sm text-gray-300 sm:text-base">
-                  <div>Région Toulousaine</div>
+                  <div>Montaigut sur Save</div>
                   <div className="text-xs text-gray-400 sm:text-sm">
-                    Déplacement possible
+                    Rayon de 20km
                   </div>
                 </div>
               </div>
@@ -127,7 +118,7 @@ const Footer = () => {
               </span>
               <span className="flex items-center space-x-2">
                 <div className="h-2 w-2 rounded-full bg-yellow-400"></div>
-                <span>5+ ans d'expérience</span>
+                <span>16 ans d'expérience</span>
               </span>
             </div>
           </div>
@@ -141,7 +132,7 @@ const Footer = () => {
           </p>
           <p className="mt-1 text-xs text-gray-500 sm:mt-2">
             Site réalisé avec <Heart className="inline h-3 w-3 text-red-400" />{' '}
-            pour les familles toulousaines
+            pour les familles de la région
           </p>
         </div>
       </div>
