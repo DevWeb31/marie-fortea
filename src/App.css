@@ -3,3 +3,125 @@
   margin: 0;
   padding: 0;
 }
+
+/* Container principal - largeur complète avec contenu centré */
+#root > div {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Contenu principal centré avec largeur maximale */
+#root > div > main {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+/* Navigation en pleine largeur */
+#root > div > nav {
+  width: 100%;
+  max-width: none;
+}
+
+/* Footer en pleine largeur */
+#root > div > footer {
+  width: 100%;
+  max-width: none;
+}
+
+/* Fond d'arrière-plan design moderne et élégant */
+body {
+  background: 
+    /* Gradient principal subtil */
+    linear-gradient(135deg, 
+      rgba(255, 182, 193, 0.03) 0%, 
+      rgba(173, 216, 230, 0.03) 25%, 
+      rgba(144, 238, 144, 0.03) 50%, 
+      rgba(255, 218, 185, 0.03) 75%, 
+      rgba(221, 160, 221, 0.03) 100%
+    ),
+    /* Formes géométriques modernes - cercles subtils */
+    radial-gradient(circle at 15% 15%, rgba(255, 182, 193, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 85% 25%, rgba(173, 216, 230, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 25% 85%, rgba(144, 238, 144, 0.08) 0%, transparent 60%),
+    radial-gradient(circle at 75% 75%, rgba(255, 218, 185, 0.08) 0%, transparent 60%),
+    /* Motif de points modernes et élégants */
+    radial-gradient(circle at 20% 40%, rgba(255, 105, 180, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 60% 20%, rgba(100, 149, 237, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 80% 60%, rgba(50, 205, 50, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 40% 80%, rgba(255, 165, 0, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 90% 10%, rgba(138, 43, 226, 0.06) 1px, transparent 1px),
+    radial-gradient(circle at 10% 70%, rgba(255, 215, 0, 0.06) 1px, transparent 1px),
+    /* Lignes diagonales modernes */
+    linear-gradient(45deg, transparent 40%, rgba(255, 182, 193, 0.04) 40%, rgba(255, 182, 193, 0.04) 60%, transparent 60%),
+    linear-gradient(-45deg, transparent 40%, rgba(173, 216, 230, 0.04) 40%, rgba(173, 216, 230, 0.04) 60%, transparent 60%),
+    /* Vagues douces et modernes */
+    linear-gradient(90deg, transparent 30%, rgba(144, 238, 144, 0.03) 30%, rgba(144, 238, 144, 0.03) 70%, transparent 70%);
+  background-size: 
+    100% 100%,
+    100% 100%, 100% 100%, 100% 100%, 100% 100%,
+    80px 80px, 80px 80px, 80px 80px, 80px 80px, 80px 80px, 80px 80px,
+    120px 120px, 120px 120px,
+    200px 100px;
+  background-position: 
+    0 0,
+    0 0, 0 0, 0 0, 0 0,
+    0 0, 40px 40px, 20px 20px, 60px 60px, 10px 10px, 50px 50px,
+    0 0, 60px 60px,
+    0 0;
+  background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, repeat, repeat, repeat, repeat, repeat, repeat, no-repeat, no-repeat, no-repeat;
+  background-attachment: fixed;
+  min-height: 100vh;
+}
+
+/* Version sombre du fond - design moderne */
+@media (prefers-color-scheme: dark) {
+  body {
+    background: 
+      /* Gradient principal subtil - version sombre */
+      linear-gradient(135deg, 
+        rgba(255, 182, 193, 0.05) 0%, 
+        rgba(173, 216, 230, 0.05) 25%, 
+        rgba(144, 238, 144, 0.05) 50%, 
+        rgba(255, 218, 185, 0.05) 75%, 
+        rgba(221, 160, 221, 0.05) 100%
+      ),
+      /* Formes géométriques modernes - cercles subtils - version sombre */
+      radial-gradient(circle at 15% 15%, rgba(255, 182, 193, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 85% 25%, rgba(173, 216, 230, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 25% 85%, rgba(144, 238, 144, 0.12) 0%, transparent 60%),
+      radial-gradient(circle at 75% 75%, rgba(255, 218, 185, 0.12) 0%, transparent 60%),
+      /* Motif de points modernes et élégants - version sombre */
+      radial-gradient(circle at 20% 40%, rgba(255, 105, 180, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 60% 20%, rgba(100, 149, 237, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 80% 60%, rgba(50, 205, 50, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 40% 80%, rgba(255, 165, 0, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 90% 10%, rgba(138, 43, 226, 0.08) 1px, transparent 1px),
+      radial-gradient(circle at 10% 70%, rgba(255, 215, 0, 0.08) 1px, transparent 1px),
+      /* Lignes diagonales modernes - version sombre */
+      linear-gradient(45deg, transparent 40%, rgba(255, 182, 193, 0.06) 40%, rgba(255, 182, 193, 0.06) 60%, transparent 60%),
+      linear-gradient(-45deg, transparent 40%, rgba(173, 216, 230, 0.06) 40%, rgba(173, 216, 230, 0.06) 60%, transparent 60%),
+      /* Vagues douces et modernes - version sombre */
+      linear-gradient(90deg, transparent 30%, rgba(144, 238, 144, 0.05) 30%, rgba(144, 238, 144, 0.05) 70%, transparent 70%);
+  }
+}
+
+/* Règles spécifiques pour les éléments principaux */
+#root > div > main {
+  max-width: 1400px;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0 1rem;
+}
+
+#root > div > nav {
+  width: 100%;
+  max-width: none;
+}
+
+#root > div > footer {
+  width: 100%;
+  max-width: none;
+}
