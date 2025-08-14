@@ -135,15 +135,11 @@ const Footer = () => {
 
         {/* Copyright */}
         <div className="mt-6 border-t border-gray-700 pt-6 text-center sm:mt-8 sm:pt-8">
-          <p className="font-['Inter'] text-xs text-gray-400 sm:text-sm">
-            © 2024 Marie Fortea - Garde d'Enfants Professionnelle. Tous droits
-            réservés.
-          </p>
-                      <p className="mt-1 text-xs text-gray-500 sm:mt-2">
-              Site réalisé avec <Heart className="inline h-3 w-3 text-red-400" />{' '}
-              pour les familles de la région
+                      <p className="font-['Inter'] text-xs text-gray-400 sm:text-sm">
+              © {new Date().getFullYear()} Marie Fortea - Garde d'Enfants Professionnelle. Tous droits
+              réservés.
             </p>
-            <p className="mt-1 text-xs text-gray-500 sm:mt-2">
+                      <p className="mt-1 text-xs text-gray-500 sm:mt-2">
               Site réalisé par{' '}
               <a 
                 href="https://www.devweb31.fr" 

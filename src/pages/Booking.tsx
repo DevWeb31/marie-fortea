@@ -20,7 +20,6 @@ import {
   Baby,
   MapPin,
   Phone,
-  Mail,
   User,
   MessageSquare,
   CheckCircle,
@@ -33,7 +32,6 @@ const Booking = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     parentName: '',
-    parentEmail: '',
     parentPhone: '',
     address: '',
     serviceType: '',
@@ -68,7 +66,6 @@ const Booking = () => {
       // Reset form
       setFormData({
         parentName: '',
-        parentEmail: '',
         parentPhone: '',
         address: '',
         serviceType: '',
@@ -188,25 +185,7 @@ const Booking = () => {
                       </div>
                     </div>
 
-                    <div>
-                      <Label
-                        htmlFor="parentEmail"
-                        className="text-xs font-medium text-gray-700 dark:text-gray-300 sm:text-sm"
-                      >
-                        Email *
-                      </Label>
-                      <Input
-                        id="parentEmail"
-                        type="email"
-                        value={formData.parentEmail}
-                        onChange={e =>
-                          handleInputChange('parentEmail', e.target.value)
-                        }
-                        placeholder="marie.dupont@email.com"
-                        required
-                        className="mt-1"
-                      />
-                    </div>
+
 
                     <div>
                       <Label
@@ -495,18 +474,13 @@ const Booking = () => {
                       07 84 97 64 00
                     </div>
                     <div className="text-xs text-gray-600 sm:text-sm">
-                      Réponse rapide
+                      Horaires d'appel :
                     </div>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="h-4 w-4 flex-shrink-0 text-green-600 sm:h-5 sm:w-5" />
-                  <div>
-                    <div className="break-all text-sm font-medium sm:text-base">
-                      marie.fortea@email.com
+                    <div className="text-xs text-gray-500 sm:text-sm">
+                      Lun-Ven : 19h-21h
                     </div>
-                    <div className="text-xs text-gray-600 sm:text-sm">
-                      Réponse sous 24h
+                    <div className="text-xs text-gray-500 sm:text-sm">
+                      Week-end : 9h-21h
                     </div>
                   </div>
                 </div>
