@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Baby,
@@ -7,8 +7,15 @@ import {
   MapPin,
   Info,
 } from 'lucide-react';
+import PhoneHoursDialog from './PhoneHoursDialog';
 
 const Footer = () => {
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    setIsPhoneDialogOpen(true);
+  };
+
   return (
     <footer className="bg-gradient-to-br from-gray-900 to-gray-800 text-white">
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
@@ -71,12 +78,12 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-400 sm:h-5 sm:w-5" />
                 <div>
-                  <a
-                    href="tel:+33784976400"
-                    className="font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base"
+                  <button
+                    onClick={handlePhoneClick}
+                    className="font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base text-left"
                   >
                     07 84 97 64 00
-                  </a>
+                  </button>
                   <div className="text-xs text-gray-400 sm:text-sm">
                     Horaires d'appel :
                   </div>
@@ -152,6 +159,13 @@ const Footer = () => {
             </p>
         </div>
       </div>
+
+      {/* Phone Hours Dialog */}
+      <PhoneHoursDialog
+        isOpen={isPhoneDialogOpen}
+        onClose={() => setIsPhoneDialogOpen(false)}
+        phoneNumber="07 84 97 64 00"
+      />
     </footer>
   );
 };

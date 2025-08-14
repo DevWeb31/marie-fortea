@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
+import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -14,6 +15,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import { AnimatedSection, AnimatedTitle } from '@/components/ScrollAnimation';
+import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import {
   Calendar,
   Clock,
@@ -30,6 +32,11 @@ import {
 const Booking = () => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    setIsPhoneDialogOpen(true);
+  };
   const [formData, setFormData] = useState({
     parentName: '',
     parentPhone: '',
@@ -433,10 +440,12 @@ const Booking = () => {
 
                   {/* Submit Button */}
                   <div className="border-t pt-4 sm:pt-6">
-                    <Button
+                    <HarmoniousButton
                       type="submit"
+                      variant="primary"
+                      size="lg"
                       disabled={isSubmitting}
-                      className="w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-3 text-base font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:py-4 sm:text-lg"
+                      className="w-full"
                     >
                       {isSubmitting ? (
                         <>
@@ -449,7 +458,7 @@ const Booking = () => {
                           Envoyer ma demande
                         </>
                       )}
-                    </Button>
+                    </HarmoniousButton>
                   </div>
                 </form>
               </CardContent>
@@ -470,9 +479,12 @@ const Booking = () => {
                 <div className="flex items-center space-x-3">
                   <Phone className="h-4 w-4 flex-shrink-0 text-blue-600 sm:h-5 sm:w-5" />
                   <div>
-                    <div className="text-sm font-medium sm:text-base">
+                    <button
+                      onClick={handlePhoneClick}
+                      className="text-sm font-medium sm:text-base text-left hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
+                    >
                       07 84 97 64 00
-                    </div>
+                    </button>
                     <div className="text-xs text-gray-600 sm:text-sm">
                       Horaires d'appel :
                     </div>
@@ -557,6 +569,13 @@ const Booking = () => {
           </div>
         </div>
       </div>
+
+      {/* Phone Hours Dialog */}
+      <PhoneHoursDialog
+        isOpen={isPhoneDialogOpen}
+        onClose={() => setIsPhoneDialogOpen(false)}
+        phoneNumber="07 84 97 64 00"
+      />
     </div>
   );
 };

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
+import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 
 import {
   Heart,
@@ -19,6 +21,12 @@ import {
 } from 'lucide-react';
 
 const Home = () => {
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    setIsPhoneDialogOpen(true);
+  };
+
   const services = [
     {
       icon: <Heart className="h-8 w-8 text-pink-500" />,
@@ -95,24 +103,23 @@ const Home = () => {
               </p>
 
               <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4 lg:justify-start lg:px-0">
-                <Button
+                            <HarmoniousButton
+              asChild
+              variant="primary"
+              size="lg"
+            >
+              <Link to="/booking">
+                <Calendar className="mr-2 h-5 w-5" />
+                Réserver maintenant
+              </Link>
+            </HarmoniousButton>
+                <HarmoniousButton
                   asChild
+                  variant="secondary"
                   size="lg"
-                  className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-base font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
-                >
-                  <Link to="/booking">
-                    <Calendar className="mr-2 h-5 w-5" />
-                    Réserver maintenant
-                  </Link>
-                </Button>
-                <Button
-                  asChild
-                  variant="outline"
-                  size="lg"
-                  className="rounded-full border-2 border-gray-300 px-6 py-3 text-base font-medium text-gray-700 transition-all duration-300 hover:border-blue-500 hover:text-blue-600 sm:px-8 sm:py-4 sm:text-lg"
                 >
                   <Link to="/services">En savoir plus</Link>
-                </Button>
+                </HarmoniousButton>
               </div>
 
               {/* Statistics */}
@@ -183,14 +190,13 @@ const Home = () => {
           </div>
 
           <div className="mt-12 text-center">
-            <Button
+            <HarmoniousButton
               asChild
-              variant="outline"
+              variant="secondary"
               size="lg"
-              className="rounded-full border-2 border-blue-200 text-blue-600 hover:bg-blue-50"
             >
               <Link to="/services">Découvrir tous les services</Link>
-            </Button>
+            </HarmoniousButton>
           </div>
         </div>
       </AnimatedSection>
@@ -324,31 +330,35 @@ const Home = () => {
           </p>
 
           <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
-            <Button
+            <HarmoniousButton
               asChild
+              variant="primary"
               size="lg"
-              className="rounded-full bg-white px-6 py-3 text-base font-medium text-blue-600 shadow-lg transition-all duration-300 hover:bg-gray-50 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
             >
               <Link to="/booking">
                 <Calendar className="mr-2 h-5 w-5" />
                 Faire une demande
               </Link>
-            </Button>
+            </HarmoniousButton>
 
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-full border-2 border-white px-6 py-3 text-base font-medium text-white transition-all duration-300 hover:bg-white hover:text-blue-600 sm:px-8 sm:py-4 sm:text-lg"
-            >
-              <a href="tel:+33784976400">
-                <Phone className="mr-2 h-5 w-5" />
-                Appeler maintenant
-              </a>
-            </Button>
+                            <HarmoniousButton
+                  variant="secondary"
+                  size="lg"
+                  onClick={handlePhoneClick}
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Appeler maintenant
+                </HarmoniousButton>
           </div>
         </div>
       </section>
+
+      {/* Phone Hours Dialog */}
+      <PhoneHoursDialog
+        isOpen={isPhoneDialogOpen}
+        onClose={() => setIsPhoneDialogOpen(false)}
+        phoneNumber="07 84 97 64 00"
+      />
     </div>
   );
 };

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
+import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Link } from 'react-router-dom';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
+import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import {
   Award,
   Heart,
@@ -21,6 +23,12 @@ import {
 } from 'lucide-react';
 
 const About = () => {
+  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+
+  const handlePhoneClick = () => {
+    setIsPhoneDialogOpen(true);
+  };
+
   const qualifications = [
     {
       icon: <GraduationCap className="h-6 w-6 text-blue-600" />,
@@ -390,29 +398,33 @@ const About = () => {
             rencontre.
           </p>
           <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
-            <Button
+            <HarmoniousButton
               asChild
+              variant="primary"
               size="lg"
-              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-base text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
             >
               <Link to="/booking">
                 <Calendar className="mr-2 h-5 w-5" />
                 Faire une demande
               </Link>
-            </Button>
-            <Button
-              asChild
-              variant="outline"
-              size="lg"
-              className="rounded-full border-2 border-blue-200 px-6 py-3 text-base text-blue-600 transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
-            >
-              <a href="tel:+33784976400">
-                <Phone className="mr-2 h-5 w-5" />
-                Appeler maintenant
-              </a>
-            </Button>
+            </HarmoniousButton>
+                            <HarmoniousButton
+                  variant="secondary"
+                  size="lg"
+                  onClick={handlePhoneClick}
+                >
+                  <Phone className="mr-2 h-5 w-5" />
+                  Appeler maintenant
+                </HarmoniousButton>
           </div>
         </AnimatedSection>
+
+        {/* Phone Hours Dialog */}
+        <PhoneHoursDialog
+          isOpen={isPhoneDialogOpen}
+          onClose={() => setIsPhoneDialogOpen(false)}
+          phoneNumber="07 84 97 64 00"
+        />
       </div>
     </div>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Badge } from '@/components/ui/badge';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
 import { Link } from 'react-router-dom';
@@ -172,12 +173,14 @@ const Services = () => {
                       <div className="font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                         {service.pricing}
                       </div>
-                      <Button
+                      <HarmoniousButton
                         asChild
-                        className="w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-4 py-2 text-sm text-white hover:from-blue-600 hover:to-blue-700 sm:w-auto sm:px-6 sm:text-base"
+                        variant="primary"
+                        size="sm"
+                        className="w-full sm:w-auto"
                       >
                         <Link to="/booking">Réserver</Link>
-                      </Button>
+                      </HarmoniousButton>
                     </div>
                   </div>
                 </CardContent>
@@ -265,24 +268,23 @@ const Services = () => {
             besoins spécifiques.
           </p>
           <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
-            <Button
+            <HarmoniousButton
               asChild
+              variant="primary"
               size="lg"
-              className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-3 text-base text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:px-8 sm:py-4 sm:text-lg"
             >
               <Link to="/booking">
                 <Calendar className="mr-2 h-5 w-5" />
                 Faire une demande
               </Link>
-            </Button>
-            <Button
+            </HarmoniousButton>
+            <HarmoniousButton
               asChild
-              variant="outline"
+              variant="secondary"
               size="lg"
-              className="rounded-full border-2 border-blue-200 px-6 py-3 text-base text-blue-600 transition-all duration-300 hover:bg-blue-50 sm:px-8 sm:py-4 sm:text-lg"
             >
               <Link to="/about">En savoir plus sur moi</Link>
-            </Button>
+            </HarmoniousButton>
           </div>
         </AnimatedSection>
       </div>
