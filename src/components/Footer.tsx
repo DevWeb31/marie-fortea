@@ -139,10 +139,21 @@ const Footer = () => {
             © 2024 Marie Fortea - Garde d'Enfants Professionnelle. Tous droits
             réservés.
           </p>
-          <p className="mt-1 text-xs text-gray-500 sm:mt-2">
-            Site réalisé avec <Heart className="inline h-3 w-3 text-red-400" />{' '}
-            pour les familles de la région
-          </p>
+                      <p className="mt-1 text-xs text-gray-500 sm:mt-2">
+              Site réalisé avec <Heart className="inline h-3 w-3 text-red-400" />{' '}
+              pour les familles de la région
+            </p>
+            <p className="mt-1 text-xs text-gray-500 sm:mt-2">
+              Site réalisé par{' '}
+              <a 
+                href="https://www.devweb31.fr" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+              >
+                DevWeb31
+              </a>
+            </p>
         </div>
       </div>
     </footer>
