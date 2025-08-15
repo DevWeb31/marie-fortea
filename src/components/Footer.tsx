@@ -26,9 +26,20 @@ const Footer = () => {
               <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-green-400 transition-transform duration-200 group-hover:scale-105 sm:h-10 sm:w-10">
                 <Baby className="h-4 w-4 text-white sm:h-5 sm:w-5" />
               </div>
-              <span className="font-['Poppins'] text-lg font-bold sm:text-xl">
-                Marie Fortea
-              </span>
+              <div className="flex items-center space-x-2">
+                <span className="font-['Poppins'] text-lg font-bold sm:text-xl">
+                  Marie Fortea
+                </span>
+                <svg 
+                  onClick={() => window.location.href = '/admin'}
+                  className="h-4 w-4 text-gray-400 hover:text-gray-300 transition-colors duration-200 opacity-60 hover:opacity-100 cursor-pointer"
+                  fill="currentColor" 
+                  viewBox="0 0 20 20"
+                  title="Accès administrateur"
+                >
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z" clipRule="evenodd" />
+                </svg>
+              </div>
             </Link>
 
             <p className="mb-4 max-w-md font-['Inter'] text-sm leading-relaxed text-gray-300 sm:mb-6 sm:text-base">
@@ -146,17 +157,18 @@ const Footer = () => {
               © {new Date().getFullYear()} Marie Fortea - Garde d'Enfants Professionnelle. Tous droits
               réservés.
             </p>
-                      <p className="mt-1 text-xs text-gray-500 sm:mt-2">
-              Site réalisé par{' '}
-              <a 
-                href="https://www.devweb31.fr" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
-              >
-                DevWeb31
-              </a>
-            </p>
+                                <p className="mt-1 text-xs text-gray-500 sm:mt-2">
+            Site réalisé par{' '}
+            <a
+              href="https://www.devweb31.fr"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+            >
+              DevWeb31
+            </a>
+          </p>
+
         </div>
       </div>
 
