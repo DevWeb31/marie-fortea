@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Settings, Users, Calendar, BarChart3 } from 'lucide-react';
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { useNavigate } from 'react-router-dom';
+import ThemeToggle from '@/components/ui/theme-toggle';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const AdminDashboard = () => {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
+              <ThemeToggle />
               <span className="text-sm text-gray-500 dark:text-gray-400">
                 Connecté en tant qu'administrateur
               </span>

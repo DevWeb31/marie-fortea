@@ -6,6 +6,7 @@ import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Lock, User, Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
+import ThemeToggle from '@/components/ui/theme-toggle';
 
 const AdminLogin = () => {
   const [email, setEmail] = useState('');
@@ -55,7 +56,12 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4 dark:from-zinc-900 dark:to-zinc-800">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4 dark:from-zinc-900 dark:to-zinc-800 relative">
+      {/* Sélecteur de thème en haut à droite */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      
       <div className="w-full max-w-md">
         <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80">
           <CardHeader className="text-center pb-6">
