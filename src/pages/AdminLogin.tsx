@@ -1,165 +1,161 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
-import { Lock, User, Shield } from 'lucide-react';
+import HarmoniousButton from '@/components/ui/harmonious-button';
+import { Lock, User, Eye, EyeOff } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { supabase } from '@/lib/supabase';
+import ThemeToggle from '@/components/ui/theme-toggle';
 
 const AdminLogin = () => {
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-  });
-
-  const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+  const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setError('');
 
     try {
-      // Simulate authentication - In real app, this would connect to Supabase
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      // Demo credentials
-      if (
-        formData.email === 'marie@example.com' &&
-        formData.password === 'admin123'
-      ) {
-        toast({
-          title: 'Connexion réussie',
-          description:
-            'Bienvenue Marie ! Redirection vers votre tableau de bord...',
-        });
-
-        setTimeout(() => {
-          navigate('/admin/dashboard');
-        }, 1000);
-      } else {
-        toast({
-          title: 'Erreur de connexion',
-          description: 'Email ou mot de passe incorrect.',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Une erreur est survenue lors de la connexion.',
-        variant: 'destructive',
+      console.log('Tentative de connexion avec Supabase...');
+      console.log('URL Supabase:', import.meta.env.VITE_SUPABASE_URL);
+      
+      // Connexion avec Supabase
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password,
       });
+      
+      if (error) {
+        console.error('Erreur de connexion Supabase:', error);
+        if (error.message.includes('Invalid login credentials')) {
+          setError('Email ou mot de passe incorrect');
+        } else if (error.message.includes('Email not confirmed')) {
+          setError('Veuillez confirmer votre email');
+        } else {
+          setError(`Erreur de connexion: ${error.message}`);
+        }
+      } else if (data?.user) {
+        // Connexion réussie
+        console.log('Connexion réussie:', data.user);
+        navigate('/admin/dashboard');
+      } else {
+        setError('Erreur inattendue lors de la connexion');
+      }
+    } catch (err) {
+      console.error('Erreur générale:', err);
+      setError('Une erreur est survenue lors de la connexion');
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center py-12 sm:py-16 md:py-20">
-      <div className="mx-auto w-full max-w-sm px-4 sm:max-w-md sm:px-6 lg:px-8">
-        <div className="mb-6 text-center sm:mb-8">
-          <Badge className="mb-6 bg-blue-100 px-4 py-2 text-sm font-medium text-blue-700 hover:bg-blue-200">
-            <Shield className="mr-2 h-4 w-4" />
-            Espace Professionnel
-          </Badge>
-
-          <h1 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 sm:text-3xl">
-            Connexion Admin
-          </h1>
-
-          <p className="px-4 font-['Inter'] text-sm text-gray-600 sm:text-base">
-            Accédez à votre tableau de bord pour gérer vos demandes et
-            disponibilités.
-          </p>
-        </div>
-
-        <Card className="border-0 shadow-xl">
-          <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50">
-            <CardTitle className="flex items-center justify-center font-['Poppins'] text-lg font-bold text-gray-900 sm:text-xl">
-              <Lock className="mr-2 h-4 w-4 text-blue-600 sm:h-5 sm:w-5" />
-              Connexion Sécurisée
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4 dark:from-zinc-900 dark:to-zinc-800 relative">
+      {/* Sélecteur de thème en haut à droite */}
+      <div className="absolute top-4 right-4">
+        <ThemeToggle />
+      </div>
+      
+      <div className="w-full max-w-md">
+        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80">
+          <CardHeader className="text-center pb-6">
+            <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
+              <Lock className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+            </div>
+            <CardTitle className="text-2xl font-bold text-gray-900 dark:text-white">
+              Accès Administrateur
             </CardTitle>
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              Connectez-vous pour accéder au back-office
+            </p>
           </CardHeader>
-
-          <CardContent className="p-6 sm:p-8">
-            <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
-              <div>
-                <Label
-                  htmlFor="email"
-                  className="text-xs font-medium text-gray-700 sm:text-sm"
-                >
-                  Email professionnel
+          
+          <CardContent>
+            <form onSubmit={handleSubmit} className="space-y-4">
+              {error && (
+                <div className="p-3 text-sm text-red-600 bg-red-50 border border-red-200 rounded-lg dark:bg-red-900/20 dark:border-red-800 dark:text-red-400">
+                  {error}
+                </div>
+              )}
+              
+              <div className="space-y-2">
+                <Label htmlFor="email" className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                  Email
                 </Label>
-                <div className="relative mt-1">
-                  <User className="absolute left-3 top-3 h-4 w-4 text-gray-400 sm:h-5 sm:w-5" />
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="email"
                     type="email"
-                    value={formData.email}
-                    onChange={e => handleInputChange('email', e.target.value)}
-                    placeholder="marie@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="votre-email@exemple.com"
+                    className="pl-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                     required
-                    className="pl-9 text-sm sm:pl-10 sm:text-base"
                   />
                 </div>
               </div>
-
-              <div>
-                <Label
-                  htmlFor="password"
-                  className="text-xs font-medium text-gray-700 sm:text-sm"
-                >
+              
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                   Mot de passe
                 </Label>
-                <div className="relative mt-1">
-                  <Lock className="absolute left-3 top-3 h-4 w-4 text-gray-400 sm:h-5 sm:w-5" />
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
                   <Input
                     id="password"
-                    type="password"
-                    value={formData.password}
-                    onChange={e =>
-                      handleInputChange('password', e.target.value)
-                    }
+                    type={showPassword ? 'text' : 'password'}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••"
+                    className="pl-10 pr-10 border-gray-200 focus:border-blue-500 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
                     required
-                    className="pl-9 text-sm sm:pl-10 sm:text-base"
                   />
+                  {showPassword ? (
+                    <EyeOff 
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+                    />
+                  ) : (
+                    <Eye 
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 cursor-pointer"
+                    />
+                  )}
                 </div>
               </div>
-
-              <Button
+              
+              <HarmoniousButton
                 type="submit"
+                variant="primary"
+                size="lg"
                 disabled={isLoading}
-                className="w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-3 text-base font-medium text-white shadow-lg transition-all duration-300 hover:from-blue-600 hover:to-blue-700 hover:shadow-xl sm:text-lg"
+                className="w-full"
               >
                 {isLoading ? (
                   <>
-                    <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                     Connexion...
                   </>
                 ) : (
-                  <>
-                    <Shield className="mr-2 h-5 w-5" />
-                    Se connecter
-                  </>
+                  'Se connecter'
                 )}
-              </Button>
+              </HarmoniousButton>
             </form>
-
-            {/* Demo credentials info */}
-            <div className="mt-4 rounded-lg bg-gray-50 p-3 sm:mt-6 sm:p-4">
-              <div className="text-center text-xs text-gray-600 sm:text-sm">
-                <div className="mb-2 font-medium">Démonstration :</div>
-                <div>Email: marie@example.com</div>
-                <div>Mot de passe: admin123</div>
-              </div>
+            
+            <div className="mt-6 text-center">
+              <button
+                onClick={() => navigate('/')}
+                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors duration-200"
+              >
+                ← Retour à l'accueil
+              </button>
             </div>
           </CardContent>
         </Card>
