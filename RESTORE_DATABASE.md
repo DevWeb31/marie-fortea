@@ -38,6 +38,7 @@
 2. **Vérifiez** que vous voyez :
    - `profiles` (table des utilisateurs)
    - `bookings` (table des réservations)
+   - `site_settings` (paramètres du site)
 
 ---
 
@@ -62,12 +63,26 @@
 - **created_at** : Date de création
 - **updated_at** : Date de mise à jour
 
+### **Table `site_settings`**
+- **id** : BIGSERIAL (clé primaire auto-incrémentée)
+- **key** : Clé unique du paramètre
+- **value** : Valeur du paramètre
+- **updated_at** : Date de mise à jour
+
+#### **Paramètres par défaut créés :**
+- `maintenance_mode` : `false` (mode maintenance désactivé)
+- `site_title` : `Marie Fortea`
+- `site_description` : `Site officiel de Marie Fortea`
+- `contact_email` : `contact@marie-fortea.com`
+- `contact_phone` : `+33 1 23 45 67 89`
+
 ---
 
 ## 🔒 Sécurité
 
 - **RLS activé** sur toutes les tables
 - **Politiques** : Utilisateurs voient/modifient uniquement leurs données
+- **site_settings** : Lecture publique, modification authentifiée
 - **Index** : Performance optimisée pour les requêtes
 
 ---
@@ -82,11 +97,17 @@
 - **Normal** si l'extension existe déjà
 - **Le script** utilise `CREATE EXTENSION IF NOT EXISTS`
 
+### **Erreur 404 sur site_settings**
+- **Résolu** : La table `site_settings` est maintenant créée
+- **Votre back-office** devrait fonctionner normalement
+
 ---
 
 ## 🎉 Succès !
 
 Une fois le script exécuté, vos tables sont restaurées et votre application peut fonctionner normalement !
+
+**Plus d'erreur 404** sur `site_settings` ! 🚀
 
 ---
 
