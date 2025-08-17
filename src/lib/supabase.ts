@@ -1,15 +1,20 @@
 import { createClient } from '@supabase/supabase-js';
+import { getSupabaseConfig, validateSupabaseConfig, logSupabaseConfig } from './supabase-config';
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+// Récupération de la configuration selon l'environnement
+const config = getSupabaseConfig();
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  console.warn('Variables d\'environnement Supabase manquantes. L\'authentification sera simulée.');
+// Validation de la configuration
+if (!validateSupabaseConfig(config)) {
+  console.warn(`Configuration Supabase manquante pour l'environnement ${config.environment}. L'authentification sera simulée.`);
 }
 
+// Log de la configuration (en développement seulement)
+logSupabaseConfig(config);
+
 export const supabase = createClient(
-  supabaseUrl || 'https://your-project.supabase.co',
-  supabaseAnonKey || 'your-anon-key'
+  config.url || 'https://your-project.supabase.co',
+  config.anonKey || 'your-anon-key'
 );
 
 // Fonctions d'authentification
