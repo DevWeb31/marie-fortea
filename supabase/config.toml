@@ -22,7 +22,6 @@ default_pool_size = 15
 
 [realtime]
 enabled = true
-port = 54323
 
 [studio]
 enabled = true
@@ -41,13 +40,9 @@ file_size_limit = "50MiB"
 
 [auth]
 enabled = true
-port = 54321
 site_url = "http://localhost:3000"
 additional_redirect_urls = ["https://localhost:3000"]
 jwt_expiry = 3600
-refresh_token_rotation_enabled = true
-security_update_password_require_reauthentication = true
 
 [edge_runtime]
 enabled = true
-port = 54325
