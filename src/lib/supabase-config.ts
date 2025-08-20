@@ -12,28 +12,14 @@ const isProduction = import.meta.env.PROD || import.meta.env.MODE === 'productio
 
 // Configuration selon l'environnement
 export const getSupabaseConfig = (): SupabaseConfig => {
-  if (isDevelopment) {
-    return {
-      url: import.meta.env.VITE_SUPABASE_URL_DEV || import.meta.env.VITE_SUPABASE_URL || '',
-      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY_DEV || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-      environment: 'development'
-    };
-  }
-
-  if (isProduction) {
-    return {
-      url: import.meta.env.VITE_SUPABASE_URL_PROD || import.meta.env.VITE_SUPABASE_URL || '',
-      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY_PROD || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-      environment: 'production'
-    };
-  }
-
-  // Fallback vers l'ancienne configuration
-  return {
-    url: import.meta.env.VITE_SUPABASE_URL || '',
-    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-    environment: 'development'
+  // Configuration fixe pour résoudre le problème de connexion
+  const config = {
+    url: 'https://hwtfbyknjwlmidxeazbe.supabase.co',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3dGZieWtuandsbWlkeGVhemJlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTUzMTMyNDcsImV4cCI6MjA3MDg4OTI0N30.qlVUwwRYxxxx2pK0wwkVn-qiopFMATK3jeZsOo4FWSU',
+    environment: isDevelopment ? 'development' : 'production'
   };
+
+  return config;
 };
 
 // Vérification de la configuration
