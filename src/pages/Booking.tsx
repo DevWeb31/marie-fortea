@@ -483,7 +483,7 @@ const Booking = () => {
                       onClick={handlePhoneClick}
                       className="text-sm font-medium sm:text-base text-left hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
                     >
-                      07 84 97 64 00
+                      07 57 57 93 30
                     </button>
                     <div className="text-xs text-gray-600 sm:text-sm">
                       Horaires d'appel :
@@ -574,7 +574,7 @@ const Booking = () => {
       <PhoneHoursDialog
         isOpen={isPhoneDialogOpen}
         onClose={() => setIsPhoneDialogOpen(false)}
-        phoneNumber="07 84 97 64 00"
+        phoneNumber="07 57 57 93 30"
       />
     </div>
   );

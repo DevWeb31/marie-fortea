@@ -423,7 +423,7 @@ const About = () => {
         <PhoneHoursDialog
           isOpen={isPhoneDialogOpen}
           onClose={() => setIsPhoneDialogOpen(false)}
-          phoneNumber="07 84 97 64 00"
+          phoneNumber="07 57 57 93 30"
         />
       </div>
     </div>

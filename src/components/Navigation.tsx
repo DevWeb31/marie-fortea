@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Baby } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ThemeToggle } from './theme-toggle';
+import Logo from './Logo';
 
 const Navigation = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -24,9 +25,7 @@ const Navigation = () => {
         <div className="flex h-14 items-center justify-between sm:h-16">
           {/* Logo */}
           <Link to="/" className="group flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-green-400 transition-transform duration-200 group-hover:scale-105 sm:h-10 sm:w-10">
-              <Baby className="h-4 w-4 text-white sm:h-5 sm:w-5" />
-            </div>
+            <Logo size="md" />
             <span className="font-['Poppins'] text-lg font-bold text-gray-800 dark:text-white sm:text-xl">
               Marie Fortea
             </span>

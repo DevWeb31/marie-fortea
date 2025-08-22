@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-  Baby,
   Heart,
   Phone,
   MapPin,
   Info,
 } from 'lucide-react';
 import PhoneHoursDialog from './PhoneHoursDialog';
+import Logo from './Logo';
 
 const Footer = () => {
   const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
@@ -23,9 +23,7 @@ const Footer = () => {
           {/* Logo & Description */}
           <div className="sm:col-span-2">
             <Link to="/" className="group mb-6 flex items-center space-x-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-br from-blue-400 to-green-400 transition-transform duration-200 group-hover:scale-105 sm:h-10 sm:w-10">
-                <Baby className="h-4 w-4 text-white sm:h-5 sm:w-5" />
-              </div>
+              <Logo size="md" />
               <div className="flex items-center space-x-2">
                 <span className="font-['Poppins'] text-lg font-bold sm:text-xl">
                   Marie Fortea
@@ -93,7 +91,7 @@ const Footer = () => {
                     onClick={handlePhoneClick}
                     className="font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base text-left"
                   >
-                    07 84 97 64 00
+                    07 57 57 93 30
                   </button>
                   <div className="text-xs text-gray-400 sm:text-sm">
                     Horaires d'appel :
@@ -176,7 +174,7 @@ const Footer = () => {
       <PhoneHoursDialog
         isOpen={isPhoneDialogOpen}
         onClose={() => setIsPhoneDialogOpen(false)}
-        phoneNumber="07 84 97 64 00"
+        phoneNumber="07 57 57 93 30"
       />
     </footer>
   );
