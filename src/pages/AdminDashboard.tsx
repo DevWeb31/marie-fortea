@@ -1,6 +1,6 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Settings, Users, Calendar, BarChart3 } from 'lucide-react';
+import { Settings, Users, Calendar, BarChart3, ExternalLink } from 'lucide-react';
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '@/components/ui/theme-toggle';
@@ -20,10 +20,19 @@ const AdminDashboard = () => {
       <header className="bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Back-Office Marie Fortea
               </h1>
+              <a
+                href="/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-3 py-1.5 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200"
+              >
+                <ExternalLink className="h-4 w-4 mr-1.5" />
+                Voir le site
+              </a>
             </div>
             <div className="flex items-center space-x-4">
               <ThemeToggle />

@@ -39,7 +39,7 @@ export const getSupabaseConfig = (): SupabaseConfig => {
 // Vérification de la configuration
 export const validateSupabaseConfig = (config: SupabaseConfig): boolean => {
   if (!config.url || !config.anonKey) {
-    console.warn(`Configuration Supabase manquante pour l'environnement ${config.environment}`);
+    console.warn(`Configuration Supabase manquante pour l'environnement ${config.environment}. L'authentification sera simulée.`);
     return false;
   }
 
