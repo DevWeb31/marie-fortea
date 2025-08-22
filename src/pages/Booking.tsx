@@ -477,14 +477,16 @@ const Booking = () => {
               <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
                 
                 <div className="flex items-center space-x-3">
-                  <Phone className="h-4 w-4 flex-shrink-0 text-blue-600 sm:h-5 sm:w-5" />
+                  <button
+                    onClick={handlePhoneClick}
+                    className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+                  >
+                    <span className="text-white text-xs font-bold">📞</span>
+                  </button>
                   <div>
-                    <button
-                      onClick={handlePhoneClick}
-                      className="text-sm font-medium sm:text-base text-left hover:text-blue-700 dark:hover:text-blue-300 transition-colors duration-200"
-                    >
+                    <div className="text-sm font-medium sm:text-base text-left">
                       07 57 57 93 30
-                    </button>
+                    </div>
                     <div className="text-xs text-gray-600 sm:text-sm">
                       Horaires d'appel :
                     </div>

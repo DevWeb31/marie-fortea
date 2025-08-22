@@ -14,7 +14,6 @@ const Navigation = () => {
     { name: 'Accueil', href: '/' },
     { name: 'Services', href: '/services' },
     { name: 'À propos', href: '/about' },
-    { name: 'Réservation', href: '/booking' },
   ];
 
   const isActive = (href: string) => location.pathname === href;

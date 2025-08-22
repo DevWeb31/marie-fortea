@@ -85,14 +85,16 @@ const Footer = () => {
             </h3>
             <div className="space-y-3 sm:space-y-4">
               <div className="flex items-start space-x-3">
-                <Phone className="mt-0.5 h-4 w-4 flex-shrink-0 text-blue-400 sm:h-5 sm:w-5" />
+                <button
+                  onClick={handlePhoneClick}
+                  className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+                >
+                  <span className="text-white text-xs font-bold">📞</span>
+                </button>
                 <div>
-                  <button
-                    onClick={handlePhoneClick}
-                    className="font-['Inter'] text-sm text-gray-300 transition-colors duration-200 hover:text-white sm:text-base text-left"
-                  >
+                  <div className="font-['Inter'] text-sm text-gray-300 sm:text-base">
                     07 57 57 93 30
-                  </button>
+                  </div>
                   <div className="text-xs text-gray-400 sm:text-sm">
                     Horaires d'appel :
                   </div>
