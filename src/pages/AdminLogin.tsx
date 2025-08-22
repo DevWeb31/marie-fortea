@@ -22,9 +22,6 @@ const AdminLogin = () => {
     setError('');
 
     try {
-      console.log('Tentative de connexion avec Supabase...');
-      console.log('URL Supabase:', import.meta.env.VITE_SUPABASE_URL);
-      
       // Connexion avec Supabase
       const { data, error } = await supabase.auth.signInWithPassword({
         email,
@@ -32,7 +29,6 @@ const AdminLogin = () => {
       });
       
       if (error) {
-        console.error('Erreur de connexion Supabase:', error);
         if (error.message.includes('Invalid login credentials')) {
           setError('Email ou mot de passe incorrect');
         } else if (error.message.includes('Email not confirmed')) {
@@ -42,13 +38,11 @@ const AdminLogin = () => {
         }
       } else if (data?.user) {
         // Connexion réussie
-        console.log('Connexion réussie:', data.user);
         navigate('/admin/dashboard');
       } else {
         setError('Erreur inattendue lors de la connexion');
       }
     } catch (err) {
-      console.error('Erreur générale:', err);
       setError('Une erreur est survenue lors de la connexion');
     } finally {
       setIsLoading(false);

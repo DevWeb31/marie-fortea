@@ -341,14 +341,12 @@ const Home = () => {
               </Link>
             </HarmoniousButton>
 
-                            <HarmoniousButton
-                  variant="secondary"
-                  size="lg"
-                  onClick={handlePhoneClick}
-                >
-                  <Phone className="mr-2 h-5 w-5" />
-                  Appeler maintenant
-                </HarmoniousButton>
+            <button
+              onClick={handlePhoneClick}
+              className="inline-flex items-center justify-center rounded-lg bg-white/20 px-6 py-3 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-blue-600"
+            >
+              <Phone className="h-6 w-6" />
+            </button>
           </div>
         </div>
       </section>
@@ -357,7 +355,7 @@ const Home = () => {
       <PhoneHoursDialog
         isOpen={isPhoneDialogOpen}
         onClose={() => setIsPhoneDialogOpen(false)}
-        phoneNumber="07 84 97 64 00"
+        phoneNumber="07 57 57 93 30"
       />
     </div>
   );
