@@ -1,0 +1,50 @@
+/* Styles personnalisés pour la carte Leaflet */
+.custom-marker {
+  background: transparent;
+  border: none;
+}
+
+.custom-popup {
+  font-family: 'Inter', sans-serif;
+}
+
+.custom-popup .leaflet-popup-content-wrapper {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  border: 1px solid #e5e7eb;
+}
+
+.custom-popup .leaflet-popup-content {
+  margin: 12px 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  color: #374151;
+}
+
+.custom-popup .leaflet-popup-tip {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-top: none;
+  border-left: none;
+}
+
+/* Amélioration de l'apparence du cercle de rayon */
+.leaflet-overlay-pane svg path {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Animation pour les marqueurs au survol */
+.custom-marker:hover {
+  transform: scale(1.1);
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Responsive design pour la carte */
+@media (max-width: 768px) {
+  .custom-popup .leaflet-popup-content {
+    font-size: 12px;
+    margin: 8px 12px;
+  }
+}

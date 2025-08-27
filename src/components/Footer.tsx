@@ -7,13 +7,24 @@ import {
   Info,
 } from 'lucide-react';
 import PhoneHoursDialog from './PhoneHoursDialog';
+import MapDialog from './MapDialog';
 import Logo from './Logo';
 
 const Footer = () => {
   const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+  const [isMapDialogOpen, setIsMapDialogOpen] = useState(false);
 
   const handlePhoneClick = () => {
     setIsPhoneDialogOpen(true);
+  };
+
+  const handleMapClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('🗺️ Footer: handleMapClick appelé');
+    console.log('🗺️ Footer: État actuel isMapDialogOpen:', isMapDialogOpen);
+    setIsMapDialogOpen(true);
+    console.log('🗺️ Footer: isMapDialogOpen mis à true');
   };
 
   return (
@@ -108,7 +119,12 @@ const Footer = () => {
               </div>
 
               <div className="flex items-start space-x-3">
-                <MapPin className="mt-0.5 h-4 w-4 flex-shrink-0 text-yellow-400 sm:h-5 sm:w-5" />
+                <button
+                  onClick={handleMapClick}
+                  className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-yellow-500 hover:bg-yellow-600 transition-colors duration-200 cursor-pointer"
+                >
+                  <MapPin className="h-4 w-4 flex-shrink-0 text-white sm:h-5 sm:w-5" />
+                </button>
                 <div className="font-['Inter'] text-sm text-gray-300 sm:text-base">
                   <div>Montaigut sur Save</div>
                   <div className="text-xs text-gray-400 sm:text-sm flex items-center space-x-1">
@@ -177,6 +193,12 @@ const Footer = () => {
         isOpen={isPhoneDialogOpen}
         onClose={() => setIsPhoneDialogOpen(false)}
         phoneNumber="07 57 57 93 30"
+      />
+
+      {/* Map Dialog */}
+      <MapDialog
+        isOpen={isMapDialogOpen}
+        onClose={() => setIsMapDialogOpen(false)}
       />
     </footer>
   );
