@@ -1,4 +1,5 @@
 // Configuration Supabase pour les environnements de développement et production
+import { getCurrentConfig, getCurrentEnvironment } from '@/config/environments';
 
 export interface SupabaseConfig {
   url: string;
@@ -6,33 +7,15 @@ export interface SupabaseConfig {
   environment: 'development' | 'production';
 }
 
-// Détection automatique de l'environnement
-const isDevelopment = import.meta.env.DEV || import.meta.env.MODE === 'development';
-const isProduction = import.meta.env.PROD || import.meta.env.MODE === 'production';
-
 // Configuration selon l'environnement
 export const getSupabaseConfig = (): SupabaseConfig => {
-  if (isDevelopment) {
-    return {
-      url: import.meta.env.VITE_SUPABASE_URL_DEV || import.meta.env.VITE_SUPABASE_URL || '',
-      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY_DEV || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-      environment: 'development'
-    };
-  }
-
-  if (isProduction) {
-    return {
-      url: import.meta.env.VITE_SUPABASE_URL_PROD || import.meta.env.VITE_SUPABASE_URL || '',
-      anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY_PROD || import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-      environment: 'production'
-    };
-  }
-
-  // Fallback vers l'ancienne configuration
+  const config = getCurrentConfig();
+  const environment = getCurrentEnvironment();
+  
   return {
-    url: import.meta.env.VITE_SUPABASE_URL || '',
-    anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY || '',
-    environment: 'development'
+    url: config.url,
+    anonKey: config.anonKey,
+    environment
   };
 };
 
@@ -43,7 +26,7 @@ export const validateSupabaseConfig = (config: SupabaseConfig): boolean => {
     return false;
   }
 
-  if (!config.url.includes('supabase.co')) {
+  if (!config.url.includes('supabase.co') && !config.url.includes('127.0.0.1') && !config.url.includes('localhost')) {
     console.warn(`URL Supabase invalide: ${config.url}`);
     return false;
   }
@@ -53,7 +36,7 @@ export const validateSupabaseConfig = (config: SupabaseConfig): boolean => {
 
 // Log de la configuration (en développement seulement)
 export const logSupabaseConfig = (config: SupabaseConfig): void => {
-  if (isDevelopment) {
+  if (config.environment === 'development') {
     console.log(`🚀 Supabase configuré pour l'environnement: ${config.environment}`);
     console.log(`📍 URL: ${config.url}`);
     console.log(`🔑 Clé: ${config.anonKey.substring(0, 20)}...`);

@@ -10,6 +10,7 @@ import Booking from '@/pages/Booking';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import AdminLayout from '@/components/AdminLayout';
+import TestEmail from '@/pages/TestEmail';
 import Footer from '@/components/Footer';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
@@ -41,6 +42,7 @@ function AppContent() {
           <Route path="/services" element={<Services />} />
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
+          <Route path="/test-email" element={<TestEmail />} />
         </Routes>
       </main>
       <Footer />

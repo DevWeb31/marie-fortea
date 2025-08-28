@@ -19,11 +19,11 @@ Remplacez le contenu de votre fichier `.env` par :
 
 ```bash
 # ===== ENVIRONNEMENT DE DÉVELOPPEMENT =====
-VITE_SUPABASE_URL_DEV=https://hwtfbyknjwlmidxeazbe.supabase.co
+VITE_SUPABASE_URL_DEV=https://your-project-dev.supabase.co
 VITE_SUPABASE_ANON_KEY_DEV=VOTRE_VRAIE_CLE_ANONYME_ICI
 
 # ===== ENVIRONNEMENT DE PRODUCTION =====
-VITE_SUPABASE_URL=https://hwtfbyknjwlmidxeazbe.supabase.co
+VITE_SUPABASE_URL=https://your-project-prod.supabase.co
 VITE_SUPABASE_ANON_KEY=VOTRE_VRAIE_CLE_ANONYME_ICI
 ```
 
@@ -45,7 +45,7 @@ Utilisez le composant de test intégré sur la page de connexion admin pour vér
 Assurez-vous que votre connexion internet fonctionne correctement.
 
 ### URL Supabase
-Vérifiez que l'URL `https://hwtfbyknjwlmidxeazbe.supabase.co` est correcte et accessible.
+Vérifiez que l'URL `https://your-project.supabase.co` est correcte et accessible.
 
 ### Permissions de la Clé
 La clé anonyme doit avoir les permissions nécessaires pour :
