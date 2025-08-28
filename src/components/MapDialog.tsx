@@ -116,24 +116,20 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
         weight: 2,
         radius: 20000 // 20km en mètres
       }).addTo(map);
-      console.log('🔵 Cercle de 20km ajouté');
       
       // Forcer le redimensionnement de la carte
       setTimeout(() => {
         map.invalidateSize();
-        console.log('🔄 Redimensionnement de la carte effectué');
       }, 100);
       
       setIsLoading(false);
       console.log('✅ Carte créée avec succès !');
     } catch (error) {
-      console.error('❌ Erreur lors de la création de la carte:', error);
       setError(`Erreur lors de la création de la carte: ${error.message}`);
       setIsLoading(false);
     }
   };
 
-  console.log('🗺️ MapDialog: Rendu du composant, isOpen:', isOpen, 'isLoading:', isLoading);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
