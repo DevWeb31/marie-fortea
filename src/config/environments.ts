@@ -6,7 +6,7 @@ export const SUPABASE_CONFIG = {
     serviceRoleKey: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY_DEV || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS1kZW1vIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImV4cCI6MTk4MzgxMjk5Nn0.EGIM96RAZx35lJzdJsyH-qQwv8Hdp7fsn3W0YpN81IU'
   },
   production: {
-    url: import.meta.env.VITE_SUPABASE_URL_PROD || 'https://hwtfbyknjwlmidxeazbe.supabase.co',
+    url: import.meta.env.VITE_SUPABASE_URL_PROD || 'https://your-project.supabase.co',
     anonKey: import.meta.env.VITE_SUPABASE_ANON_KEY_PROD || 'your-production-anon-key',
     serviceRoleKey: import.meta.env.VITE_SUPABASE_SERVICE_ROLE_KEY_PROD || 'your-production-service-role-key'
   }
