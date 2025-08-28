@@ -24,6 +24,14 @@ out/
 supabase/.branches/
 supabase/.temp/
 
+# Fichiers de configuration sensibles
+MAILGUN_SETUP.md
+ENV_EXAMPLE.md
+.env.example
+.env.local
+.env.development
+.env.production
+
 # IDE and editors
 .vscode/
 .idea/
