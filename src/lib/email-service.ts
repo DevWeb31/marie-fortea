@@ -20,6 +20,15 @@ export class EmailService {
         return { data: true, error: null }; // Pas d'erreur, juste désactivé
       }
 
+      // Récupérer l'email de notification
+      const notificationEmail = await SiteSettingsService.getBookingNotificationEmail();
+      if (notificationEmail.error || !notificationEmail.data) {
+        return { data: null, error: 'Email de notification non configuré' };
+      }
+
+      // Préparer le contenu de l'email
+      const emailData = this.prepareBookingNotificationEmail(bookingRequest, notificationEmail.data);
+
       // En production, utiliser Mailgun directement
       console.log('📧 Tentative d\'envoi d\'email via Mailgun...');
       
@@ -38,15 +47,6 @@ export class EmailService {
           // Fallback vers la simulation
         }
       }
-
-      // Récupérer l'email de notification
-      const notificationEmail = await SiteSettingsService.getBookingNotificationEmail();
-      if (notificationEmail.error || !notificationEmail.data) {
-        return { data: null, error: 'Email de notification non configuré' };
-      }
-
-      // Préparer le contenu de l'email
-      const emailData = this.prepareBookingNotificationEmail(bookingRequest, notificationEmail.data);
 
       // Envoyer l'email via Mailgun ou fallback vers la simulation
       const { data, error } = await this.sendEmailViaInbucket(emailData);
