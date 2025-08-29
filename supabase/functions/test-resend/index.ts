@@ -19,7 +19,7 @@ serve(async (req) => {
       throw new Error('Clé API manquante');
     }
 
-    console.log('🔑 Test de la clé API Resend...');
+
 
     // Tester la connexion Resend avec un email de test
     const response = await fetch('https://api.resend.com/emails', {
@@ -42,7 +42,7 @@ serve(async (req) => {
     }
 
     const result = await response.json();
-    console.log('✅ Test de connexion Resend réussi:', result);
+    
 
     return new Response(
       JSON.stringify({ 

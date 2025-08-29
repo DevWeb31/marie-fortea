@@ -263,7 +263,7 @@ ID de la demande : ${bookingRequest.id}
   // Envoyer un email via SMTP ou simulation locale
   private static async sendEmailViaInbucket(emailData: EmailData): Promise<{ data: any; error: any }> {
     try {
-      console.log('📧 Tentative d\'envoi d\'email via Mailgun...');
+
       
       // Vérifier si la configuration Mailgun est disponible
       const mailgunConfigured = await this.isMailgunConfigured();

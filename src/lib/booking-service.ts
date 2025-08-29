@@ -99,11 +99,11 @@ export class BookingService {
     }
   }
 
-  // Récupérer toutes les demandes (pour l'administration)
+  // Récupérer toutes les demandes actives (pour l'administration)
   static async getAllBookingRequests(): Promise<{ data: BookingRequestSummary[] | null; error: string | null }> {
     try {
       const { data, error } = await supabase
-        .from('booking_requests_summary')
+        .from('active_booking_requests')
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -361,8 +361,118 @@ export class BookingService {
 
       return { data: stats, error: null };
     } catch (error) {
-      console.error('Erreur lors de la récupération des statistiques:', error);
       return { data: null, error: 'Erreur lors de la récupération des statistiques' };
+    }
+  }
+
+  // ===== GESTION DE LA CORBEILLE =====
+
+  // Mettre une réservation dans la corbeille (soft delete)
+static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
+  try {
+    const { data, error } = await supabase
+      .rpc('soft_delete_booking_request', { booking_id: id });
+
+    if (error) {
+      return { data: null, error: 'Erreur lors de la mise en corbeille' };
+    }
+
+    // Vérifier que la fonction a bien mis à jour une ligne
+    if (data === false) {
+      return { data: null, error: 'Aucune réservation trouvée ou déjà dans la corbeille' };
+    }
+
+    return { data: true, error: null };
+  } catch (error) {
+    return { data: null, error: 'Erreur inattendue lors de la mise en corbeille' };
+  }
+}
+
+  // Restaurer une réservation depuis la corbeille
+static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
+  try {
+    const { data, error } = await supabase
+      .rpc('restore_booking_request', { booking_id: id });
+
+    if (error) {
+      return { data: null, error: 'Erreur lors de la restauration' };
+    }
+
+    // Vérifier que la fonction a bien mis à jour une ligne
+    if (data === false) {
+      return { data: null, error: 'Aucune réservation trouvée ou pas dans la corbeille' };
+    }
+
+    return { data: true, error: null };
+  } catch (error) {
+    return { data: null, error: 'Erreur inattendue lors de la restauration' };
+  }
+}
+
+  // Supprimer définitivement une réservation (hard delete)
+  static async permanentlyDelete(id: string): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const { error } = await supabase
+        .rpc('hard_delete_booking_request', { booking_id: id });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de la suppression définitive' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de la suppression définitive' };
+    }
+  }
+
+  // Récupérer toutes les réservations dans la corbeille
+  static async getDeletedBookingRequests(): Promise<{ data: BookingRequestSummary[] | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .from('deleted_booking_requests')
+        .select('*')
+        .order('deleted_at', { ascending: false });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de la récupération des réservations supprimées' };
+      }
+
+      const summaries: BookingRequestSummary[] = data.map(row => ({
+        id: row.id,
+        status: row.status as BookingStatus,
+        createdAt: row.created_at,
+        parentName: row.parent_name,
+        parentPhone: row.parent_phone,
+        serviceType: row.service_type,
+        requestedDate: row.requested_date,
+        startTime: row.start_time,
+        endTime: row.end_time,
+        durationHours: row.duration_hours,
+        childrenCount: row.children_count,
+        serviceName: row.service_name,
+        basePrice: row.base_price,
+        estimatedTotal: row.estimated_total
+      }));
+
+      return { data: summaries, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de la récupération des réservations supprimées' };
+    }
+  }
+
+  // Nettoyer automatiquement les réservations supprimées après X mois
+  static async cleanupDeletedBookings(monthsToKeep: number = 12): Promise<{ data: number | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .rpc('cleanup_deleted_bookings', { months_to_keep: monthsToKeep });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors du nettoyage automatique' };
+      }
+
+      return { data, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors du nettoyage automatique' };
     }
   }
 }

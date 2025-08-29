@@ -76,7 +76,7 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
 
   const createMap = (container: HTMLDivElement) => {
     try {
-      console.log('🗺️ MapDialog: Création de la carte...');
+  
       const L = (window as any).L;
       
       if (!L) {

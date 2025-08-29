@@ -64,12 +64,11 @@ serve(async (req) => {
 
     // Pour le moment, on simule le test sans se connecter réellement
     // Cela nous permet de vérifier que la fonction Edge fonctionne
-    console.log('🧪 Simulation du test SMTP (connexion réelle désactivée)');
+    // Simulation du test SMTP (connexion réelle désactivée)
     
     // Simuler un délai de test
     await new Promise(resolve => setTimeout(resolve, 1000));
     
-    console.log('✅ Test SMTP simulé avec succès');
 
     return new Response(
       JSON.stringify({ 

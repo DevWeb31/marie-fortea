@@ -43,8 +43,12 @@ import {
   RefreshCw,
   CheckCircle,
   XCircle,
-  AlertCircle
+  AlertCircle,
+  Trash2,
+  RotateCcw,
+  Trash
 } from 'lucide-react';
+import ConfirmDialog from '@/components/ui/confirm-dialog';
 
 interface BookingRequestsListProps {
   className?: string;
@@ -70,11 +74,36 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
   const [statusNote, setStatusNote] = useState('');
   const [adminNote, setAdminNote] = useState('');
   const [isUpdating, setIsUpdating] = useState(false);
+  
+  // Gestion de la corbeille
+  const [showTrash, setShowTrash] = useState(false);
+  const [deletedRequests, setDeletedRequests] = useState<BookingRequestSummary[]>([]);
+  const [isTrashLoading, setIsTrashLoading] = useState(false);
+
+  // États des boîtes de confirmation
+  const [confirmDialog, setConfirmDialog] = useState<{
+    isOpen: boolean;
+    type: 'trash' | 'restore' | 'delete' | null;
+    requestId: string | null;
+    requestName: string | null;
+  }>({
+    isOpen: false,
+    type: null,
+    requestId: null,
+    requestName: null,
+  });
 
   // Charger les demandes
   useEffect(() => {
     loadRequests();
   }, []);
+
+  // Charger les réservations supprimées
+  useEffect(() => {
+    if (showTrash) {
+      loadDeletedRequests();
+    }
+  }, [showTrash]);
 
   // Appliquer les filtres
   useEffect(() => {
@@ -123,6 +152,151 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const loadDeletedRequests = async () => {
+    setIsTrashLoading(true);
+    try {
+      const result = await BookingService.getDeletedBookingRequests();
+      if (result.error) {
+        toast({
+          title: 'Erreur',
+          description: result.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+      setDeletedRequests(result.data || []);
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors du chargement des réservations supprimées',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsTrashLoading(false);
+    }
+  };
+
+  const openConfirmDialog = (type: 'trash' | 'restore' | 'delete', id: string, name: string) => {
+    setConfirmDialog({
+      isOpen: true,
+      type,
+      requestId: id,
+      requestName: name,
+    });
+  };
+
+  const closeConfirmDialog = () => {
+    setConfirmDialog({
+      isOpen: false,
+      type: null,
+      requestId: null,
+      requestName: null,
+    });
+  };
+
+  const handleMoveToTrash = async (id: string) => {
+    try {
+      const result = await BookingService.moveToTrash(id);
+      
+      if (result.error) {
+        toast({
+          title: 'Erreur',
+          description: result.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      if (result.data) {
+        toast({
+          title: 'Réservation supprimée',
+          description: 'La réservation a été mise dans la corbeille',
+          variant: 'default',
+        });
+
+        await loadRequests();
+      }
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la mise en corbeille',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleRestoreFromTrash = async (id: string) => {
+    try {
+      const result = await BookingService.restoreFromTrash(id);
+      if (result.error) {
+        toast({
+          title: 'Erreur',
+          description: result.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      toast({
+        title: 'Réservation restaurée',
+        description: 'La réservation a été restaurée avec succès',
+      });
+
+      await loadDeletedRequests();
+      await loadRequests();
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la restauration',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handlePermanentlyDelete = async (id: string) => {
+    try {
+      const result = await BookingService.permanentlyDelete(id);
+      if (result.error) {
+        toast({
+          title: 'Erreur',
+          description: result.error,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      toast({
+        title: 'Réservation supprimée',
+        description: 'La réservation a été supprimée définitivement',
+        variant: 'default',
+      });
+
+      await loadDeletedRequests();
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la suppression définitive',
+        variant: 'destructive',
+      });
+    }
+  };
+
+  const handleConfirmedAction = async () => {
+    if (!confirmDialog.requestId || !confirmDialog.type) return;
+
+    switch (confirmDialog.type) {
+      case 'trash':
+        await handleMoveToTrash(confirmDialog.requestId);
+        break;
+      case 'restore':
+        await handleRestoreFromTrash(confirmDialog.requestId);
+        break;
+      case 'delete':
+        await handlePermanentlyDelete(confirmDialog.requestId);
+        break;
     }
   };
 
@@ -294,7 +468,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
               <div>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Total estimé</p>
                 <p className="text-2xl font-bold text-purple-600">
-                  {requests.reduce((sum, r) => sum + r.estimatedTotal, 0).toFixed(0)}€
+                  {requests.reduce((sum, r) => sum + (r.estimatedTotal || 0), 0).toFixed(0)}€
                 </p>
               </div>
             </div>
@@ -370,16 +544,44 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       {/* Liste des demandes */}
       <Card>
         <CardHeader>
-          <CardTitle>Demandes de Réservation</CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>
+              {showTrash ? 'Corbeille' : 'Demandes de Réservation'}
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button
+                onClick={() => setShowTrash(!showTrash)}
+                variant={showTrash ? "default" : "outline"}
+                size="sm"
+              >
+                {showTrash ? (
+                  <>
+                    <Eye className="h-4 w-4 mr-2" />
+                    Voir les demandes actives
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Voir la corbeille
+                  </>
+                )}
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          {filteredRequests.length === 0 ? (
+          {isLoading || (showTrash && isTrashLoading) ? (
+            <div className="text-center py-8">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mx-auto"></div>
+              <p className="mt-2 text-gray-600">Chargement...</p>
+            </div>
+          ) : (showTrash ? deletedRequests : filteredRequests).length === 0 ? (
             <div className="text-center py-8 text-gray-500 dark:text-gray-400">
-              Aucune demande trouvée
+              {showTrash ? 'Aucune réservation dans la corbeille' : 'Aucune demande trouvée'}
             </div>
           ) : (
             <div className="space-y-4">
-              {filteredRequests.map((request) => (
+              {(showTrash ? deletedRequests : filteredRequests).map((request) => (
                 <div
                   key={request.id}
                   className="border rounded-lg p-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
@@ -426,35 +628,68 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                         </span>
                         <span className="text-gray-500 dark:text-gray-400">•</span>
                         <span className="font-medium text-green-600 dark:text-green-400">
-                          {request.estimatedTotal.toFixed(2)}€
+                          {request.estimatedTotal ? request.estimatedTotal.toFixed(2) : '0.00'}€
                         </span>
                       </div>
                     </div>
                     
                     <div className="flex items-center space-x-2 ml-4">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openDetailDialog(request)}
-                      >
-                        <Eye className="h-4 w-4" />
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openStatusDialog(request)}
-                      >
-                        <CheckCircle className="h-4 w-4" />
-                      </Button>
-                      
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => openNoteDialog(request)}
-                      >
-                        <MessageSquare className="h-4 w-4" />
-                      </Button>
+                      {!showTrash ? (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openDetailDialog(request)}
+                          >
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openStatusDialog(request)}
+                          >
+                            <CheckCircle className="h-4 w-4" />
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openNoteDialog(request)}
+                          >
+                            <MessageSquare className="h-4 w-4" />
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openConfirmDialog('trash', request.id, request.parentName)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openConfirmDialog('restore', request.id, request.parentName)}
+                            className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                          >
+                            <RotateCcw className="h-4 w-4" />
+                          </Button>
+                          
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => openConfirmDialog('delete', request.id, request.parentName)}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash className="h-4 w-4" />
+                          </Button>
+                        </>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -500,7 +735,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                   <p><strong>Date:</strong> {formatDate(selectedRequest.requestedDate)}</p>
                   <p><strong>Heures:</strong> {selectedRequest.startTime} - {selectedRequest.endTime}</p>
                   <p><strong>Durée:</strong> {selectedRequest.durationHours}h</p>
-                  <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal.toFixed(2)}€</p>
+                  <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€</p>
                 </div>
               </div>
             </div>
@@ -613,6 +848,33 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
           </div>
         </DialogContent>
       </Dialog>
+
+      {/* Boîte de dialogue de confirmation */}
+      <ConfirmDialog
+        isOpen={confirmDialog.isOpen}
+        onClose={closeConfirmDialog}
+        onConfirm={handleConfirmedAction}
+        title={
+          confirmDialog.type === 'trash' ? 'Mettre en corbeille' :
+          confirmDialog.type === 'restore' ? 'Restaurer la réservation' :
+          confirmDialog.type === 'delete' ? 'Supprimer définitivement' : ''
+        }
+        description={
+          confirmDialog.type === 'trash' 
+            ? `Êtes-vous sûr de vouloir mettre la réservation de "${confirmDialog.requestName}" dans la corbeille ?` :
+          confirmDialog.type === 'restore'
+            ? `Êtes-vous sûr de vouloir restaurer la réservation de "${confirmDialog.requestName}" ?` :
+          confirmDialog.type === 'delete'
+            ? `⚠️ ATTENTION : Cette action est irréversible ! Êtes-vous absolument sûr de vouloir supprimer définitivement la réservation de "${confirmDialog.requestName}" ?` : ''
+        }
+        confirmText={
+          confirmDialog.type === 'trash' ? 'Mettre en corbeille' :
+          confirmDialog.type === 'restore' ? 'Restaurer' :
+          confirmDialog.type === 'delete' ? 'Supprimer définitivement' : 'Confirmer'
+        }
+        cancelText="Annuler"
+        variant={confirmDialog.type === 'delete' ? 'destructive' : 'default'}
+      />
     </div>
   );
 };

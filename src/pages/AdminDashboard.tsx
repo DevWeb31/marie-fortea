@@ -43,10 +43,15 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    // TODO: Implémenter la déconnexion Supabase
-    // await supabase.auth.signOut();
-    navigate('/admin');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/admin');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+      // Rediriger quand même
+      navigate('/admin');
+    }
   };
 
   const tabs = [
