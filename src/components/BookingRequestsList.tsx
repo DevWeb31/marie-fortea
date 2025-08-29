@@ -100,6 +100,28 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
     requestName: null,
   });
 
+  // État pour le dialogue de sélection de statut après désarchivage
+  const [unarchiveStatusDialog, setUnarchiveStatusDialog] = useState<{
+    isOpen: boolean;
+    requestId: string | null;
+    requestName: string | null;
+  }>({
+    isOpen: false,
+    requestId: null,
+    requestName: null,
+  });
+
+  // État pour le dialogue de sélection de statut après restauration de la corbeille
+  const [restoreStatusDialog, setRestoreStatusDialog] = useState<{
+    isOpen: boolean;
+    requestId: string | null;
+    requestName: string | null;
+  }>({
+    isOpen: false,
+    requestId: null,
+    requestName: null,
+  });
+
   // Charger les demandes
   useEffect(() => {
     loadRequests();
@@ -249,6 +271,31 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleMoveToTrash = async (id: string) => {
     try {
+      console.log('🔄 Mise en corbeille avec mise à jour automatique du statut...');
+      console.log('Réservation:', id);
+
+      // 1. D'abord, mettre à jour le statut vers "cancelled" (annulée)
+      const { error: statusError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          status: 'cancelled',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (statusError) {
+        console.error('❌ Erreur lors de la mise à jour du statut:', statusError);
+        toast({
+          title: 'Erreur',
+          description: `Erreur lors de la mise à jour du statut: ${statusError.message}`,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      console.log('✅ Statut mis à jour vers "cancelled"');
+
+      // 2. Ensuite, mettre la réservation dans la corbeille
       const result = await BookingService.moveToTrash(id);
       
       if (result.error) {
@@ -261,9 +308,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
+        console.log('✅ Réservation mise dans la corbeille avec succès');
         toast({
           title: 'Réservation supprimée',
-          description: 'La réservation a été mise dans la corbeille',
+          description: 'La réservation a été mise dans la corbeille et le statut a été mis à jour vers "Annulée"',
           variant: 'default',
         });
 
@@ -271,6 +319,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         await reloadAllCounters();
       }
     } catch (error) {
+      console.error('❌ Erreur lors de la mise en corbeille:', error);
       toast({
         title: 'Erreur',
         description: 'Erreur lors de la mise en corbeille',
@@ -281,6 +330,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleRestoreFromTrash = async (id: string) => {
     try {
+      console.log('🔄 Restauration avec sélection de nouveau statut...');
+      console.log('Réservation:', id);
+
+      // 1. D'abord, restaurer la réservation de la corbeille
       const result = await BookingService.restoreFromTrash(id);
       if (result.error) {
         toast({
@@ -291,14 +344,19 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      toast({
-        title: 'Réservation restaurée',
-        description: 'La réservation a été restaurée avec succès',
-      });
-
-      // Recharger automatiquement tous les compteurs
-      await reloadAllCounters();
+      if (result.data) {
+        console.log('✅ Réservation restaurée avec succès');
+        
+        // 2. Ouvrir le dialogue de sélection de statut
+        const request = deletedRequests.find(r => r.id === id);
+        setRestoreStatusDialog({
+          isOpen: true,
+          requestId: id,
+          requestName: request?.parentName || 'Réservation'
+        });
+      }
     } catch (error) {
+      console.error('❌ Erreur lors de la restauration:', error);
       toast({
         title: 'Erreur',
         description: 'Erreur lors de la restauration',
@@ -360,6 +418,31 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleArchiveBooking = async (id: string) => {
     try {
+      console.log('🔄 Archivage avec mise à jour automatique du statut...');
+      console.log('Réservation:', id);
+
+      // 1. D'abord, mettre à jour le statut vers "completed" (terminée)
+      const { error: statusError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          status: 'completed',
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id);
+
+      if (statusError) {
+        console.error('❌ Erreur lors de la mise à jour du statut:', statusError);
+        toast({
+          title: 'Erreur',
+          description: `Erreur lors de la mise à jour du statut: ${statusError.message}`,
+          variant: 'destructive',
+        });
+        return;
+      }
+
+      console.log('✅ Statut mis à jour vers "completed"');
+
+      // 2. Ensuite, archiver la réservation
       const result = await BookingService.archiveBooking(id);
       
       if (result.error) {
@@ -372,16 +455,18 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
+        console.log('✅ Réservation archivée avec succès');
         toast({
           title: 'Réservation archivée',
-          description: 'La réservation a été archivée avec succès',
+          description: 'La réservation a été archivée avec succès et le statut a été mis à jour vers "Terminée"',
           variant: 'default',
         });
 
-        await loadRequests();
-        await loadArchivedRequests();
+        // Recharger automatiquement tous les compteurs
+        await reloadAllCounters();
       }
     } catch (error) {
+      console.error('❌ Erreur lors de l\'archivage:', error);
       toast({
         title: 'Erreur',
         description: 'Erreur lors de l\'archivage',
@@ -392,6 +477,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleUnarchiveBooking = async (id: string) => {
     try {
+      console.log('🔄 Désarchivage avec sélection de nouveau statut...');
+      console.log('Réservation:', id);
+
+      // 1. D'abord, désarchiver la réservation
       const result = await BookingService.unarchiveBooking(id);
       
       if (result.error) {
@@ -404,80 +493,73 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
-        toast({
-          title: 'Réservation désarchivée',
-          description: 'La réservation a été désarchivée avec succès',
-          variant: 'default',
+        console.log('✅ Réservation désarchivée avec succès');
+        
+        // 2. Ouvrir le dialogue de sélection de statut
+        const request = archivedRequests.find(r => r.id === id);
+        setUnarchiveStatusDialog({
+          isOpen: true,
+          requestId: id,
+          requestName: request?.parentName || 'Réservation'
         });
-
-        await loadRequests();
-        await loadArchivedRequests();
       }
     } catch (error) {
+      console.error('❌ Erreur lors du désarchivage:', error);
       toast({
         title: 'Erreur',
-        description: 'Erreur lors de la désarchivage',
+        description: 'Erreur lors du désarchivage',
         variant: 'destructive',
       });
     }
   };
 
-  const handleStatusUpdate = async () => {
-    if (!selectedRequest) return;
+  // Fonction pour mettre à jour le statut après restauration de la corbeille
+  const handleRestoreStatusUpdate = async (newStatus: AllBookingStatus) => {
+    if (!restoreStatusDialog.requestId) return;
 
     setIsUpdating(true);
     try {
-      // Vérifier si la transition est autorisée
-      const allowedTransitions = getAvailableTransitions(selectedRequest.status);
-      const isTransitionAllowed = allowedTransitions.some(t => t.toCode === newStatus);
-      
-      if (!isTransitionAllowed) {
-        toast({
-          title: 'Transition non autorisée',
-          description: `La transition de "${formatBookingStatus(selectedRequest.status)}" vers "${formatBookingStatus(newStatus)}" n'est pas autorisée.`,
-          variant: 'destructive',
-        });
-        return;
-      }
+      console.log('🔄 Mise à jour du statut après restauration...');
+      console.log('Réservation:', restoreStatusDialog.requestId);
+      console.log('Nouveau statut:', newStatus);
 
-      // Vérifier si des notes sont requises
-      const transition = allowedTransitions.find(t => t.toCode === newStatus);
-      if (transition?.requiresNotes && !statusNote.trim()) {
-        toast({
-          title: 'Notes requises',
-          description: 'Des notes sont obligatoires pour cette transition de statut.',
-          variant: 'destructive',
-        });
-        return;
-      }
+      // Mettre à jour le statut
+      const { error: statusError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          status: newStatus,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', restoreStatusDialog.requestId);
 
-      // Mettre à jour le statut en utilisant le nouveau système
-      const result = await updateBookingStatusWithNewSystem(
-        selectedRequest.id,
-        newStatus,
-        statusNote
-      );
-
-      if (result.error) {
+      if (statusError) {
+        console.error('❌ Erreur lors de la mise à jour du statut:', statusError);
         toast({
           title: 'Erreur',
-          description: result.error,
+          description: `Erreur lors de la mise à jour du statut: ${statusError.message}`,
           variant: 'destructive',
         });
         return;
       }
 
+      console.log('✅ Statut mis à jour avec succès');
       toast({
-        title: 'Statut mis à jour',
-        description: `Le statut de la demande a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
+        title: 'Réservation restaurée',
+        description: `La réservation a été restaurée avec succès et le statut a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
+        variant: 'default',
       });
 
-      // Recharger les demandes
-      await loadRequests();
-      setIsStatusDialogOpen(false);
-      setStatusNote('');
+      // Fermer le dialogue et recharger les données
+      setRestoreStatusDialog({
+        isOpen: false,
+        requestId: null,
+        requestName: null,
+      });
+
+      // Recharger automatiquement tous les compteurs
+      await reloadAllCounters();
     } catch (error) {
-      console.error('Erreur lors de la mise à jour du statut:', error);
+      console.error('❌ Erreur lors de la mise à jour du statut:', error);
       toast({
         title: 'Erreur',
         description: 'Erreur lors de la mise à jour du statut',
@@ -488,116 +570,155 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
     }
   };
 
-  // Nouvelle méthode pour mettre à jour le statut avec le nouveau système
-  const updateBookingStatusWithNewSystem = async (
-    id: string, 
-    newStatusCode: string, 
-    notes?: string
-  ): Promise<{ data: boolean | null; error: string | null }> => {
+  // Fonction pour mettre à jour le statut après désarchivage
+  const handleUnarchiveStatusUpdate = async (newStatus: AllBookingStatus) => {
+    if (!unarchiveStatusDialog.requestId) return;
+
+    setIsUpdating(true);
     try {
-      // 1. Mettre à jour le statut principal
+      console.log('🔄 Mise à jour du statut après désarchivage...');
+      console.log('Réservation:', unarchiveStatusDialog.requestId);
+      console.log('Nouveau statut:', newStatus);
+
+      // Mettre à jour le statut
       const { error: statusError } = await supabase
         .from('booking_requests')
         .update({ 
-          status: newStatusCode, // Garder la compatibilité avec l'ancien système
-          status_id: await getStatusIdByCode(newStatusCode) // Nouveau système
+          status: newStatus,
+          updated_at: new Date().toISOString()
         })
-        .eq('id', id);
+        .eq('id', unarchiveStatusDialog.requestId);
 
       if (statusError) {
-        console.error('Erreur lors de la mise à jour du statut:', statusError);
-        return { data: null, error: 'Erreur lors de la mise à jour du statut' };
-      }
-
-      // 2. Enregistrer le changement de statut dans l'historique
-      const { error: historyError } = await supabase
-        .from('booking_status_changes')
-        .insert({
-          booking_request_id: id,
-          from_status_id: await getStatusIdByCode(selectedRequest?.status || ''),
-          to_status_id: await getStatusIdByCode(newStatusCode),
-          changed_by: 'admin', // TODO: Récupérer l'utilisateur connecté
-          notes: notes || null,
-          transition_reason: 'Changement manuel par administrateur'
+        console.error('❌ Erreur lors de la mise à jour du statut:', statusError);
+        toast({
+          title: 'Erreur',
+          description: `Erreur lors de la mise à jour du statut: ${statusError.message}`,
+          variant: 'destructive',
         });
-
-      if (historyError) {
-        console.error('Erreur lors de l\'enregistrement de l\'historique:', historyError);
-        // Ne pas échouer la mise à jour du statut si l'historique échoue
+        return;
       }
 
-      // 3. Ajouter une note administrative si fournie
-      if (notes && notes.trim()) {
-        await BookingService.addAdminNote(id, notes);
-      }
+      console.log('✅ Statut mis à jour avec succès');
+      toast({
+        title: 'Réservation désarchivée',
+        description: `La réservation a été désarchivée avec succès et le statut a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
+        variant: 'default',
+      });
 
-      return { data: true, error: null };
+      // Fermer le dialogue et recharger les données
+      setUnarchiveStatusDialog({
+        isOpen: false,
+        requestId: null,
+        requestName: null,
+      });
+
+      // Recharger automatiquement tous les compteurs
+      await reloadAllCounters();
     } catch (error) {
-      console.error('Erreur inattendue lors de la mise à jour du statut:', error);
-      return { data: null, error: 'Erreur inattendue lors de la mise à jour du statut' };
+      console.error('❌ Erreur lors de la mise à jour du statut:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la mise à jour du statut',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUpdating(false);
     }
   };
+  const handleStatusUpdate = async () => {
+    if (!selectedRequest) return;
 
-  // Fonction utilitaire pour obtenir l'ID d'un statut par son code
-  const getStatusIdByCode = async (statusCode: string): Promise<number | null> => {
+    setIsUpdating(true);
     try {
-      const { data, error } = await supabase
-        .from('booking_statuses')
-        .select('id')
-        .eq('code', statusCode)
-        .single();
+      console.log('🔄 Mise à jour ULTRA SIMPLE du statut...');
+      console.log('Réservation:', selectedRequest.id);
+      console.log('Ancien statut:', selectedRequest.status);
+      console.log('Nouveau statut:', newStatus);
+      console.log('Note:', statusNote);
 
-      if (error || !data) {
-        console.warn(`Statut non trouvé pour le code: ${statusCode}`);
-        return null;
+      // UNIQUEMENT la mise à jour du statut dans booking_requests
+      const { error: statusError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          status: newStatus,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', selectedRequest.id);
+
+      if (statusError) {
+        console.error('❌ Erreur lors de la mise à jour du statut:', statusError);
+        toast({
+          title: 'Erreur',
+          description: `Erreur lors de la mise à jour du statut: ${statusError.message}`,
+          variant: 'destructive',
+        });
+        return;
       }
 
-      return data.id;
+      console.log('✅ Statut mis à jour avec succès - AUCUNE autre table utilisée');
+
+      // Tentative d'ajout de note (optionnel, sans historique complexe)
+      if (statusNote && statusNote.trim()) {
+        try {
+          // Essayer d'ajouter une note simple dans admin_notes
+          const { error: noteError } = await supabase
+            .from('admin_notes')
+            .insert({
+              booking_request_id: selectedRequest.id,
+              note: `Changement de statut: ${selectedRequest.status} → ${newStatus}. ${statusNote}`,
+              created_by: 'admin',
+              created_at: new Date().toISOString()
+            });
+
+          if (noteError) {
+            console.warn('⚠️ Erreur lors de l\'ajout de la note:', noteError);
+            // Ne pas échouer si la note échoue
+          } else {
+            console.log('✅ Note ajoutée avec succès');
+          }
+        } catch (noteError) {
+          console.warn('⚠️ Erreur lors de l\'ajout de la note:', noteError);
+        }
+      }
+
+      toast({
+        title: 'Statut mis à jour',
+        description: `Le statut de la demande a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
+        variant: 'default',
+      });
+
+      // Recharger automatiquement tous les compteurs
+      await reloadAllCounters();
+      setIsStatusDialogOpen(false);
+      setStatusNote('');
+      setSelectedRequest(null);
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'ID du statut:', error);
-      return null;
+      console.error('❌ Erreur lors de la mise à jour du statut:', error);
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de la mise à jour du statut',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsUpdating(false);
     }
   };
 
-  // Fonction pour obtenir les transitions disponibles
-  const getAvailableTransitions = (currentStatus: string) => {
-    // Transitions prédéfinies basées sur la migration
-    const predefinedTransitions = [
-      // Transitions depuis "pending" (ancien système)
-      { fromCode: 'pending', toCode: 'contacted', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'pending', toCode: 'cancelled', requiresAdminApproval: true, requiresNotes: true },
-      
-      // Transitions depuis "contacted"
-      { fromCode: 'contacted', toCode: 'confirmed', requiresAdminApproval: false, requiresNotes: false },
-      { fromCode: 'contacted', toCode: 'cancelled', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'contacted', toCode: 'pending', requiresAdminApproval: true, requiresNotes: true },
-      
-      // Transitions depuis "confirmed"
-      { fromCode: 'confirmed', toCode: 'completed', requiresAdminApproval: false, requiresNotes: false },
-      { fromCode: 'confirmed', toCode: 'cancelled', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'confirmed', toCode: 'contacted', requiresAdminApproval: true, requiresNotes: true },
-      
-      // Transitions depuis "completed"
-      { fromCode: 'completed', toCode: 'archived', requiresAdminApproval: false, requiresNotes: false },
-      
-      // Transitions depuis "cancelled"
-      { fromCode: 'cancelled', toCode: 'pending', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'cancelled', toCode: 'archived', requiresAdminApproval: false, requiresNotes: false },
-      
-      // Transitions depuis "archived"
-      { fromCode: 'archived', toCode: 'completed', requiresAdminApproval: true, requiresNotes: true },
-      
-      // Nouvelles transitions pour le nouveau système
-      { fromCode: 'nouvelle', toCode: 'acceptee', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'nouvelle', toCode: 'annulee', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'acceptee', toCode: 'confirmee', requiresAdminApproval: false, requiresNotes: false },
-      { fromCode: 'acceptee', toCode: 'annulee', requiresAdminApproval: true, requiresNotes: true },
-      { fromCode: 'confirmee', toCode: 'en_cours', requiresAdminApproval: false, requiresNotes: false },
-      { fromCode: 'en_cours', toCode: 'terminee', requiresAdminApproval: false, requiresNotes: false },
-      { fromCode: 'terminee', toCode: 'archivée', requiresAdminApproval: false, requiresNotes: false },
-    ];
+  // Fonction supprimée - remplacée par la logique ultra-simple
 
-    return predefinedTransitions.filter(transition => transition.fromCode === currentStatus);
+  // Fonction supprimée - plus nécessaire avec la logique ultra-simple
+
+  // Fonction pour obtenir les transitions disponibles (simplifiée)
+  const getAvailableTransitions = (currentStatus: string) => {
+    // Toutes les transitions sont autorisées (simplification)
+    return [
+      { fromCode: currentStatus, toCode: 'pending', requiresAdminApproval: false },
+      { fromCode: currentStatus, toCode: 'contacted', requiresAdminApproval: false },
+      { fromCode: currentStatus, toCode: 'confirmed', requiresAdminApproval: false },
+      { fromCode: currentStatus, toCode: 'cancelled', requiresAdminApproval: false },
+      { fromCode: currentStatus, toCode: 'completed', requiresAdminApproval: false },
+    ];
   };
 
   const handleAddNote = async () => {
@@ -1303,6 +1424,158 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         cancelText="Annuler"
         variant={confirmDialog.type === 'delete' ? 'destructive' : 'default'}
       />
+
+      {/* Dialogue de sélection de statut après désarchivage */}
+      <Dialog open={unarchiveStatusDialog.isOpen} onOpenChange={(open) => {
+        if (!open) {
+          setUnarchiveStatusDialog({
+            isOpen: false,
+            requestId: null,
+            requestName: null,
+          });
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Choisir le nouveau statut</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              La réservation de <strong>"{unarchiveStatusDialog.requestName}"</strong> a été désarchivée avec succès.
+              <br />
+              Veuillez choisir le nouveau statut pour cette réservation :
+            </p>
+            
+            <div className="grid grid-cols-1 gap-3">
+              <Button
+                variant="outline"
+                onClick={() => handleUnarchiveStatusUpdate('pending')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <span>En attente</span>
+                </div>
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => handleUnarchiveStatusUpdate('contacted')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span>Contacté</span>
+                </div>
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => handleUnarchiveStatusUpdate('confirmed')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span>Confirmé</span>
+                </div>
+              </Button>
+            </div>
+            
+            <div className="flex justify-end space-x-2 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setUnarchiveStatusDialog({
+                  isOpen: false,
+                  requestId: null,
+                  requestName: null,
+                })}
+                disabled={isUpdating}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialogue de sélection de statut après restauration de la corbeille */}
+      <Dialog open={restoreStatusDialog.isOpen} onOpenChange={(open) => {
+        if (!open) {
+          setRestoreStatusDialog({
+            isOpen: false,
+            requestId: null,
+            requestName: null,
+          });
+        }
+      }}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Choisir le nouveau statut</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-600 dark:text-gray-400">
+              La réservation de <strong>"{restoreStatusDialog.requestName}"</strong> a été restaurée avec succès.
+              <br />
+              Veuillez choisir le nouveau statut pour cette réservation :
+            </p>
+            
+            <div className="grid grid-cols-1 gap-3">
+              <Button
+                variant="outline"
+                onClick={() => handleRestoreStatusUpdate('pending')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                  <span>En attente</span>
+                </div>
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => handleRestoreStatusUpdate('contacted')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
+                  <span>Contacté</span>
+                </div>
+              </Button>
+              
+              <Button
+                variant="outline"
+                onClick={() => handleRestoreStatusUpdate('confirmed')}
+                disabled={isUpdating}
+                className="justify-start"
+              >
+                <div className="flex items-center space-x-2">
+                  <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                  <span>Confirmé</span>
+                </div>
+              </Button>
+            </div>
+            
+            <div className="flex justify-end space-x-2 pt-4">
+              <Button
+                variant="outline"
+                onClick={() => setRestoreStatusDialog({
+                  isOpen: false,
+                  requestId: null,
+                  requestName: null,
+                })}
+                disabled={isUpdating}
+              >
+                Annuler
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

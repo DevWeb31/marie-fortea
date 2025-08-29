@@ -1,20 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Settings, Users, Calendar, BarChart3, ExternalLink, FileText, MessageSquare, Trash2 } from 'lucide-react';
+import { Settings, Users, Calendar, BarChart3, ExternalLink, FileText, MessageSquare } from 'lucide-react';
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import BookingRequestsList from '@/components/BookingRequestsList';
 import SiteSettingsManager from '@/components/SiteSettingsManager';
-import TrashTestPage from '@/pages/TrashTestPage';
 import { BookingService } from '@/lib/booking-service';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'settings' | 'trash-test'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'settings'>('dashboard');
   const [stats, setStats] = useState({
     pending: 0,
     total: 0,
@@ -58,8 +57,7 @@ const AdminDashboard = () => {
   const tabs = [
     { id: 'dashboard', label: 'Tableau de bord', icon: BarChart3 },
     { id: 'bookings', label: 'Demandes de réservation', icon: FileText },
-    { id: 'settings', label: 'Paramètres', icon: Settings },
-    { id: 'trash-test', label: 'Test Corbeille', icon: Trash2 }
+    { id: 'settings', label: 'Paramètres', icon: Settings }
   ];
 
   return (
@@ -108,7 +106,7 @@ const AdminDashboard = () => {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings' | 'trash-test')}
+                  onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings')}
                   className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600 dark:text-blue-400'
@@ -308,10 +306,6 @@ const AdminDashboard = () => {
           <div>
             <SiteSettingsManager />
           </div>
-        )}
-
-        {activeTab === 'trash-test' && (
-          <TrashTestPage />
         )}
       </main>
     </div>
