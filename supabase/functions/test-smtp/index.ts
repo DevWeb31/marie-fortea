@@ -43,7 +43,7 @@ serve(async (req) => {
 
     // Récupérer les paramètres SMTP de la requête
     const smtpConfig = await req.json();
-    console.log('📧 Configuration SMTP reçue:', smtpConfig);
+
     
     // Valider les paramètres requis
     const requiredFields = ['host', 'port', 'username', 'password'];
@@ -59,12 +59,8 @@ serve(async (req) => {
       }
     }
 
-    console.log('🔗 Configuration SMTP validée');
-    console.log('📍 Host:', smtpConfig.host);
-    console.log('🔌 Port:', smtpConfig.port);
-    console.log('👤 Username:', smtpConfig.username);
-    console.log('🔐 Password:', smtpConfig.password ? '***' : 'manquant');
-    console.log('🔒 Encryption:', smtpConfig.encryption);
+
+
 
     // Pour le moment, on simule le test sans se connecter réellement
     // Cela nous permet de vérifier que la fonction Edge fonctionne

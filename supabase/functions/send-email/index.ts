@@ -26,9 +26,7 @@ serve(async (req) => {
     try {
       // Essayer req.json() d'abord
       emailData = await req.json() as EmailData;
-      console.log('📝 Corps de la requête reçu via req.json()');
     } catch (error) {
-      console.error('❌ Erreur de parsing:', error);
       throw new Error(`Erreur de parsing: ${error.message}`);
     }
 
@@ -37,12 +35,7 @@ serve(async (req) => {
       throw new Error('Données d\'email manquantes: to, subject, html sont requis');
     }
 
-    console.log('📧 Données email validées:', { 
-      to: emailData.to, 
-      subject: emailData.subject, 
-      hasHtml: !!emailData.html,
-      hasText: !!emailData.text 
-    });
+
 
     // Récupérer les paramètres SMTP depuis la base de données
     const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
@@ -55,12 +48,9 @@ serve(async (req) => {
       throw new Error('Variables d\'environnement Supabase manquantes');
     }
     
-    console.log('🔗 Connexion à Supabase:', { url: supabaseUrl, hasKey: !!supabaseServiceKey });
-    
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
     
     // Récupérer les paramètres SMTP depuis la base de données
-    console.log('📊 Récupération des paramètres SMTP...');
     const { data: smtpSettings, error: smtpError } = await supabase
       .from('site_settings')
       .select('key, value')
@@ -75,7 +65,7 @@ serve(async (req) => {
       throw new Error('Paramètres SMTP non trouvés dans la base de données');
     }
     
-    console.log('✅ Paramètres SMTP récupérés:', smtpSettings.map(s => ({ key: s.key, hasValue: !!s.value })));
+
     
     // Convertir les paramètres en objet
     const smtpConfig: { [key: string]: string } = {};
@@ -95,29 +85,11 @@ serve(async (req) => {
     const smtpFrom = smtpConfig.smtp_from || 'noreply@marie-fortea.com';
     const smtpEncryption = smtpConfig.smtp_encryption || 'tls';
 
-    console.log('🔧 Configuration SMTP:', { 
-      host: smtpHost, 
-      port: smtpPort, 
-      username: smtpUsername, 
-      hasPassword: !!smtpPassword,
-      from: smtpFrom,
-      encryption: smtpEncryption
-    });
+
 
     // Test temporaire : simulation d'envoi SMTP
-    console.log('🧪 Test temporaire : simulation d\'envoi SMTP');
-    console.log('📧 Email qui serait envoyé :');
-    console.log('   De:', smtpFrom);
-    console.log('   À:', emailData.to);
-    console.log('   Sujet:', emailData.subject);
-    console.log('   Serveur SMTP:', smtpHost);
-    console.log('   Port:', smtpPort);
-    console.log('   Username:', smtpUsername);
-    
     // Simuler un délai d'envoi
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log('✅ Email simulé avec succès (test temporaire)');
 
     // Retourner une réponse de succès
     return new Response(

@@ -15,10 +15,7 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
   const [mapContainer, setMapContainer] = useState<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log('🗺️ MapDialog: useEffect déclenché, isOpen:', isOpen);
-    
     if (isOpen && !mapContainer) {
-      console.log('🗺️ MapDialog: Modal ouvert, création du conteneur de carte');
       setIsLoading(true);
       setError(null);
       
@@ -33,16 +30,12 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
       // Charger Leaflet de manière dynamique
       const loadMap = async () => {
         try {
-          console.log('🗺️ MapDialog: Vérification de Leaflet...');
-          
           // Vérifier si Leaflet est déjà chargé
           if ((window as any).L) {
-            console.log('✅ Leaflet déjà chargé, création de la carte...');
             createMap(container);
             return;
           }
 
-          console.log('📥 Chargement des CSS Leaflet...');
           // Charger les CSS de Leaflet
           const link = document.createElement('link');
           link.rel = 'stylesheet';
@@ -50,14 +43,12 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
           link.crossOrigin = '';
           document.head.appendChild(link);
 
-          console.log('📥 Chargement du script Leaflet...');
           // Charger le script de Leaflet
           const script = document.createElement('script');
           script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
           script.crossOrigin = '';
           
           script.onload = () => {
-            console.log('✅ Script Leaflet chargé avec succès');
             createMap(container);
           };
           
@@ -77,7 +68,6 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
       
       loadMap();
     } else if (!isOpen) {
-      console.log('🗺️ MapDialog: Modal fermé, nettoyage');
       setMapContainer(null);
       setIsLoading(false);
       setError(null);
@@ -95,18 +85,15 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
       
       // Coordonnées de Montaigut sur Save
       const montaigutCoords: [number, number] = [43.6917, 1.2319];
-      console.log('📍 Coordonnées Montaigut:', montaigutCoords);
       
       // Créer la carte
       const map = L.map(container).setView(montaigutCoords, 10);
-      console.log('🗺️ Carte créée');
       
       // Ajouter la couche de tuiles OpenStreetMap
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '© OpenStreetMap contributors',
         maxZoom: 18
       }).addTo(map);
-      console.log('🗺️ Tuiles ajoutées');
       
       // Ajouter le cercle de 20km
       const circle = L.circle(montaigutCoords, {
@@ -123,7 +110,6 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
       }, 100);
       
       setIsLoading(false);
-      console.log('✅ Carte créée avec succès !');
     } catch (error) {
       setError(`Erreur lors de la création de la carte: ${error.message}`);
       setIsLoading(false);
