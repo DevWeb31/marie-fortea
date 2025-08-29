@@ -37,8 +37,6 @@ export const validateSupabaseConfig = (config: SupabaseConfig): boolean => {
 // Log de la configuration (en développement seulement)
 export const logSupabaseConfig = (config: SupabaseConfig): void => {
   if (config.environment === 'development') {
-    console.log(`🚀 Supabase configuré pour l'environnement: ${config.environment}`);
-    console.log(`📍 URL: ${config.url}`);
-    console.log(`🔑 Clé: ${config.anonKey.substring(0, 20)}...`);
+    
   }
 };

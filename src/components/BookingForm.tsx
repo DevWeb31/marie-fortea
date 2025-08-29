@@ -115,10 +115,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('🔄 Début de la soumission du formulaire');
-    console.log('📝 Données du formulaire:', formData);
-    console.log('🔐 Token captcha:', captchaToken);
-    
     if (!captchaToken) {
       console.log('❌ Pas de token captcha');
       toast({
@@ -131,7 +127,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
 
     // Validation des dates
     if (formData.startDate >= formData.endDate) {
-      console.log('❌ Erreur de validation des dates');
       toast({
         title: 'Erreur de dates',
         description: 'La date de fin doit être après la date de début.',
@@ -139,12 +134,9 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       });
       return;
     }
-
-    console.log('✅ Validation passée, début de la soumission');
     setIsSubmitting(true);
 
     try {
-      console.log('📤 Appel du service de réservation...');
       const result = await BookingService.createBookingRequest({
         ...formData,
         parentName: `${formData.parentFirstName} ${formData.parentLastName}`.trim(),
@@ -160,10 +152,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
         captchaToken
       });
 
-      console.log('📥 Réponse du service:', result);
-
       if (result.error) {
-        console.log('❌ Erreur du service:', result.error);
         toast({
           title: 'Erreur',
           description: result.error,
@@ -172,7 +161,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
         return;
       }
 
-      console.log('✅ Succès de la réservation');
       toast({
         title: 'Demande envoyée avec succès !',
         description: 'Je vous contacterai dans les plus brefs délais pour confirmer votre réservation et prendre plus de détails.',
@@ -199,14 +187,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       // Appeler le callback de succès
       onSuccess?.();
     } catch (error) {
-      console.error('💥 Erreur inattendue:', error);
       toast({
         title: 'Erreur',
         description: 'Une erreur est survenue. Veuillez réessayer.',
         variant: 'destructive',
       });
     } finally {
-      console.log('🏁 Fin de la soumission');
       setIsSubmitting(false);
     }
   };

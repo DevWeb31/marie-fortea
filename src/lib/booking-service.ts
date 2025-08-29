@@ -13,16 +13,11 @@ export class BookingService {
   // Créer une nouvelle demande de réservation
   static async createBookingRequest(data: CreateBookingRequest): Promise<{ data: BookingRequest | null; error: string | null }> {
     try {
-      console.log('🚀 BookingService.createBookingRequest appelé avec:', data);
-      
       // Validation des données
       const validationError = this.validateBookingData(data);
       if (validationError) {
-        console.log('❌ Erreur de validation:', validationError);
         return { data: null, error: validationError };
       }
-
-      console.log('✅ Validation passée, préparation des données...');
 
       // Préparer les données pour l'insertion
       const bookingData = {
@@ -48,8 +43,7 @@ export class BookingService {
         user_agent: navigator.userAgent
       };
 
-      console.log('📊 Données préparées pour Supabase:', bookingData);
-      console.log('🔗 Tentative de connexion à Supabase...');
+
 
       const { data: result, error } = await supabase
         .from('booking_requests')
@@ -58,11 +52,8 @@ export class BookingService {
         .single();
 
       if (error) {
-        console.error('❌ Erreur Supabase:', error);
         return { data: null, error: 'Erreur lors de la création de la demande' };
       }
-
-      console.log('✅ Données insérées avec succès:', result);
 
       // Convertir les données de la base vers notre format
       const bookingRequest: BookingRequest = {
@@ -98,18 +89,12 @@ export class BookingService {
 
       // Envoyer une notification par email
       try {
-        console.log('📧 Tentative d\'envoi d\'email...');
         await EmailService.sendBookingNotification(bookingRequest);
-        console.log('✅ Email envoyé avec succès');
       } catch (emailError) {
-        console.error('❌ Erreur lors de l\'envoi de l\'email de notification:', emailError);
         // Ne pas échouer la création de la réservation si l'email échoue
       }
-
-      console.log('🎉 Réservation créée avec succès:', bookingRequest);
       return { data: bookingRequest, error: null };
     } catch (error) {
-      console.error('💥 Erreur inattendue lors de la création de la demande:', error);
       return { data: null, error: 'Erreur inattendue lors de la création de la demande' };
     }
   }

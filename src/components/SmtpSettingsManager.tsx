@@ -50,7 +50,6 @@ const SmtpSettingsManager: React.FC = () => {
       const result = await SiteSettingsService.getSmtpSettings();
       if (result.error) {
         // Si les paramètres SMTP n'existent pas, les créer automatiquement
-        console.log('Paramètres SMTP manquants, création automatique...');
         await createDefaultSmtpSettings();
         // Recharger après création
         const retryResult = await SiteSettingsService.getSmtpSettings();
@@ -196,10 +195,6 @@ const SmtpSettingsManager: React.FC = () => {
     setTestResult(null);
 
     try {
-      console.log('🧪 Début du test SMTP...');
-      console.log('🔐 plainPassword:', plainPassword);
-      console.log('📝 editedValues:', editedValues);
-      
       // Utiliser le mot de passe en clair pour le test
       const testSettings = { ...editedValues };
       if (plainPassword) {
@@ -216,18 +211,13 @@ const SmtpSettingsManager: React.FC = () => {
         encryption: testSettings.smtp_encryption || 'tls'
       };
       
-      console.log('🔧 Configuration de test:', testConfig);
-      
       // Vérifier que tous les paramètres sont présents
       if (!testConfig.host || !testConfig.port || !testConfig.username || !testConfig.password) {
         throw new Error('Tous les paramètres SMTP doivent être remplis pour le test');
       }
       
       // Appeler la fonction Edge Function pour tester la connexion
-      console.log('🌐 Appel de l\'Edge Function test-smtp...');
       const supabaseConfig = getCurrentConfig();
-      console.log('🔗 URL Supabase:', supabaseConfig.url);
-      console.log('🔑 Clé anon:', supabaseConfig.anonKey ? 'Présente' : 'Manquante');
       
       const response = await fetch(`${supabaseConfig.url}/functions/v1/test-smtp`, {
         method: 'POST',
@@ -238,9 +228,7 @@ const SmtpSettingsManager: React.FC = () => {
         body: JSON.stringify(testConfig),
       });
       
-      console.log('📡 Réponse reçue:', response.status, response.statusText);
       const result = await response.json();
-      console.log('📄 Contenu de la réponse:', result);
       
       if (!response.ok) {
         throw new Error(result.error || 'Erreur lors du test de connexion');
@@ -433,13 +421,7 @@ const SmtpSettingsManager: React.FC = () => {
           {/* Bouton de test temporaire */}
           <Button
             onClick={() => {
-              console.log('🧪 Test de l\'état des variables:');
-              console.log('📝 editedValues:', editedValues);
-              console.log('💾 smtpSettings:', smtpSettings);
-              console.log('🔐 plainPassword:', plainPassword);
-              console.log('✅ hasChanges():', hasChanges);
-              console.log('🔍 Object.keys(editedValues):', Object.keys(editedValues));
-              console.log('🔍 Object.keys(smtpSettings):', Object.keys(smtpSettings));
+              // Debug désactivé pour la production
             }}
             variant="outline"
             size="sm"

@@ -34,8 +34,6 @@ export const isProduction = getCurrentEnvironment() === 'production';
 if (isDevelopment) {
   const config = getCurrentConfig();
   console.group("🔧 Configuration Supabase");
-  console.log('Environnement:', getCurrentEnvironment());
-  console.log('URL:', config.url);
-  console.log('Clé anonyme:', config.anonKey.substring(0, 20) + '...');
+
   console.groupEnd();
 }

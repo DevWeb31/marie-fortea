@@ -21,10 +21,7 @@ const Footer = () => {
   const handleMapClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('🗺️ Footer: handleMapClick appelé');
-    console.log('🗺️ Footer: État actuel isMapDialogOpen:', isMapDialogOpen);
     setIsMapDialogOpen(true);
-    console.log('🗺️ Footer: isMapDialogOpen mis à true');
   };
 
   return (

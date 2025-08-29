@@ -16,7 +16,6 @@ export class EmailService {
       // Vérifier si les notifications par email sont activées
       const notificationsEnabled = await SiteSettingsService.areEmailNotificationsEnabled();
       if (notificationsEnabled.error || !notificationsEnabled.data) {
-        console.log('Notifications par email désactivées');
         return { data: true, error: null }; // Pas d'erreur, juste désactivé
       }
 
@@ -30,20 +29,15 @@ export class EmailService {
       const emailData = this.prepareBookingNotificationEmail(bookingRequest, notificationEmail.data);
 
       // En production, utiliser Mailgun directement
-      console.log('📧 Tentative d\'envoi d\'email via Mailgun...');
       
       // Vérifier si la configuration Mailgun est disponible
       const mailgunConfigured = await this.isMailgunConfigured();
       
       if (mailgunConfigured) {
-        console.log('🔧 Configuration Mailgun détectée, tentative d\'envoi réel...');
-        
         try {
           const result = await this.sendEmailViaMailgun(emailData);
-          console.log('✅ Email envoyé via Mailgun avec succès !');
           return { data: true, error: null };
         } catch (mailgunError) {
-          console.warn('⚠️ Échec de l\'envoi Mailgun, fallback vers la simulation:', mailgunError);
           // Fallback vers la simulation
         }
       }
@@ -276,26 +270,15 @@ ID de la demande : ${bookingRequest.id}
       
       if (mailgunConfigured) {
         // Configuration Mailgun disponible, essayer l'envoi réel
-        console.log('🔧 Configuration Mailgun détectée, tentative d\'envoi réel...');
-        
         try {
           const result = await this.sendEmailViaMailgun(emailData);
-          console.log('✅ Email envoyé via Mailgun avec succès !');
           return { data: result, error: null };
         } catch (mailgunError) {
-          console.warn('⚠️ Échec de l\'envoi Mailgun, fallback vers la simulation:', mailgunError);
           // Fallback vers la simulation
         }
       }
       
       // Fallback : simulation locale
-      console.log('📬 Email simulé localement (développement) :');
-      console.log('   À:', emailData.to);
-      console.log('   Sujet:', emailData.subject);
-      console.log('   Contenu HTML:', emailData.html.substring(0, 100) + '...');
-      
-      console.log('📬 Interface Inbucket disponible sur: http://127.0.0.1:54334');
-      console.log('   (Pour voir les emails capturés localement)');
       
       return { 
         data: { 
@@ -309,11 +292,7 @@ ID de la demande : ${bookingRequest.id}
       };
       
     } catch (error) {
-      console.error('❌ Erreur lors de l\'envoi d\'email:', error);
-      
       // Même en cas d'erreur, on simule un succès pour le développement
-      console.log('🔄 Fallback : simulation d\'envoi d\'email réussi');
-      console.log('📬 Interface Inbucket disponible sur: http://127.0.0.1:54334');
       
       return { 
         data: { 
@@ -328,8 +307,6 @@ ID de la demande : ${bookingRequest.id}
 
   // Envoyer un email via Mailgun
   private static async sendEmailViaMailgun(emailData: EmailData): Promise<any> {
-    console.log('📧 Envoi via Mailgun...');
-    
     // Utiliser l'Edge Function send-email-mailgun
     const { data, error } = await supabase.functions.invoke('send-email-mailgun', {
       body: emailData
@@ -349,7 +326,6 @@ ID de la demande : ${bookingRequest.id}
       // car les variables d'environnement sont définies dans Supabase
       return true;
     } catch (error) {
-      console.warn('⚠️ Erreur lors de la vérification Mailgun:', error);
       return false;
     }
   }
