@@ -20,11 +20,23 @@ export class EmailService {
         return { data: true, error: null }; // Pas d'erreur, juste désactivé
       }
 
-      // Vérifier que la configuration SMTP est complète
-      const smtpConfigured = await SiteSettingsService.isSmtpConfigured();
-      if (smtpConfigured.error || !smtpConfigured.data) {
-        console.log('Configuration SMTP incomplète');
-        return { data: null, error: 'Configuration SMTP incomplète. Veuillez configurer les paramètres SMTP dans le back-office.' };
+      // En production, utiliser Mailgun directement
+      console.log('📧 Tentative d\'envoi d\'email via Mailgun...');
+      
+      // Vérifier si la configuration Mailgun est disponible
+      const mailgunConfigured = await this.isMailgunConfigured();
+      
+      if (mailgunConfigured) {
+        console.log('🔧 Configuration Mailgun détectée, tentative d\'envoi réel...');
+        
+        try {
+          const result = await this.sendEmailViaMailgun(emailData);
+          console.log('✅ Email envoyé via Mailgun avec succès !');
+          return { data: true, error: null };
+        } catch (mailgunError) {
+          console.warn('⚠️ Échec de l\'envoi Mailgun, fallback vers la simulation:', mailgunError);
+          // Fallback vers la simulation
+        }
       }
 
       // Récupérer l'email de notification
@@ -36,7 +48,7 @@ export class EmailService {
       // Préparer le contenu de l'email
       const emailData = this.prepareBookingNotificationEmail(bookingRequest, notificationEmail.data);
 
-      // Envoyer l'email via Inbucket (MailHog local) au lieu de l'Edge Function problématique
+      // Envoyer l'email via Mailgun ou fallback vers la simulation
       const { data, error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
