@@ -12,6 +12,7 @@ import AdminDashboard from '@/pages/AdminDashboard';
 import AdminLayout from '@/components/AdminLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import TestEmail from '@/pages/TestEmail';
+import TrashTestPage from '@/pages/TrashTestPage';
 import Footer from '@/components/Footer';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
@@ -29,6 +30,7 @@ function AppContent() {
       <Routes>
         <Route path="/admin" element={<AdminLayout><AdminLogin /></AdminLayout>} />
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/dashboard/trash-test" element={<ProtectedRoute><AdminLayout><TrashTestPage /></AdminLayout></ProtectedRoute>} />
       </Routes>
     );
   }

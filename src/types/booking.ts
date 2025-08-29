@@ -11,9 +11,45 @@ export interface ServiceType {
   createdAt: string;
 }
 
+// Nouveau système de statuts
+export interface BookingStatus {
+  id: number;
+  code: string;
+  name: string;
+  description: string;
+  color: string;
+  icon: string;
+  isActive: boolean;
+  sortOrder: number;
+  createdAt: string;
+}
+
+export interface BookingStatusTransition {
+  id: number;
+  fromStatusId: number;
+  toStatusId: number;
+  requiresAdminApproval: boolean;
+  requiresNotes: boolean;
+  autoActions?: string[];
+  createdAt: string;
+}
+
+export interface BookingStatusChange {
+  id: string;
+  bookingRequestId: string;
+  fromStatusId?: number;
+  toStatusId: number;
+  changedBy: string;
+  changedAt: string;
+  notes?: string;
+  transitionReason?: string;
+  metadata?: Record<string, any>;
+}
+
 export interface BookingRequest {
   id: string;
-  status: BookingStatus;
+  status: string; // Legacy field for backward compatibility
+  statusId: number; // New field referencing booking_statuses
   createdAt: string;
   updatedAt: string;
   
@@ -54,6 +90,13 @@ export interface BookingRequest {
   utmSource?: string;
   utmMedium?: string;
   utmCampaign?: string;
+  
+  // Nouveaux champs pour le système de statuts
+  statusCode?: string;
+  statusName?: string;
+  statusColor?: string;
+  statusIcon?: string;
+  statusDescription?: string;
 }
 
 export interface CreateBookingRequest {
@@ -76,10 +119,11 @@ export interface CreateBookingRequest {
   captchaToken: string;
 }
 
+// Legacy interface for backward compatibility
 export interface BookingStatusHistory {
   id: string;
   bookingRequestId: string;
-  status: BookingStatus;
+  status: string;
   notes?: string;
   changedBy: string;
   changedAt: string;
@@ -96,7 +140,7 @@ export interface AdminNote {
 
 export interface BookingRequestSummary {
   id: string;
-  status: BookingStatus;
+  status: string;
   createdAt: string;
   parentName: string;
   parentPhone: string;
@@ -111,7 +155,19 @@ export interface BookingRequestSummary {
   estimatedTotal: number;
 }
 
-export type BookingStatus = 
+// Nouveau type pour les statuts avec code string
+export type BookingStatusCode = 
+  | 'nouvelle'      // Nouvelle réservation
+  | 'acceptee'      // Réservation acceptée
+  | 'confirmee'     // Réservation confirmée
+  | 'en_cours'      // En cours
+  | 'terminee'      // Terminée
+  | 'annulee'       // Annulée
+  | 'archivée'      // Archivée
+  | 'supprimee';    // Supprimée
+
+// Legacy type for backward compatibility
+export type LegacyBookingStatus = 
   | 'pending'      // En attente de contact
   | 'contacted'    // Contacté par l'admin
   | 'confirmed'    // Réservation confirmée
@@ -198,6 +254,82 @@ export const SERVICE_TYPES: Omit<ServiceType, 'id' | 'createdAt'>[] = [
   }
 ];
 
+// Constantes pour les nouveaux statuts
+export const BOOKING_STATUSES: Omit<BookingStatus, 'id' | 'createdAt'>[] = [
+  {
+    code: 'nouvelle',
+    name: 'Nouvelle réservation',
+    description: 'Demande initiale reçue, en attente de traitement',
+    color: '#F59E0B',
+    icon: 'clock',
+    isActive: true,
+    sortOrder: 1
+  },
+  {
+    code: 'acceptee',
+    name: 'Réservation acceptée',
+    description: 'Demande validée par l\'administrateur, en attente de confirmation client',
+    color: '#3B82F6',
+    icon: 'check-circle',
+    isActive: true,
+    sortOrder: 2
+  },
+  {
+    code: 'confirmee',
+    name: 'Réservation confirmée',
+    description: 'Réservation confirmée par le client, prête pour exécution',
+    color: '#10B981',
+    icon: 'calendar-check',
+    isActive: true,
+    sortOrder: 3
+  },
+  {
+    code: 'en_cours',
+    name: 'En cours',
+    description: 'Réservation en cours d\'exécution',
+    color: '#8B5CF6',
+    icon: 'play-circle',
+    isActive: true,
+    sortOrder: 4
+  },
+  {
+    code: 'terminee',
+    name: 'Terminée',
+    description: 'Réservation terminée avec succès',
+    color: '#6B7280',
+    icon: 'check-square',
+    isActive: true,
+    sortOrder: 5
+  },
+  {
+    code: 'annulee',
+    name: 'Annulée',
+    description: 'Réservation annulée par le client ou l\'administrateur',
+    color: '#EF4444',
+    icon: 'x-circle',
+    isActive: true,
+    sortOrder: 6
+  },
+  {
+    code: 'archivée',
+    name: 'Archivée',
+    description: 'Réservation archivée pour conservation',
+    color: '#9CA3AF',
+    icon: 'archive',
+    isActive: true,
+    sortOrder: 7
+  },
+  {
+    code: 'supprimee',
+    name: 'Supprimée',
+    description: 'Réservation supprimée (soft delete)',
+    color: '#374151',
+    icon: 'trash-2',
+    isActive: true,
+    sortOrder: 8
+  }
+];
+
 // Fonctions utilitaires
 export const getServiceTypeByCode = (code: string): Omit<ServiceType, 'id' | 'createdAt'> | undefined => {
   return SERVICE_TYPES.find(service => service.code === code);
@@ -213,6 +345,31 @@ export const getServiceTypePrice = (code: string): number => {
   return service?.basePrice || 0;
 };
 
+// Nouvelles fonctions utilitaires pour les statuts
+export const getBookingStatusByCode = (code: string): Omit<BookingStatus, 'id' | 'createdAt'> | undefined => {
+  return BOOKING_STATUSES.find(status => status.code === code);
+};
+
+export const getBookingStatusName = (code: string): string => {
+  const status = getBookingStatusByCode(code);
+  return status?.name || code;
+};
+
+export const getBookingStatusColor = (code: string): string => {
+  const status = getBookingStatusByCode(code);
+  return status?.color || '#6B7280';
+};
+
+export const getBookingStatusIcon = (code: string): string => {
+  const status = getBookingStatusByCode(code);
+  return status?.icon || 'help-circle';
+};
+
+export const getBookingStatusDescription = (code: string): string => {
+  const status = getBookingStatusByCode(code);
+  return status?.description || '';
+};
+
 export const calculateDuration = (startTime: string, endTime: string): number => {
   const start = new Date(`2000-01-01T${startTime}`);
   const end = new Date(`2000-01-01T${endTime}`);
@@ -226,26 +383,75 @@ export const calculateEstimatedTotal = (serviceType: string, startTime: string, 
   return Math.round(basePrice * duration * 100) / 100;
 };
 
-export const formatBookingStatus = (status: BookingStatus): string => {
-  const statusLabels: Record<BookingStatus, string> = {
-    pending: 'En attente',
-    contacted: 'Contacté',
-    confirmed: 'Confirmé',
-    cancelled: 'Annulé',
-    completed: 'Terminé'
+// Fonction mise à jour pour le nouveau système de statuts
+export const formatBookingStatus = (status: string): string => {
+  const statusLabels: Record<string, string> = {
+    // Nouveaux statuts
+    'nouvelle': 'Nouvelle réservation',
+    'acceptee': 'Réservation acceptée',
+    'confirmee': 'Réservation confirmée',
+    'en_cours': 'En cours',
+    'terminee': 'Terminée',
+    'annulee': 'Annulée',
+    'archivée': 'Archivée',
+    'supprimee': 'Supprimée',
+    // Legacy statuts pour la compatibilité
+    'pending': 'En attente',
+    'contacted': 'Contacté',
+    'confirmed': 'Confirmé',
+    'cancelled': 'Annulé',
+    'completed': 'Terminé'
   };
   return statusLabels[status] || status;
 };
 
-export const getStatusColor = (status: BookingStatus): string => {
-  const statusColors: Record<BookingStatus, string> = {
-    pending: 'bg-yellow-100 text-yellow-800',
-    contacted: 'bg-blue-100 text-blue-800',
-    confirmed: 'bg-green-100 text-green-800',
-    cancelled: 'bg-red-100 text-red-800',
-    completed: 'bg-gray-100 text-gray-800'
+// Fonction mise à jour pour les couleurs des statuts
+export const getStatusColor = (status: string): string => {
+  const statusColors: Record<string, string> = {
+    // Nouveaux statuts
+    'nouvelle': 'bg-yellow-100 text-yellow-800',
+    'acceptee': 'bg-blue-100 text-blue-800',
+    'confirmee': 'bg-green-100 text-green-800',
+    'en_cours': 'bg-purple-100 text-purple-800',
+    'terminee': 'bg-gray-100 text-gray-800',
+    'annulee': 'bg-red-100 text-red-800',
+    'archivée': 'bg-gray-100 text-gray-600',
+    'supprimee': 'bg-gray-100 text-gray-900',
+    // Legacy statuts pour la compatibilité
+    'pending': 'bg-yellow-100 text-yellow-800',
+    'contacted': 'bg-blue-100 text-blue-800',
+    'confirmed': 'bg-green-100 text-green-800',
+    'cancelled': 'bg-red-100 text-red-800',
+    'completed': 'bg-gray-100 text-gray-800'
   };
   return statusColors[status] || 'bg-gray-100 text-gray-800';
+};
+
+// Fonction pour obtenir les transitions disponibles (à implémenter avec l'API)
+export const getAvailableTransitions = async (bookingId: string): Promise<{
+  toStatusCode: string;
+  toStatusName: string;
+  toStatusColor: string;
+  toStatusIcon: string;
+  requiresAdminApproval: boolean;
+  requiresNotes: boolean;
+}[]> => {
+  // TODO: Implémenter l'appel à l'API Supabase
+  // SELECT * FROM get_available_transitions(booking_id)
+  return [];
+};
+
+// Fonction pour changer le statut d'une réservation (à implémenter avec l'API)
+export const changeBookingStatus = async (
+  bookingId: string,
+  newStatusCode: string,
+  notes?: string,
+  changedBy?: string,
+  transitionReason?: string
+): Promise<boolean> => {
+  // TODO: Implémenter l'appel à l'API Supabase
+  // SELECT change_booking_status(booking_id, new_status_code, notes, changed_by, transition_reason)
+  return false;
 };
 
 // Fonction pour formater les dates

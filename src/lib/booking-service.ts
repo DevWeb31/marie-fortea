@@ -368,46 +368,142 @@ export class BookingService {
   // ===== GESTION DE LA CORBEILLE =====
 
   // Mettre une réservation dans la corbeille (soft delete)
-static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
-  try {
-    const { data, error } = await supabase
-      .rpc('soft_delete_booking_request', { booking_id: id });
+  static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      console.log('🔄 Tentative de mise à la corbeille pour:', id);
+      
+      // Première tentative : utiliser la fonction RPC
+      const { data: rpcData, error: rpcError } = await supabase
+        .rpc('soft_delete_booking_request', { booking_id: id });
 
-    if (error) {
-      return { data: null, error: 'Erreur lors de la mise en corbeille' };
+      if (rpcError) {
+        console.warn('Fonction RPC échouée, tentative de mise à jour directe:', rpcError.message);
+      } else if (rpcData === true) {
+        console.log('✅ RPC réussi pour la réservation:', id);
+        return { data: true, error: null };
+      } else {
+        console.warn('RPC retourne false, tentative de mise à jour directe');
+      }
+      
+      // Solution de contournement : mise à jour directe de la table
+      console.log('🔄 Tentative de mise à jour directe...');
+      
+      const { data: directData, error: directError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          deleted_at: new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', id)
+        .select('id, deleted_at');
+
+      if (directError) {
+        console.error('Erreur de mise à jour directe:', directError.message);
+        return { data: null, error: `Erreur lors de la mise en corbeille (directe): ${directError.message}` };
+      }
+
+      if (directData && directData.length > 0) {
+        console.log('✅ Mise à jour directe réussie pour la réservation:', id);
+        return { data: true, error: null };
+      } else {
+        console.warn('⚠️ Aucune ligne affectée par la mise à jour directe');
+        
+        // Dernière tentative : vérifier si la réservation existe et son état
+        const { data: checkData, error: checkError } = await supabase
+          .from('booking_requests')
+          .select('id, deleted_at, archived_at')
+          .eq('id', id)
+          .single();
+
+        if (checkError) {
+          console.error('Erreur lors de la vérification:', checkError.message);
+          return { data: null, error: `Erreur lors de la vérification: ${checkError.message}` };
+        }
+
+        if (checkData) {
+          if (checkData.deleted_at) {
+            console.log('ℹ️ Réservation déjà dans la corbeille');
+            return { data: null, error: 'Réservation déjà dans la corbeille' };
+          } else if (checkData.archived_at) {
+            console.log('ℹ️ Réservation déjà archivée');
+            return { data: null, error: 'Réservation déjà archivée' };
+          } else {
+            console.error('❌ Réservation trouvée mais mise à jour impossible - problème de permissions RLS');
+            return { data: null, error: 'Réservation trouvée mais mise à jour impossible - problème de permissions RLS' };
+          }
+        } else {
+          console.error('❌ Réservation non trouvée');
+          return { data: null, error: 'Réservation non trouvée' };
+        }
+      }
+    } catch (error) {
+      console.error('❌ Exception lors de la mise en corbeille:', error);
+      return { data: null, error: 'Erreur inattendue lors de la mise en corbeille' };
     }
-
-    // Vérifier que la fonction a bien mis à jour une ligne
-    if (data === false) {
-      return { data: null, error: 'Aucune réservation trouvée ou déjà dans la corbeille' };
-    }
-
-    return { data: true, error: null };
-  } catch (error) {
-    return { data: null, error: 'Erreur inattendue lors de la mise en corbeille' };
   }
-}
 
-  // Restaurer une réservation depuis la corbeille
-static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
-  try {
-    const { data, error } = await supabase
-      .rpc('restore_booking_request', { booking_id: id });
+    // Restaurer une réservation depuis la corbeille
+  static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .rpc('restore_booking_request', { booking_id: id });
 
-    if (error) {
-      return { data: null, error: 'Erreur lors de la restauration' };
+      if (error) {
+        return { data: null, error: 'Erreur lors de la restauration' };
+      }
+
+      // Vérifier que la fonction a bien mis à jour une ligne
+      if (data === false) {
+        return { data: null, error: 'Aucune réservation trouvée ou pas dans la corbeille' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de la restauration' };
     }
-
-    // Vérifier que la fonction a bien mis à jour une ligne
-    if (data === false) {
-      return { data: null, error: 'Aucune réservation trouvée ou pas dans la corbeille' };
-    }
-
-    return { data: true, error: null };
-  } catch (error) {
-    return { data: null, error: 'Erreur inattendue lors de la restauration' };
   }
-}
+
+  // Archiver une réservation
+  static async archiveBooking(id: string): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .rpc('archive_booking_request', { booking_id: id });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de l\'archivage' };
+      }
+
+      // Vérifier que la fonction a bien mis à jour une ligne
+      if (data === false) {
+        return { data: null, error: 'Aucune réservation trouvée ou déjà archivée' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de l\'archivage' };
+    }
+  }
+
+  // Désarchiver une réservation
+  static async unarchiveBooking(id: string): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .rpc('unarchive_booking_request', { booking_id: id });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de la désarchivage' };
+      }
+
+      // Vérifier que la fonction a bien mis à jour une ligne
+      if (data === false) {
+        return { data: null, error: 'Aucune réservation trouvée ou pas archivée' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de la désarchivage' };
+    }
+  }
 
   // Supprimer définitivement une réservation (hard delete)
   static async permanentlyDelete(id: string): Promise<{ data: boolean | null; error: string | null }> {
@@ -429,7 +525,7 @@ static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error
   static async getDeletedBookingRequests(): Promise<{ data: BookingRequestSummary[] | null; error: string | null }> {
     try {
       const { data, error } = await supabase
-        .from('deleted_booking_requests')
+        .from('trashed_booking_requests')
         .select('*')
         .order('deleted_at', { ascending: false });
 
@@ -457,6 +553,41 @@ static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error
       return { data: summaries, error: null };
     } catch (error) {
       return { data: null, error: 'Erreur inattendue lors de la récupération des réservations supprimées' };
+    }
+  }
+
+  // Récupérer les réservations archivées
+  static async getArchivedBookingRequests(): Promise<{ data: BookingRequestSummary[] | null; error: string | null }> {
+    try {
+      const { data, error } = await supabase
+        .from('archived_booking_requests')
+        .select('*')
+        .order('archived_at', { ascending: false });
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de la récupération des réservations archivées' };
+      }
+
+      const summaries: BookingRequestSummary[] = data.map(row => ({
+        id: row.id,
+        status: row.status as BookingStatus,
+        createdAt: row.created_at,
+        parentName: row.parent_name,
+        parentPhone: row.parent_phone,
+        serviceType: row.service_type,
+        requestedDate: row.requested_date,
+        startTime: row.start_time,
+        endTime: row.end_time,
+        durationHours: row.duration_hours,
+        childrenCount: row.children_count,
+        serviceName: row.service_name,
+        basePrice: row.base_price,
+        estimatedTotal: row.estimated_total
+      }));
+
+      return { data: summaries, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de la récupération des réservations archivées' };
     }
   }
 
