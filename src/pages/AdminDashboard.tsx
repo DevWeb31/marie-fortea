@@ -43,10 +43,15 @@ const AdminDashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    // TODO: Implémenter la déconnexion Supabase
-    // await supabase.auth.signOut();
-    navigate('/admin');
+  const handleLogout = async () => {
+    try {
+      await supabase.auth.signOut();
+      navigate('/admin');
+    } catch (error) {
+      console.error('Erreur lors de la déconnexion:', error);
+      // Rediriger quand même
+      navigate('/admin');
+    }
   };
 
   const tabs = [
@@ -101,7 +106,7 @@ const AdminDashboard = () => {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings')}
+                  onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings')}
                   className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
                     activeTab === tab.id
                       ? 'border-blue-500 text-blue-600 dark:text-blue-400'

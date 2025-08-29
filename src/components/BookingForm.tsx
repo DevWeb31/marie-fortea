@@ -116,7 +116,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
     e.preventDefault();
     
     if (!captchaToken) {
-      console.log('❌ Pas de token captcha');
+
       toast({
         title: 'Vérification requise',
         description: 'Veuillez compléter la vérification de sécurité avant d\'envoyer votre demande.',
