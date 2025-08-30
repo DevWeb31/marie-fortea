@@ -154,3 +154,14 @@ button:focus-visible {
     @apply bg-background text-foreground;
   }
 }
+
+/* Styles personnalisés pour la navbar responsive */
+@layer utilities {
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Safari and Chrome */
+  }
+}

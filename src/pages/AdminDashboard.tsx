@@ -64,8 +64,48 @@ const AdminDashboard = () => {
     <div className="min-h-screen bg-gray-50 dark:bg-zinc-900">
       {/* Header */}
       <header className="bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          {/* Header Mobile - Empilé */}
+          <div className="block sm:hidden">
+            <div className="space-y-3">
+              {/* Titre et lien site */}
+              <div className="flex flex-col space-y-2">
+                <h1 className="text-lg font-semibold text-gray-900 dark:text-white text-center">
+                  Back-Office Marie Fortea
+                </h1>
+                <a
+                  href="/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center px-3 py-2 text-sm font-medium text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-colors duration-200 w-full"
+                >
+                  <ExternalLink className="h-4 w-4 mr-2" />
+                  Voir le site
+                </a>
+              </div>
+              
+              {/* Actions et statut */}
+              <div className="flex flex-col space-y-2">
+                <div className="flex items-center justify-center space-x-3">
+                  <ThemeToggle />
+                  <span className="text-xs text-gray-500 dark:text-gray-400 text-center">
+                    Connecté en tant qu'administrateur
+                  </span>
+                </div>
+                <HarmoniousButton
+                  variant="secondary"
+                  size="sm"
+                  onClick={handleLogout}
+                  className="w-full"
+                >
+                  Déconnexion
+                </HarmoniousButton>
+              </div>
+            </div>
+          </div>
+          
+          {/* Header Desktop - Horizontal */}
+          <div className="hidden sm:flex justify-between items-center">
             <div className="flex items-center space-x-4">
               <h1 className="text-xl font-semibold text-gray-900 dark:text-white">
                 Back-Office Marie Fortea
@@ -99,26 +139,54 @@ const AdminDashboard = () => {
 
       {/* Navigation des onglets */}
       <div className="bg-white dark:bg-zinc-800 border-b border-gray-200 dark:border-zinc-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <nav className="flex space-x-8">
-            {tabs.map((tab) => {
-              const Icon = tab.icon;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings')}
-                  className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
-                    activeTab === tab.id
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  <span>{tab.label}</span>
-                </button>
-              );
-            })}
-          </nav>
+        <div className="max-w-7xl mx-auto px-4 py-4">
+          {/* Navigation Mobile - Scrollable horizontal */}
+          <div className="block sm:hidden">
+            <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings')}
+                    className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap transition-colors duration-200 ${
+                      activeTab === tab.id
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400'
+                        : 'border-gray-200 dark:border-zinc-600 bg-white dark:bg-zinc-800 text-gray-600 dark:text-gray-400 hover:border-gray-300 dark:hover:border-zinc-500'
+                    }`}
+                  >
+                    <div className="flex flex-col items-center space-y-1">
+                      <Icon className="h-5 w-5" />
+                      <span className="text-xs">{tab.label}</span>
+                    </div>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          
+          {/* Navigation Desktop - Horizontal classique */}
+          <div className="hidden sm:block">
+            <nav className="flex space-x-8">
+              {tabs.map((tab) => {
+                const Icon = tab.icon;
+                return (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id as 'dashboard' | 'bookings' | 'settings')}
+                    className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                      activeTab === tab.id
+                        ? 'border-blue-500 text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-transparent text-gray-600 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600 bg-white dark:bg-zinc-800'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    <span>{tab.label}</span>
+                  </button>
+                );
+              })}
+            </nav>
+          </div>
         </div>
       </div>
 
@@ -126,7 +194,7 @@ const AdminDashboard = () => {
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {activeTab === 'dashboard' && (
           <>
-            <div className="mb-8">
+            <div className="mt-6 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Tableau de bord
               </h2>
@@ -284,12 +352,15 @@ const AdminDashboard = () => {
                 </div>
               </CardContent>
             </Card>
+            
+            {/* Marge mobile et tablette en bas de la page */}
+            <div className="block lg:hidden h-8"></div>
           </>
         )}
 
         {activeTab === 'bookings' && (
           <div>
-            <div className="mb-8">
+            <div className="mt-6 mb-8">
               <h2 className="text-2xl font-bold text-gray-900 dark:text-white">
                 Gestion des Demandes de Réservation
               </h2>
