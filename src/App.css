@@ -31,10 +31,24 @@
   max-width: none;
 }
 
-/* Fond d'arrière-plan avec sphères géométriques flottantes - VERSION SIMPLE ET VISIBLE */
+/* Fond d'arrière-plan avec sphères géométriques flottantes - VERSION OPTIMISÉE POUR PERFORMANCE */
 body {
   background: 
-    /* Gradient principal subtil */
+    /* Fond simple pour le thème clair - PERFORMANCE */
+    linear-gradient(135deg, 
+      rgba(255, 255, 255, 0.8) 0%, 
+      rgba(248, 250, 252, 0.8) 100%
+    );
+  background-attachment: fixed;
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Optimisation pour le thème sombre - garder le gradient coloré */
+.dark body {
+  background: 
+    /* Gradient principal subtil pour le thème sombre */
     linear-gradient(135deg, 
       rgba(255, 182, 193, 0.03) 0%, 
       rgba(173, 216, 230, 0.03) 25%, 
@@ -42,10 +56,6 @@ body {
       rgba(255, 218, 185, 0.03) 75%, 
       rgba(221, 160, 221, 0.03) 100%
     );
-  background-attachment: fixed;
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
 }
 
 /* Sphères flottantes - VERSION SIMPLE ET VISIBLE */
@@ -88,6 +98,22 @@ body {
               pointer-events: none;
               z-index: -10;
               animation: float3 80s ease-in-out infinite;
+              box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
+            }
+
+            /* Optimisation pour le thème sombre - sphères plus visibles */
+            .dark .floating-sphere-1 {
+              background: rgba(255, 182, 193, 0.4);
+              box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+            }
+
+            .dark .floating-sphere-2 {
+              background: rgba(173, 216, 230, 0.4);
+              box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
+            }
+
+            .dark .floating-sphere-3 {
+              background: rgba(144, 238, 144, 0.4);
               box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
             }
 
