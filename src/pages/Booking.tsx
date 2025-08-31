@@ -5,6 +5,7 @@ import { useToast } from '@/hooks/use-toast';
 import { AnimatedSection, AnimatedTitle } from '@/components/ScrollAnimation';
 import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import BookingForm from '@/components/BookingForm';
+import DynamicPricing from '@/components/DynamicPricing';
 import {
   Star,
   Shield,
@@ -31,13 +32,7 @@ const Booking = () => {
     setTimeout(() => setShowSuccessMessage(false), 5000);
   };
 
-  const serviceTypes = [
-    { value: 'mariage', label: 'Mariage', price: '25€/h', minHours: 4 },
-    { value: 'urgence', label: "Garde d'urgence", price: '30€/h', minHours: 2 },
-    { value: 'soiree', label: 'Soirée parents', price: '20€/h', minHours: 3 },
-    { value: 'weekend', label: 'Week-end/Vacances', price: '18€/h', minHours: 6 },
-    { value: 'autre', label: 'Autre événement', price: '22€/h', minHours: 3 },
-  ];
+
 
   return (
     <div className="min-h-screen py-12 sm:py-16 md:py-20">
@@ -165,41 +160,7 @@ const Booking = () => {
             </Card>
 
             {/* Tarifs & Conditions */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
-              <CardHeader className="rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
-                  Tarifs & Conditions
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-                <div className="space-y-2 sm:space-y-3">
-                  {serviceTypes.map(service => (
-                    <div
-                      key={service.value}
-                      className="flex items-center justify-between"
-                    >
-                      <div className="flex-1">
-                        <span className="text-xs font-medium sm:text-sm">
-                          {service.label}
-                        </span>
-                        <div className="text-xs text-gray-500 dark:text-gray-400">
-                          Min. {service.minHours}h
-                        </div>
-                      </div>
-                      <Badge variant="secondary" className="text-xs">
-                        {service.price}
-                      </Badge>
-                    </div>
-                  ))}
-                </div>
-                <div className="border-t pt-3 text-xs text-gray-600 dark:text-gray-400 space-y-1">
-                  <p>• Durée minimum : 3h</p>
-                  <p>• Frais déplacement : +5€ au-delà de 10km</p>
-                  <p>• Majoration nocturne : +5€/h après 22h</p>
-                  <p>• Réservation confirmée uniquement après contact</p>
-                </div>
-              </CardContent>
-            </Card>
+            <DynamicPricing />
 
             {/* Processus Simplifié */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">

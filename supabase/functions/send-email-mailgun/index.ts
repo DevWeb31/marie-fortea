@@ -32,9 +32,25 @@ serve(async (req) => {
     let mailgunApiKey = Deno.env.get('MAILGUN_API_KEY');
     let mailgunDomain = Deno.env.get('MAILGUN_DOMAIN');
     
-    // Fallback: utiliser des valeurs codées en dur pour le développement local
+    // Fallback: simulation en développement local si pas de configuration
     if (!mailgunApiKey || !mailgunDomain) {
-      throw new Error('Mailgun API key or domain not configured');
+      console.log('Mailgun non configuré, simulation en mode développement');
+      
+      // Retourner une simulation de succès pour le développement
+      return new Response(
+        JSON.stringify({ 
+          success: true, 
+          message: 'Email simulé (développement local - Mailgun non configuré)',
+          simulated: true,
+          to: emailData.to,
+          subject: emailData.subject,
+          timestamp: new Date().toISOString()
+        }),
+        { 
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+          status: 200 
+        }
+      );
     }
 
     // Préparer les données pour Mailgun

@@ -1312,7 +1312,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                               setSelectedItems(new Set());
                               setSelectAll(false);
                             }}
-                            className="text-blue-600 hover:text-blue-700 w-full sm:w-auto"
+                            className="text-blue-600 hover:text-blue-500 w-full sm:w-auto"
                           >
                             Désélectionner tout
                           </Button>
@@ -1331,7 +1331,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                             variant="outline"
                             size="sm"
                             onClick={() => handleBulkAction('archive')}
-                            className="text-blue-600 hover:text-blue-700 w-full sm:w-auto"
+                            className="text-blue-600 hover:text-blue-500 w-full sm:w-auto"
                           >
                             <RotateCcw className="h-4 w-4 mr-2" />
                             Archiver
@@ -1466,7 +1466,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                               variant="outline"
                               size="sm"
                               onClick={() => openConfirmDialog('archive', request.id, request.parentName)}
-                              className="w-10 h-10 p-0 flex items-center justify-center text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                              className="w-10 h-10 p-0 flex items-center justify-center text-blue-600 hover:text-blue-500 hover:bg-blue-50"
                             >
                               <RotateCcw className="h-4 w-4" />
                             </Button>
@@ -1517,7 +1517,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                               setSelectedItems(new Set());
                               setSelectAll(false);
                             }}
-                            className="text-blue-600 hover:text-blue-700 w-full sm:w-auto"
+                            className="text-blue-600 hover:text-blue-500 w-full sm:w-auto"
                           >
                             Désélectionner tout
                           </Button>
@@ -1707,7 +1707,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                               setSelectedItems(new Set());
                               setSelectAll(false);
                             }}
-                            className="text-blue-600 hover:text-blue-700 w-full sm:w-auto"
+                            className="text-blue-600 hover:text-blue-500 w-full sm:w-auto"
                           >
                             Désélectionner tout
                           </Button>
