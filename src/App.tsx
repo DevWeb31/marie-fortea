@@ -9,6 +9,7 @@ import About from '@/pages/About';
 import Booking from '@/pages/Booking';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
+import PricingManagement from '@/pages/PricingManagement';
 import AdminLayout from '@/components/AdminLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import TestEmail from '@/pages/TestEmail';
@@ -29,6 +30,7 @@ function AppContent() {
       <Routes>
         <Route path="/admin" element={<AdminLayout><AdminLogin /></AdminLayout>} />
         <Route path="/admin/dashboard" element={<ProtectedRoute><AdminLayout><AdminDashboard /></AdminLayout></ProtectedRoute>} />
+        <Route path="/admin/pricing" element={<ProtectedRoute><AdminLayout><PricingManagement /></AdminLayout></ProtectedRoute>} />
       </Routes>
     );
   }
@@ -36,6 +38,11 @@ function AppContent() {
   // Sinon, on affiche le site complet avec navigation et footer
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-zinc-950 dark:to-zinc-900">
+      {/* Sphères flottantes */}
+      <div className="floating-sphere-1"></div>
+      <div className="floating-sphere-2"></div>
+      <div className="floating-sphere-3"></div>
+      
       <Navigation />
       <main>
         <Routes>

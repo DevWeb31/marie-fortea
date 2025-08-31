@@ -40,7 +40,7 @@ const Navigation = () => {
                   'relative whitespace-nowrap text-sm font-medium transition-colors duration-200',
                   isActive(item.href)
                     ? 'text-blue-600 dark:text-blue-400'
-                    : 'text-gray-600 hover:text-blue-600 dark:text-zinc-300 dark:hover:text-blue-400'
+                    : 'text-gray-600 hover:text-blue-500 dark:text-zinc-300 dark:hover:text-blue-400'
                 )}
               >
                 {item.name}
@@ -86,7 +86,7 @@ const Navigation = () => {
                     'block rounded-lg px-3 py-2.5 text-base font-medium transition-colors duration-200',
                     isActive(item.href)
                       ? 'bg-blue-50 text-blue-600 dark:bg-blue-900/30 dark:text-blue-300'
-                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-600 dark:text-slate-300 dark:hover:bg-blue-900/30 dark:hover:text-blue-300'
+                      : 'text-gray-600 hover:bg-blue-50 hover:text-blue-500 dark:text-slate-300 dark:hover:bg-blue-900/30 dark:hover:text-blue-300'
                   )}
                 >
                   {item.name}

@@ -14,7 +14,8 @@ import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
 import Captcha from './Captcha';
 import { BookingService } from '@/lib/booking-service';
-import { SERVICE_TYPES, calculateEstimatedTotal } from '@/types/booking';
+import { PricingService } from '@/lib/pricing-service';
+import { calculateEstimatedTotal } from '@/types/booking';
 import { Calendar, Clock, Baby, User, Phone, CheckCircle, AlertCircle } from 'lucide-react';
 
 interface BookingFormProps {
@@ -27,6 +28,58 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [captchaToken, setCaptchaToken] = useState<string>('');
   const [estimatedTotal, setEstimatedTotal] = useState<number>(0);
+
+  // Fonction pour obtenir les services par défaut
+  const getDefaultServices = () => [
+    {
+      code: 'babysitting',
+      name: 'Garde d\'enfants',
+      description: 'Garde d\'enfants professionnelle',
+      basePrice: 15.00,
+      minDurationHours: 1,
+      isActive: true
+    },
+    {
+      code: 'event_support',
+      name: 'Soutien événementiel',
+      description: 'Garde d\'enfants pour événements',
+      basePrice: 18.00,
+      minDurationHours: 2,
+      isActive: true
+    },
+    {
+      code: 'overnight_care',
+      name: 'Garde de nuit',
+      description: 'Garde d\'enfants nocturne',
+      basePrice: 22.50,
+      minDurationHours: 4,
+      isActive: true
+    },
+    {
+      code: 'weekend_care',
+      name: 'Garde de weekend',
+      description: 'Garde d\'enfants de weekend',
+      basePrice: 19.50,
+      minDurationHours: 3,
+      isActive: true
+    },
+    {
+      code: 'holiday_care',
+      name: 'Garde pendant les vacances',
+      description: 'Garde d\'enfants pendant les vacances',
+      basePrice: 21.00,
+      minDurationHours: 2,
+      isActive: true
+    },
+    {
+      code: 'emergency_care',
+      name: 'Garde d\'urgence',
+      description: 'Garde d\'enfants en urgence',
+      basePrice: 27.00,
+      minDurationHours: 1,
+      isActive: true
+    }
+  ];
 
   const [formData, setFormData] = useState({
     parentFirstName: '',
@@ -48,27 +101,122 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
     error?: string;
   }>({ isValid: true });
 
+  // État pour les services dynamiques
+  const [dynamicServices, setDynamicServices] = useState<any[]>(getDefaultServices());
+  const [servicesLoading, setServicesLoading] = useState(true);
+
+  // Charger les services dynamiques
+  useEffect(() => {
+    const loadServices = async () => {
+      try {
+        const { data: pricingData, error } = await PricingService.getPublicPricing();
+        
+        if (error) {
+          console.error('Erreur lors du chargement des services:', error);
+          // Fallback vers les services par défaut
+          setDynamicServices(getDefaultServices());
+        } else if (pricingData) {
+          setDynamicServices(getDynamicServices(pricingData));
+        }
+      } catch (error) {
+        console.error('Erreur lors du chargement des services:', error);
+        setDynamicServices(getDefaultServices());
+      } finally {
+        setServicesLoading(false);
+      }
+    };
+
+    loadServices();
+  }, []);
+
   // Calculer le total estimé quand les données changent
   useEffect(() => {
-    if (formData.serviceType && formData.startTime && formData.endTime && formData.startDate) {
-      // Calculer la durée totale en heures
-      const startDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
-      const endDateTime = new Date(`${formData.startDate}T${formData.endTime}`);
-      
-      // Si l'heure de fin est avant l'heure de début, c'est le lendemain
-      if (endDateTime <= startDateTime) {
-        endDateTime.setDate(endDateTime.getDate() + 1);
+    const calculateTotal = async () => {
+      if (formData.serviceType && formData.startTime && formData.endTime && formData.startDate) {
+        // Calculer la durée totale en heures
+        const startDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
+        const endDateTime = new Date(`${formData.startDate}T${formData.endTime}`);
+        
+        // Si l'heure de fin est avant l'heure de début, c'est le lendemain
+        if (endDateTime <= startDateTime) {
+          endDateTime.setDate(endDateTime.getDate() + 1);
+        }
+        
+        const durationMs = endDateTime.getTime() - startDateTime.getTime();
+        const durationHours = durationMs / (1000 * 60 * 60);
+        
+        // Utiliser le service de prix dynamiques
+        try {
+          const { data: calculation, error } = await PricingService.calculatePrice(
+            formData.serviceType,
+            durationHours,
+            formData.childrenCount
+          );
+          
+          if (error) {
+            console.error('Erreur lors du calcul du prix:', error);
+            // Fallback vers l'ancien calcul
+            const basePrice = getServiceTypeInfo(formData.serviceType)?.basePrice || 0;
+            const total = basePrice * Math.max(1, durationHours);
+            setEstimatedTotal(total);
+          } else if (calculation) {
+            setEstimatedTotal(calculation.totalAmount);
+          }
+        } catch (error) {
+          console.error('Erreur lors du calcul du prix:', error);
+          // Fallback vers l'ancien calcul
+          const basePrice = getServiceTypeInfo(formData.serviceType)?.basePrice || 0;
+          const total = basePrice * Math.max(1, durationHours);
+          setEstimatedTotal(total);
+        }
       }
-      
-      const durationMs = endDateTime.getTime() - startDateTime.getTime();
-      const durationHours = durationMs / (1000 * 60 * 60);
-      
-      // Calculer le prix par heure et multiplier par la durée
-      const basePrice = getServiceTypeInfo(formData.serviceType)?.basePrice || 0;
-      const total = basePrice * Math.max(1, durationHours);
-      setEstimatedTotal(total);
-    }
-  }, [formData.serviceType, formData.startTime, formData.endTime, formData.startDate]);
+    };
+
+    calculateTotal();
+  }, [formData.serviceType, formData.startTime, formData.endTime, formData.startDate, formData.childrenCount]);
+
+  // Fonction pour obtenir les services dynamiques
+  const getDynamicServices = (pricingData: any) => {
+    const serviceMapping: { [key: string]: any } = {
+      babysitting: {
+        name: 'Garde d\'enfants',
+        description: 'Garde d\'enfants professionnelle',
+        minDurationHours: 1,
+      },
+      event_support: {
+        name: 'Soutien événementiel',
+        description: 'Garde d\'enfants pour événements',
+        minDurationHours: 2,
+      },
+      overnight_care: {
+        name: 'Garde de nuit',
+        description: 'Garde d\'enfants nocturne',
+        minDurationHours: 4,
+      },
+      weekend_care: {
+        name: 'Garde de weekend',
+        description: 'Garde d\'enfants de weekend',
+        minDurationHours: 3,
+      },
+      holiday_care: {
+        name: 'Garde pendant les vacances',
+        description: 'Garde d\'enfants pendant les vacances',
+        minDurationHours: 2,
+      },
+      emergency_care: {
+        name: 'Garde d\'urgence',
+        description: 'Garde d\'enfants en urgence',
+        minDurationHours: 1,
+      },
+    };
+
+    return pricingData.services.map((service: any) => ({
+      code: service.type,
+      ...serviceMapping[service.type],
+      basePrice: service.price,
+      isActive: true
+    }));
+  };
 
   // Fonction pour formater en Camel Case
   const formatToCamelCase = (value: string): string => {
@@ -383,7 +531,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   };
 
   const getServiceTypeInfo = (code: string) => {
-    return SERVICE_TYPES.find(service => service.code === code);
+    return dynamicServices.find(service => service.code === code);
   };
 
   // Générer les heures par intervalles de 30 minutes
@@ -552,16 +700,26 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
                   <SelectValue placeholder="Sélectionnez un service" />
                 </SelectTrigger>
                 <SelectContent>
-                  {SERVICE_TYPES.map(service => (
-                    <SelectItem key={service.code} value={service.code}>
-                      <div className="flex items-center justify-between w-full">
-                        <span>{service.name}</span>
-                        <Badge variant="secondary" className="ml-2">
-                          {service.basePrice}€/h
-                        </Badge>
-                      </div>
+                  {servicesLoading ? (
+                    <SelectItem value="loading" disabled>
+                      Chargement des services...
                     </SelectItem>
-                  ))}
+                  ) : dynamicServices.length > 0 ? (
+                    dynamicServices.map(service => (
+                      <SelectItem key={service.code} value={service.code}>
+                        <div className="flex items-center justify-between w-full">
+                          <span>{service.name}</span>
+                          <Badge variant="secondary" className="ml-2">
+                            {service.basePrice}€/h
+                          </Badge>
+                        </div>
+                      </SelectItem>
+                    ))
+                  ) : (
+                    <SelectItem value="no-services" disabled>
+                      Aucun service disponible
+                    </SelectItem>
+                  )}
                 </SelectContent>
               </Select>
             </div>

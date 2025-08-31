@@ -1,19 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Settings, Users, Calendar, BarChart3, ExternalLink, FileText, MessageSquare } from 'lucide-react';
+import { Settings, Users, Calendar, BarChart3, ExternalLink, FileText, MessageSquare, Euro } from 'lucide-react';
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { useNavigate } from 'react-router-dom';
 import ThemeToggle from '@/components/ui/theme-toggle';
 import BookingRequestsList from '@/components/BookingRequestsList';
 import SiteSettingsManager from '@/components/SiteSettingsManager';
+import PricingManagement from './PricingManagement';
 import { BookingService } from '@/lib/booking-service';
 import { useToast } from '@/hooks/use-toast';
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'settings'>('dashboard');
+  const [activeTab, setActiveTab] = useState<'dashboard' | 'bookings' | 'settings' | 'pricing'>('dashboard');
   const [stats, setStats] = useState({
     pending: 0,
     total: 0,
@@ -57,6 +58,7 @@ const AdminDashboard = () => {
   const tabs = [
     { id: 'dashboard', label: 'Tableau de bord', icon: BarChart3 },
     { id: 'bookings', label: 'Demandes de réservation', icon: FileText },
+    { id: 'pricing', label: 'Gestion des Prix', icon: Euro },
     { id: 'settings', label: 'Paramètres', icon: Settings }
   ];
 
@@ -289,6 +291,14 @@ const AdminDashboard = () => {
                     <MessageSquare className="h-4 w-4 mr-2" />
                     Traiter les demandes en attente
                   </Button>
+                  <Button
+                    onClick={() => setActiveTab('pricing')}
+                    className="w-full justify-start"
+                    variant="outline"
+                  >
+                    <Euro className="h-4 w-4 mr-2" />
+                    Gérer les prix
+                  </Button>
                 </CardContent>
               </Card>
 
@@ -350,6 +360,15 @@ const AdminDashboard = () => {
                     <p>Surveillez les statistiques et l'évolution des demandes</p>
                   </div>
                 </div>
+                <div className="flex items-start space-x-3">
+                  <div className="w-6 h-6 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0 mt-0.5">
+                    4
+                  </div>
+                  <div>
+                    <p className="font-medium text-gray-900 dark:text-white">Gérer les prix</p>
+                    <p>Utilisez l'onglet "Gestion des Prix" pour modifier les tarifs de vos services</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
             
@@ -370,6 +389,12 @@ const AdminDashboard = () => {
             </div>
             
             <BookingRequestsList />
+          </div>
+        )}
+
+        {activeTab === 'pricing' && (
+          <div>
+            <PricingManagement />
           </div>
         )}
 

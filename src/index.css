@@ -72,6 +72,35 @@ button:focus-visible {
 }
 
 @layer base {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+
+  @keyframes rainbow-outline {
+    0% {
+      background: conic-gradient(from 0deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+    }
+    100% {
+      background: conic-gradient(from 360deg, #ff0000, #ff8000, #ffff00, #80ff00, #00ff00, #00ff80, #00ffff, #0080ff, #0000ff, #8000ff, #ff00ff, #ff0080, #ff0000);
+    }
+  }
+
+  .rainbow-outline {
+    animation: rainbow-outline 5s linear infinite;
+  }
+
+  @keyframes gentle-bounce {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-3px);
+    }
+  }
+
+  .animate-shake {
+    animation: gentle-bounce 0.6s ease-in-out;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
@@ -165,3 +194,4 @@ button:focus-visible {
     display: none;  /* Safari and Chrome */
   }
 }
+

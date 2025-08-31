@@ -181,21 +181,21 @@ const BookingStatusDemo: React.FC = () => {
                   <div className="space-y-2">
                     <a 
                       href="/DATABASE_STRUCTURE.md" 
-                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <ExternalLink className="h-4 w-4" />
                       <span>Structure de la base de données</span>
                     </a>
                     <a 
                       href="/ENHANCED_STATUS_SYSTEM.md" 
-                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <ExternalLink className="h-4 w-4" />
                       <span>Système de statuts avancé</span>
                     </a>
                     <a 
                       href="/ADMIN_INTERFACE_GUIDE.md" 
-                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <ExternalLink className="h-4 w-4" />
                       <span>Guide de l'interface admin</span>
@@ -217,14 +217,14 @@ const BookingStatusDemo: React.FC = () => {
                     </a>
                     <a 
                       href="/SUPABASE_SETUP.md" 
-                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <ExternalLink className="h-4 w-4" />
                       <span>Configuration Supabase</span>
                     </a>
                     <a 
                       href="/DEPLOYMENT_GUIDE.md" 
-                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                      className="flex items-center space-x-2 text-blue-600 hover:text-blue-500 dark:text-blue-400 dark:hover:text-blue-300"
                     >
                       <ExternalLink className="h-4 w-4" />
                       <span>Guide de déploiement</span>

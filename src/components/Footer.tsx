@@ -49,8 +49,8 @@ const Footer = () => {
             </Link>
 
             <p className="mb-4 max-w-md font-['Inter'] text-sm leading-relaxed text-gray-300 sm:mb-6 sm:text-base">
-              Professionnelle de la petite enfance avec plus de 16 ans
-              d'expérience en crèche. Je propose des services de garde
+              Professionnelle de la petite enfance avec plus de 9 ans
+              d'expérience en crèche et 7 ans de garde à domicile. Je propose des services de garde
               occasionnelle de qualité pour vos événements spéciaux et urgences.
             </p>
 

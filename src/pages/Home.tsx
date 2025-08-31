@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import HarmoniousButton from '@/components/ui/harmonious-button';
@@ -6,6 +6,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
 import PhoneHoursDialog from '@/components/PhoneHoursDialog';
+import AnimatedNumber from '@/components/AnimatedNumber';
 
 import {
   Heart,
@@ -22,10 +23,56 @@ import {
 
 const Home = () => {
   const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const [whyMarieMousePosition, setWhyMarieMousePosition] = useState({ x: 0, y: 0 });
+  const imageRef = useRef<HTMLDivElement>(null);
+  const whyMarieImageRef = useRef<HTMLDivElement>(null);
 
   const handlePhoneClick = () => {
     setIsPhoneDialogOpen(true);
   };
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (imageRef.current) {
+      const rect = imageRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / centerY * -10; // Rotation X inversée
+      const rotateY = (x - centerX) / centerX * 10; // Rotation Y
+      
+      setMousePosition({ x: rotateY, y: rotateX });
+    }
+  };
+
+  const handleMouseLeave = () => {
+    setMousePosition({ x: 0, y: 0 });
+  };
+
+  const handleWhyMarieMouseMove = (e: React.MouseEvent) => {
+    if (whyMarieImageRef.current) {
+      const rect = whyMarieImageRef.current.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+      
+      const rotateX = (y - centerY) / centerY * -10; // Rotation X inversée
+      const rotateY = (x - centerX) / centerX * 10; // Rotation Y
+      
+      setWhyMarieMousePosition({ x: rotateY, y: rotateX });
+    }
+  };
+
+  const handleWhyMarieMouseLeave = () => {
+    setWhyMarieMousePosition({ x: 0, y: 0 });
+  };
+
+
 
   const services = [
     {
@@ -78,8 +125,7 @@ const Home = () => {
   return (
     <div className="min-h-screen">
       {/* Hero Section */}
-      <AnimatedSection className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-32">
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-400/10 via-green-400/10 to-yellow-400/10 dark:from-blue-500/10 dark:via-emerald-500/10 dark:to-violet-500/10"></div>
+      <div className="relative overflow-hidden py-12 sm:py-16 md:py-20 lg:py-32">
         <div className="relative w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2">
             <div className="order-2 text-center lg:order-1 lg:text-left">
@@ -97,7 +143,7 @@ const Home = () => {
 
               <p className="mb-6 px-4 font-['Inter'] text-lg leading-relaxed text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-xl lg:px-0">
                 Je suis Marie Fortea, professionnelle de la petite enfance avec
-                plus de 5 ans d'expérience en crèche. Je propose des services de
+                plus de 9 ans d'expérience en crèche et 7 ans de garde à domicile. Je propose des services de
                 garde occasionnelle pour vos mariages, événements spéciaux et
                 urgences.
               </p>
@@ -125,37 +171,62 @@ const Home = () => {
               {/* Statistics */}
               <div className="mt-8 grid grid-cols-3 gap-4 px-4 lg:px-0">
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-600 dark:text-blue-400 sm:text-3xl">16</div>
+                  <AnimatedNumber value={16} colorClass="text-blue-600 dark:text-blue-400" />
                   <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Années d'expérience</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-green-600 dark:text-green-400 sm:text-3xl">50+</div>
+                  <AnimatedNumber value={50} suffix="+" colorClass="text-green-600 dark:text-green-400" />
                   <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Familles satisfaites</div>
                 </div>
                 <div className="text-center">
-                  <div className="text-2xl font-bold text-purple-600 dark:text-purple-400 sm:text-3xl">20km</div>
+                  <AnimatedNumber value={20} suffix="km" colorClass="text-purple-600 dark:text-purple-400" />
                   <div className="text-xs text-gray-600 dark:text-gray-400 sm:text-sm">Rayon d'intervention</div>
                 </div>
               </div>
             </div>
 
             <div className="order-1 lg:order-2">
-              <div className="relative">
-                <img
-                  src="https://images.pexels.com/photos/8613313/pexels-photo-8613313.jpeg?auto=compress&cs=tinysrgb&w=600"
-                  alt="Marie Fortea avec des enfants"
-                  className="mx-auto aspect-[4/5] w-full max-w-sm rounded-2xl object-cover shadow-2xl sm:max-w-md sm:rounded-3xl lg:max-w-lg"
-                />
+              <div 
+                ref={imageRef}
+                className="relative perspective-1000"
+                onMouseMove={handleMouseMove}
+                onMouseLeave={handleMouseLeave}
+              >
+                <div 
+                  className="rainbow-outline rounded-2xl p-0.5 sm:rounded-3xl mx-auto max-w-sm sm:max-w-md lg:max-w-lg transition-transform duration-300 ease-out"
+                  style={{
+                    transform: `rotateY(${mousePosition.x}deg) rotateX(${mousePosition.y}deg)`,
+                    transformStyle: 'preserve-3d',
+                  }}
+                >
+                  <img
+                    src="https://images.pexels.com/photos/8613313/pexels-photo-8613313.jpeg?auto=compress&cs=tinysrgb&w=600"
+                    alt="Marie Fortea avec des enfants"
+                    className="w-full aspect-[4/5] rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
+                  />
+                </div>
                 <div className="absolute -right-4 -top-4 h-20 w-20 animate-pulse rounded-full bg-gradient-to-br from-yellow-400 to-orange-400 opacity-20 sm:-right-6 sm:-top-6 sm:h-32 sm:w-32"></div>
                 <div className="animation-delay-1000 absolute -bottom-4 -left-4 h-16 w-16 animate-pulse rounded-full bg-gradient-to-br from-blue-400 to-green-400 opacity-20 sm:-bottom-6 sm:-left-6 sm:h-24 sm:w-24"></div>
               </div>
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </div>
 
       {/* Services Section */}
-      <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.1}>
+      <div className="py-12 sm:py-16 md:py-20">
+        {/* Séparateur animé - Bulles colorées */}
+        <div className="relative mb-16">
+          <div className="absolute inset-0 flex justify-center">
+            <div className="flex space-x-3">
+              <div className="h-3 w-3 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-green-400 animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2s' }}></div>
+              <div className="h-4 w-4 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: '0.6s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-yellow-400 animate-bounce" style={{ animationDelay: '0.9s', animationDuration: '2s' }}></div>
+              <div className="h-3 w-3 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '1.2s', animationDuration: '2s' }}></div>
+            </div>
+          </div>
+        </div>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <AnimatedTitle className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl" delay={0.3}>
@@ -172,16 +243,16 @@ const Home = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="group cursor-pointer border-2 border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:bg-zinc-900/90"
+                className="group cursor-pointer border-2 border-pink-100 bg-white transition-all duration-300 hover:shadow-xl hover:border-pink-200 dark:border-zinc-700 dark:bg-zinc-900 rounded-2xl shadow-sm hover:animate-shake"
               >
                 <CardContent className="p-4 text-center sm:p-6">
                   <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
                     {service.icon}
                   </div>
-                  <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
+                  <h3 className="mb-2 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:text-xl">
                     {service.title}
                   </h3>
-                  <p className="font-['Inter'] text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
+                  <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
                     {service.description}
                   </p>
                 </CardContent>
@@ -199,10 +270,22 @@ const Home = () => {
             </HarmoniousButton>
           </div>
         </div>
-      </AnimatedSection>
+      </div>
 
       {/* Why Choose Me Section */}
-      <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.2}>
+      <div className="py-12 sm:py-16 md:py-20">
+        {/* Séparateur animé - Bulles colorées */}
+        <div className="relative mb-16">
+          <div className="absolute inset-0 flex justify-center">
+            <div className="flex space-x-3">
+              <div className="h-3 w-3 rounded-full bg-purple-400 animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-pink-400 animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2s' }}></div>
+              <div className="h-4 w-4 rounded-full bg-indigo-400 animate-bounce" style={{ animationDelay: '0.6s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-rose-400 animate-bounce" style={{ animationDelay: '0.9s', animationDuration: '2s' }}></div>
+              <div className="h-3 w-3 rounded-full bg-violet-400 animate-bounce" style={{ animationDelay: '1.2s', animationDuration: '2s' }}></div>
+            </div>
+          </div>
+        </div>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
@@ -220,7 +303,7 @@ const Home = () => {
                       Expérience Professionnelle
                     </h3>
                     <p className="font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:text-base">
-                      Plus de 16 ans d'expérience en crèche et formations
+                      Plus de 9 ans d'expérience en crèche et 7 ans de garde à domicile avec formations
                       spécialisées en petite enfance.
                     </p>
                   </div>
@@ -258,19 +341,44 @@ const Home = () => {
               </div>
             </div>
 
-            <div className="relative">
-              <img
-                src="https://images.pexels.com/photos/8613098/pexels-photo-8613098.jpeg?auto=compress&cs=tinysrgb&w=600"
-                alt="Marie avec des enfants en activité"
-                className="aspect-[4/3] w-full rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
-              />
+            <div 
+              ref={whyMarieImageRef}
+              className="relative perspective-1000"
+              onMouseMove={handleWhyMarieMouseMove}
+              onMouseLeave={handleWhyMarieMouseLeave}
+            >
+              <div 
+                className="rainbow-outline rounded-2xl p-0.5 sm:rounded-3xl w-full transition-transform duration-300 ease-out"
+                style={{
+                  transform: `rotateY(${whyMarieMousePosition.x}deg) rotateX(${whyMarieMousePosition.y}deg)`,
+                  transformStyle: 'preserve-3d',
+                }}
+              >
+                <img
+                  src="https://images.pexels.com/photos/8613098/pexels-photo-8613098.jpeg?auto=compress&cs=tinysrgb&w=600"
+                  alt="Marie avec des enfants en activité"
+                  className="w-full aspect-[4/3] rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
+                />
+              </div>
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </div>
 
       {/* Testimonials Section */}
-      <AnimatedSection className="py-12 sm:py-16 md:py-20" delay={0.3}>
+      <div className="py-12 sm:py-16 md:py-20">
+        {/* Séparateur animé - Bulles colorées */}
+        <div className="relative mb-16">
+          <div className="absolute inset-0 flex justify-center">
+            <div className="flex space-x-3">
+              <div className="h-3 w-3 rounded-full bg-emerald-400 animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-teal-400 animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2s' }}></div>
+              <div className="h-4 w-4 rounded-full bg-cyan-400 animate-bounce" style={{ animationDelay: '0.6s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-blue-400 animate-bounce" style={{ animationDelay: '0.9s', animationDuration: '2s' }}></div>
+              <div className="h-3 w-3 rounded-full bg-sky-400 animate-bounce" style={{ animationDelay: '1.2s', animationDuration: '2s' }}></div>
+            </div>
+          </div>
+        </div>
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="mb-12 text-center sm:mb-16">
             <AnimatedTitle className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl" delay={0.5}>
@@ -286,7 +394,7 @@ const Home = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="border-2 border-gray-100 bg-white/80 backdrop-blur-sm transition-all duration-300 hover:shadow-lg hover:bg-white/90 dark:border-zinc-800 dark:bg-zinc-900/80 dark:hover:bg-zinc-900/90"
+                className="border-2 border-blue-100 bg-white transition-all duration-300 hover:shadow-xl hover:border-blue-200 dark:border-zinc-700 dark:bg-zinc-900 rounded-2xl shadow-sm hover:animate-shake"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
@@ -316,15 +424,27 @@ const Home = () => {
             ))}
           </div>
         </div>
-      </AnimatedSection>
+      </div>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-r from-blue-600 to-green-600 py-12 sm:py-16 md:py-20">
+      <section className="py-12 sm:py-16 md:py-20">
+        {/* Séparateur animé - Bulles colorées */}
+        <div className="relative mb-16">
+          <div className="absolute inset-0 flex justify-center">
+            <div className="flex space-x-3">
+              <div className="h-3 w-3 rounded-full bg-orange-400 animate-bounce" style={{ animationDelay: '0s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-amber-400 animate-bounce" style={{ animationDelay: '0.3s', animationDuration: '2s' }}></div>
+              <div className="h-4 w-4 rounded-full bg-yellow-400 animate-bounce" style={{ animationDelay: '0.6s', animationDuration: '2s' }}></div>
+              <div className="h-2 w-2 rounded-full bg-lime-400 animate-bounce" style={{ animationDelay: '0.9s', animationDuration: '2s' }}></div>
+              <div className="h-3 w-3 rounded-full bg-green-400 animate-bounce" style={{ animationDelay: '1.2s', animationDuration: '2s' }}></div>
+            </div>
+          </div>
+        </div>
         <div className="w-full px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-white sm:mb-6 sm:text-3xl md:text-4xl">
+          <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl md:text-4xl">
             Prêts à confier vos enfants à une professionnelle ?
           </h2>
-          <p className="mb-6 px-4 font-['Inter'] text-lg text-blue-100 sm:mb-8 sm:text-xl">
+          <p className="mb-6 px-4 font-['Inter'] text-lg text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-xl">
             Réservez dès maintenant pour vos prochains événements ou en cas
             d'urgence.
           </p>
@@ -343,7 +463,7 @@ const Home = () => {
 
             <button
               onClick={handlePhoneClick}
-              className="inline-flex items-center justify-center rounded-lg bg-white/20 px-6 py-3 text-lg font-semibold text-white backdrop-blur-sm transition-all duration-200 hover:bg-white/30 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-white/50 focus:ring-offset-2 focus:ring-offset-blue-600"
+              className="inline-flex items-center justify-center rounded-lg bg-gray-100 px-6 py-3 text-lg font-semibold text-gray-700 backdrop-blur-sm transition-all duration-200 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
             >
               <Phone className="h-6 w-6" />
             </button>
