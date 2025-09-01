@@ -37,7 +37,7 @@ function AppContent() {
 
   // Sinon, on affiche le site complet avec navigation et footer
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50/30 to-green-50/20 dark:from-zinc-950 dark:to-zinc-900">
+    <div className="min-h-screen">
       {/* Sphères flottantes */}
       <div className="floating-sphere-1"></div>
       <div className="floating-sphere-2"></div>

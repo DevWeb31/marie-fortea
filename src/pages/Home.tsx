@@ -243,7 +243,7 @@ const Home = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="group cursor-pointer border-2 border-pink-100 bg-white transition-all duration-300 hover:shadow-xl hover:border-pink-200 dark:border-zinc-700 dark:bg-zinc-900 rounded-2xl shadow-sm hover:animate-shake"
+                className="group cursor-pointer border-2 border-pink-100 bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:border-pink-200 dark:border-zinc-700 dark:bg-zinc-900/90 rounded-2xl shadow-sm hover:animate-shake"
               >
                 <CardContent className="p-4 text-center sm:p-6">
                   <div className="mb-4 transition-transform duration-300 group-hover:scale-110">
@@ -394,7 +394,7 @@ const Home = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="border-2 border-blue-100 bg-white transition-all duration-300 hover:shadow-xl hover:border-blue-200 dark:border-zinc-700 dark:bg-zinc-900 rounded-2xl shadow-sm hover:animate-shake"
+                className="border-2 border-blue-100 bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-xl hover:border-blue-200 dark:border-zinc-700 dark:bg-zinc-900/90 rounded-2xl shadow-sm hover:animate-shake"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">

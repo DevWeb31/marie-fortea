@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+
 import { AnimatedSection, AnimatedTitle } from '@/components/ScrollAnimation';
 import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import BookingForm from '@/components/BookingForm';
@@ -9,16 +9,14 @@ import DynamicPricing from '@/components/DynamicPricing';
 import {
   Star,
   Shield,
-  Clock,
   CheckCircle,
   Phone,
-  MapPin,
   Calendar,
   Heart
 } from 'lucide-react';
 
 const Booking = () => {
-  const { toast } = useToast();
+
   const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
@@ -60,7 +58,7 @@ const Booking = () => {
         {/* Message de succès */}
         {showSuccessMessage && (
           <AnimatedSection className="mb-8">
-            <Card className="border-green-200 bg-green-50 dark:border-green-800 dark:bg-green-900/20">
+            <Card className="border-green-200 bg-green-50/90 backdrop-blur-sm dark:border-green-800 dark:bg-green-900/20">
               <CardContent className="p-6 text-center">
                 <div className="flex items-center justify-center space-x-3 text-green-700 dark:text-green-300">
                   <CheckCircle className="h-8 w-8" />
@@ -77,7 +75,7 @@ const Booking = () => {
         <div className="grid grid-cols-1 gap-6 sm:gap-8 lg:grid-cols-3">
           {/* Main Form */}
           <div className="order-2 lg:order-1 lg:col-span-2">
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-blue-50 to-green-50 dark:from-zinc-800 dark:to-zinc-700 rounded-t-xl">
                 <CardTitle className="flex items-center font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl">
                   <Calendar className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400 sm:mr-3 sm:h-6 sm:w-6" />
@@ -97,7 +95,7 @@ const Booking = () => {
           {/* Sidebar */}
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Sécurité et Confiance */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-br from-green-500 to-blue-500 text-white rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg flex items-center">
                   <Shield className="mr-2 h-5 w-5" />
@@ -127,7 +125,7 @@ const Booking = () => {
             </Card>
 
             {/* Contact Direct */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base sm:text-lg">
                   Contact Direct
@@ -163,7 +161,7 @@ const Booking = () => {
             <DynamicPricing />
 
             {/* Processus Simplifié */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
                   Processus Simplifié
@@ -200,7 +198,7 @@ const Booking = () => {
             </Card>
 
             {/* Pourquoi me faire confiance */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900">
+            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="rounded-t-xl">
                 <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg flex items-center">
                   <Heart className="mr-2 h-4 w-4 text-red-500" />

@@ -96,7 +96,7 @@ const About = () => {
     {
       icon: <Users className="h-6 w-6 text-pink-600" />,
       title: '9+ Années en Crèche',
-      description: 'Expérience approfondie avec des enfants de 3 mois à 6 ans',
+      description: 'Expérience approfondie avec des enfants de 3 mois à 3 ans',
     },
   ];
 
@@ -180,7 +180,7 @@ const About = () => {
 
         {/* About Me Section */}
         <AnimatedSection className="mb-12 sm:mb-16 md:mb-20" delay={0.1}>
-          <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
+          <div className="grid gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16 lg:items-center">
             <div 
               ref={aboutImageRef}
               className="relative perspective-1000"
@@ -200,7 +200,7 @@ const About = () => {
                   className="w-full aspect-[4/5] rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
                 />
               </div>
-                          <div className="absolute -bottom-4 -right-4 rounded-xl bg-white p-3 shadow-lg dark:bg-zinc-800 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
+                          <div className="absolute -bottom-4 -right-4 rounded-xl bg-white/90 backdrop-blur-sm p-3 shadow-lg dark:bg-zinc-800/90 sm:-bottom-6 sm:-right-6 sm:rounded-2xl sm:p-4">
               <div className="text-center">
                 <div className="font-['Poppins'] text-xl font-bold text-blue-600 dark:text-blue-400 sm:text-2xl">
                   16
@@ -222,7 +222,7 @@ const About = () => {
                                   <p>
                   Diplômée d'un CAP Petite Enfance, j'ai débuté ma carrière dans
                   une crèche municipale où j'ai eu l'opportunité de
-                  travailler avec des enfants de 3 mois à 6 ans pendant plus de
+                  travailler avec des enfants de 3 mois à 3 ans pendant plus de
                   9 années, suivies de 7 années de garde à domicile.
                 </p>
 
@@ -243,7 +243,7 @@ const About = () => {
                 </div>
               </div>
 
-              <div className="rounded-2xl bg-gradient-to-br from-blue-50 to-green-50 p-4 dark:from-zinc-900 dark:to-zinc-800 sm:rounded-3xl sm:p-6">
+              <div className="rounded-2xl bg-gradient-to-br from-blue-50/90 to-green-50/90 backdrop-blur-sm p-4 dark:from-zinc-900/90 dark:to-zinc-800/90 sm:rounded-3xl sm:p-6">
                 <h3 className="mb-3 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-4 sm:text-xl">
                   Ma Philosophie
                 </h3>
@@ -279,7 +279,7 @@ const About = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="group border-2 border-gray-100 bg-white transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900 rounded-2xl hover:animate-shake"
+                className="group border-2 border-gray-100 bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/90 rounded-2xl hover:animate-shake"
               >
                 <CardContent className="p-4 text-center sm:p-6">
                   <div className="mx-auto mb-3 flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 transition-transform duration-300 group-hover:scale-110 dark:bg-zinc-800 sm:mb-4 sm:h-12 sm:w-12">
@@ -288,7 +288,7 @@ const About = () => {
                   <h3 className="mb-2 font-['Poppins'] text-base font-semibold text-gray-900 dark:text-white sm:text-lg">
                     {qual.title}
                   </h3>
-                  <p className="font-['Inter'] text-xs text-gray-600 dark:text-gray-300 sm:text-sm">
+                  <p className="font-['Inter'] text-base text-gray-600 dark:text-gray-300 sm:text-lg">
                     {qual.description}
                   </p>
                 </CardContent>
@@ -318,7 +318,7 @@ const About = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className={`${value.color} group transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900 rounded-2xl hover:animate-shake`}
+                className={`${value.color} group transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/90 rounded-2xl hover:animate-shake backdrop-blur-sm`}
               >
                 <CardContent className="p-6 sm:p-8">
                   <div className="flex items-start space-x-4">
@@ -329,7 +329,7 @@ const About = () => {
                       <h3 className="mb-2 font-['Poppins'] text-lg font-semibold text-gray-900 dark:text-white sm:mb-3 sm:text-xl">
                         {value.title}
                       </h3>
-                      <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                      <p className="font-['Inter'] text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
                         {value.description}
                       </p>
                     </div>
@@ -352,28 +352,28 @@ const About = () => {
               <div className="h-3 w-3 rounded-full bg-sky-400 animate-bounce" style={{ animationDelay: '1.2s', animationDuration: '2s' }}></div>
             </div>
           </div>
-          <div className="rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 text-white sm:rounded-3xl sm:p-8">
+          <div className="rounded-2xl bg-gradient-to-r from-blue-600/50 via-green-600/50 via-purple-600/50 to-pink-600/50 backdrop-blur-sm p-6 text-white sm:rounded-3xl sm:p-8">
             <div className="grid grid-cols-2 gap-4 text-center sm:gap-8 md:grid-cols-4">
               <div>
-                <AnimatedNumber value={16} />
+                <AnimatedNumber value={16} colorClass="text-blue-700 dark:text-blue-300" style={{ textShadow: '3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000' }} />
                 <div className="text-xs text-blue-100 sm:text-sm">
                   Années d'expérience
                 </div>
               </div>
               <div>
-                <AnimatedNumber value={50} suffix="+" />
+                <AnimatedNumber value={50} suffix="+" colorClass="text-green-700 dark:text-green-300" style={{ textShadow: '3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000' }} />
                 <div className="text-xs text-blue-100 sm:text-sm">
                   Familles satisfaites
                 </div>
               </div>
               <div>
-                <AnimatedNumber value={200} suffix="+" />
+                <AnimatedNumber value={200} suffix="+" colorClass="text-purple-700 dark:text-purple-300" style={{ textShadow: '3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000' }} />
                 <div className="text-xs text-blue-100 sm:text-sm">
                   Heures de garde
                 </div>
               </div>
               <div>
-                <AnimatedNumber value={100} suffix="%" />
+                <AnimatedNumber value={100} suffix="%" colorClass="text-pink-700 dark:text-pink-300" style={{ textShadow: '3px 3px 0px #000, -1px -1px 0px #000, 1px -1px 0px #000, -1px 1px 0px #000, 1px 1px 0px #000' }} />
                 <div className="text-xs text-blue-100 sm:text-sm">
                   Familles qui recommandent
                 </div>
@@ -403,7 +403,7 @@ const About = () => {
               <AnimatedCard
                 key={index}
                 index={index}
-                className="group border-2 border-gray-100 bg-white transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900 rounded-2xl hover:animate-shake"
+                className="group border-2 border-gray-100 bg-white/90 backdrop-blur-sm transition-all duration-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900/90 rounded-2xl hover:animate-shake"
               >
                 <CardContent className="p-4 sm:p-6">
                   <div className="mb-4 flex items-center">
@@ -414,7 +414,7 @@ const About = () => {
                       />
                     ))}
                   </div>
-                  <p className="mb-4 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                  <p className="mb-4 font-['Inter'] text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
                     "{testimonial.text}"
                   </p>
                   <div className="flex items-center justify-between">
@@ -457,9 +457,9 @@ const About = () => {
                 <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
                   Zone d'Intervention
                 </h2>
-                <p className="mb-6 font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                <p className="mb-6 font-['Inter'] text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
                   Je me déplace dans un rayon de 20km autour de Montaigut sur Save pour
-                  assurer mes services de garde. Ma zone couvre principalement :
+                  assurer mes services de garde. Voici quelques exemples de communes de ma zone d'intervention :
                 </p>
                 <div className="grid grid-cols-2 gap-3 text-sm sm:text-base">
                   <div className="flex items-center space-x-2">
@@ -468,15 +468,55 @@ const About = () => {
                   </div>
                   <div className="flex items-center space-x-2">
                     <MapPin className="h-4 w-4 text-green-600" />
-                    <span className="text-gray-700 dark:text-gray-300">Toulouse</span>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-purple-600" />
                     <span className="text-gray-700 dark:text-gray-300">L'Isle-Jourdain</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <MapPin className="h-4 w-4 text-orange-600" />
+                    <MapPin className="h-4 w-4 text-purple-600" />
                     <span className="text-gray-700 dark:text-gray-300">Grenade</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-orange-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Cadours</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-red-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Pibrac</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-indigo-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Léguevin</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-pink-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Fonsorbes</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-teal-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Plaisance-du-Touch</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-yellow-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Tournefeuille</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-cyan-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Cugnaux</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-emerald-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Colomiers</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-violet-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Blagnac</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-rose-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Lévignac</span>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <MapPin className="h-4 w-4 text-lime-600" />
+                    <span className="text-gray-700 dark:text-gray-300">Toulouse</span>
                   </div>
                 </div>
               </div>
@@ -495,8 +535,8 @@ const About = () => {
                   }}
                 >
                   <img
-                    src="https://images.pexels.com/photos/8613098/pexels-photo-8613098.jpeg?auto=compress&cs=tinysrgb&w=600"
-                    alt="Marie avec des enfants en activité"
+                    src="./images/carte-zone_d_intervention.webp"
+                    alt="Carte de localisation et zone d'intervention"
                     className="w-full aspect-[4/3] rounded-2xl object-cover shadow-2xl sm:rounded-3xl"
                   />
                 </div>
@@ -510,7 +550,7 @@ const About = () => {
           <h2 className="mb-4 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:mb-6 sm:text-3xl">
             Prêt à me faire confiance ?
           </h2>
-          <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-base">
+          <p className="mb-6 px-4 font-['Inter'] text-base text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-lg">
             Contactez-moi pour discuter de vos besoins et planifier une première
             rencontre.
           </p>

@@ -31,96 +31,127 @@
   max-width: none;
 }
 
-/* Fond d'arrière-plan avec sphères géométriques flottantes - VERSION OPTIMISÉE POUR PERFORMANCE */
+/* Fond d'arrière-plan discret thème petite enfance */
 body {
-  background: 
-    /* Fond simple pour le thème clair - PERFORMANCE */
-    linear-gradient(135deg, 
-      rgba(255, 255, 255, 0.8) 0%, 
-      rgba(248, 250, 252, 0.8) 100%
-    );
-  background-attachment: fixed;
+  background-color: #fefefe !important;
+  background-image: 
+    /* Grille très subtile */
+    linear-gradient(90deg, rgba(255, 182, 193, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255, 182, 193, 0.08) 1px, transparent 1px),
+    /* Formes géométriques douces et discrètes */
+    radial-gradient(circle at 15% 25%, rgba(255, 182, 193, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 85% 15%, rgba(173, 216, 230, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 25% 85%, rgba(144, 238, 144, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 75% 85%, rgba(255, 218, 185, 0.06) 0%, transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(221, 160, 221, 0.04) 0%, transparent 70%);
+  background-size: 
+    80px 80px, 80px 80px,
+    200px 200px, 200px 200px, 200px 200px, 200px 200px, 300px 300px;
+  background-position: 
+    0 0, 0 0,
+    0 0, 0 0, 0 0, 0 0, 0 0;
+  background-repeat: repeat;
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
-/* Optimisation pour le thème sombre - garder le gradient coloré */
+/* Thème sombre discret thème petite enfance */
 .dark body {
-  background: 
-    /* Gradient principal subtil pour le thème sombre */
-    linear-gradient(135deg, 
-      rgba(255, 182, 193, 0.03) 0%, 
-      rgba(173, 216, 230, 0.03) 25%, 
-      rgba(144, 238, 144, 0.03) 50%, 
-      rgba(255, 218, 185, 0.03) 75%, 
-      rgba(221, 160, 221, 0.03) 100%
-    );
+  background-color: #0a0a0a !important;
+  background-image: 
+    /* Grille blanche très subtile pour le thème sombre */
+    linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    /* Formes géométriques douces et discrètes pour le thème sombre */
+    radial-gradient(circle at 15% 25%, rgba(255, 182, 193, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 85% 15%, rgba(173, 216, 230, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 25% 85%, rgba(144, 238, 144, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 75% 85%, rgba(255, 218, 185, 0.04) 0%, transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(221, 160, 221, 0.03) 0%, transparent 70%);
+  background-size: 
+    80px 80px, 80px 80px,
+    200px 200px, 200px 200px, 200px 200px, 200px 200px, 300px 300px;
+  background-position: 
+    0 0, 0 0,
+    0 0, 0 0, 0 0, 0 0, 0 0;
+  background-repeat: repeat;
 }
 
 /* Sphères flottantes - VERSION SIMPLE ET VISIBLE */
-            .floating-sphere-1 {
-              position: fixed;
-              width: 150px;
-              height: 150px;
-              background: rgba(255, 182, 193, 0.4);
-              border-radius: 50%;
-              top: 20%;
-              left: 10%;
-              pointer-events: none;
-              z-index: -10;
-              animation: float1 60s ease-in-out infinite;
-              box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
-            }
-            
-            .floating-sphere-2 {
-              position: fixed;
-              width: 100px;
-              height: 100px;
-              background: rgba(173, 216, 230, 0.4);
-              border-radius: 50%;
-              top: 60%;
-              right: 20%;
-              pointer-events: none;
-              z-index: -10;
-              animation: float2 70s ease-in-out infinite reverse;
-              box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
-            }
-            
-            .floating-sphere-3 {
-              position: fixed;
-              width: 120px;
-              height: 120px;
-              background: rgba(144, 238, 144, 0.4);
-              border-radius: 50%;
-              top: 40%;
-              right: 40%;
-              pointer-events: none;
-              z-index: -10;
-              animation: float3 80s ease-in-out infinite;
-              box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
-            }
+.floating-sphere-1 {
+  position: fixed;
+  width: 150px;
+  height: 150px;
+  background: rgba(255, 182, 193, 0.4);
+  border-radius: 50%;
+  top: 20%;
+  left: 10%;
+  pointer-events: none;
+  z-index: 5;
+  animation: float1 60s ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+}
 
-            /* Optimisation pour le thème sombre - sphères plus visibles */
-            .dark .floating-sphere-1 {
-              background: rgba(255, 182, 193, 0.4);
-              box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
-            }
+.floating-sphere-2 {
+  position: fixed;
+  width: 100px;
+  height: 100px;
+  background: rgba(173, 216, 230, 0.4);
+  border-radius: 50%;
+  top: 60%;
+  right: 20%;
+  pointer-events: none;
+  z-index: 5;
+  animation: float2 70s ease-in-out infinite reverse;
+  box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
+}
 
-            .dark .floating-sphere-2 {
-              background: rgba(173, 216, 230, 0.4);
-              box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
-            }
+.floating-sphere-3 {
+  position: fixed;
+  width: 120px;
+  height: 120px;
+  background: rgba(144, 238, 144, 0.4);
+  border-radius: 50%;
+  top: 40%;
+  right: 40%;
+  pointer-events: none;
+  z-index: 5;
+  animation: float3 80s ease-in-out infinite;
+  box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
+}
 
-            .dark .floating-sphere-3 {
-              background: rgba(144, 238, 144, 0.4);
-              box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
-            }
+/* Optimisation pour le thème sombre - sphères plus visibles */
+.dark .floating-sphere-1 {
+  background: rgba(255, 182, 193, 0.4);
+  box-shadow: 0 0 20px rgba(255, 182, 193, 0.3);
+}
+
+.dark .floating-sphere-2 {
+  background: rgba(173, 216, 230, 0.4);
+  box-shadow: 0 0 15px rgba(173, 216, 230, 0.3);
+}
+
+.dark .floating-sphere-3 {
+  background: rgba(144, 238, 144, 0.4);
+  box-shadow: 0 0 18px rgba(144, 238, 144, 0.3);
+}
 
 /* Assurer que tous les éléments principaux sont au-dessus des sphères */
 nav, main, footer, .card, .bg-white, .bg-zinc-900, [class*="bg-"] {
   position: relative;
-  z-index: 1;
+  z-index: 20;
+}
+
+/* Réduire la luminosité des images en thème sombre */
+.dark img {
+  filter: brightness(0.6) contrast(1.2);
+  transition: filter 0.3s ease;
+}
+
+/* Optionnel : effet hover pour les images en thème sombre */
+.dark img:hover {
+  filter: brightness(0.75) contrast(1.1);
 }
 
 /* Animations de flottement - MOUVEMENTS ALÉATOIRES SUR TOUTE LA VUE */
@@ -281,60 +312,7 @@ nav, main, footer, .card, .bg-white, .bg-zinc-900, [class*="bg-"] {
   }
 }
 
-/* Version sombre du fond - design harmonisé avec formes géométriques rondes */
-@media (prefers-color-scheme: dark) {
-  body {
-    background: 
-      /* Gradient principal harmonisé - version sombre */
-      linear-gradient(135deg, 
-        rgba(59, 130, 246, 0.06) 0%, 
-        rgba(147, 51, 234, 0.06) 25%, 
-        rgba(236, 72, 153, 0.06) 50%, 
-        rgba(245, 158, 11, 0.06) 75%, 
-        rgba(34, 197, 94, 0.06) 100%
-      ),
-      /* Formes géométriques rondes harmonisées - cercles principaux */
-      radial-gradient(circle at 15% 25%, rgba(59, 130, 246, 0.12) 0%, transparent 45%),
-      radial-gradient(circle at 85% 15%, rgba(147, 51, 234, 0.12) 0%, transparent 40%),
-      radial-gradient(circle at 25% 85%, rgba(236, 72, 153, 0.12) 0%, transparent 50%),
-      radial-gradient(circle at 75% 85%, rgba(245, 158, 11, 0.12) 0%, transparent 35%),
-      radial-gradient(circle at 50% 15%, rgba(34, 197, 94, 0.12) 0%, transparent 55%),
-      radial-gradient(circle at 15% 65%, rgba(239, 68, 68, 0.12) 0%, transparent 30%),
-      radial-gradient(circle at 85% 75%, rgba(168, 85, 247, 0.12) 0%, transparent 45%),
-      radial-gradient(circle at 35% 45%, rgba(251, 191, 36, 0.12) 0%, transparent 40%),
-      /* Cercles moyens harmonisés pour la profondeur */
-      radial-gradient(circle at 65% 35%, rgba(59, 130, 246, 0.08) 0%, transparent 65%),
-      radial-gradient(circle at 45% 75%, rgba(147, 51, 234, 0.08) 0%, transparent 60%),
-      radial-gradient(circle at 55% 65%, rgba(236, 72, 153, 0.08) 0%, transparent 70%),
-      radial-gradient(circle at 25% 55%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
-      /* Petits cercles décoratifs harmonisés */
-      radial-gradient(circle at 20% 40%, rgba(59, 130, 246, 0.06) 0%, transparent 25%),
-      radial-gradient(circle at 80% 50%, rgba(147, 51, 234, 0.06) 0%, transparent 30%),
-      radial-gradient(circle at 30% 90%, rgba(236, 72, 153, 0.06) 0%, transparent 20%),
-      radial-gradient(circle at 70% 25%, rgba(245, 158, 11, 0.06) 0%, transparent 35%),
-      radial-gradient(circle at 90% 90%, rgba(34, 197, 94, 0.06) 0%, transparent 25%),
-      radial-gradient(circle at 10% 90%, rgba(239, 68, 68, 0.06) 0%, transparent 30%),
-      /* Cercles très subtils pour texture harmonisée */
-      radial-gradient(circle at 40% 30%, rgba(59, 130, 246, 0.04) 0%, transparent 85%),
-      radial-gradient(circle at 60% 80%, rgba(147, 51, 234, 0.04) 0%, transparent 80%),
-      radial-gradient(circle at 50% 50%, rgba(236, 72, 153, 0.04) 0%, transparent 75%),
-      radial-gradient(circle at 30% 70%, rgba(245, 158, 11, 0.04) 0%, transparent 90%);
-    background-size: 
-      100% 100%,
-      100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
-      100% 100%, 100% 100%, 100% 100%, 100% 100%,
-      100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%, 100% 100%,
-      100% 100%, 100% 100%, 100% 100%, 100% 100%;
-    background-position: 
-      0 0,
-      0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0, 0 0,
-      0 0, 0 0, 0 0, 0 0,
-      0 0, 0 0, 0 0, 0 0, 0 0, 0 0,
-      0 0, 0 0, 0 0, 0 0;
-    background-repeat: no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat, no-repeat;
-    background-attachment: fixed;
-  }
-}
+
 
 /* Règles spécifiques pour les éléments principaux */
 #root > div > main {

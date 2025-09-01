@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
+
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Badge } from '@/components/ui/badge';
-import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
+import { AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
 import { Link } from 'react-router-dom';
 import { PricingService } from '@/lib/pricing-service';
 import {
@@ -13,7 +13,7 @@ import {
   Clock,
   Baby,
   Calendar,
-  MapPin,
+
   CheckCircle,
   Sun,
   Moon,
@@ -354,7 +354,7 @@ const Services = () => {
                 </CardHeader>
 
                 <CardContent className="space-y-4 sm:space-y-6">
-                  <p className="font-['Inter'] text-sm leading-relaxed text-gray-700 dark:text-gray-300 sm:text-base">
+                  <p className="font-['Inter'] text-base leading-relaxed text-gray-700 dark:text-gray-300 sm:text-lg">
                     {service.description}
                   </p>
 
@@ -362,7 +362,7 @@ const Services = () => {
                     {service.features.map((feature: string, idx: number) => (
                       <div key={idx} className="flex items-center space-x-3">
                         <CheckCircle className="h-4 w-4 flex-shrink-0 text-green-600 sm:h-5 sm:w-5" />
-                        <span className="font-['Inter'] text-sm text-gray-700 dark:text-gray-300 sm:text-base">
+                        <span className="font-['Inter'] text-base text-gray-700 dark:text-gray-300 sm:text-lg">
                           {feature}
                         </span>
                       </div>
@@ -427,7 +427,7 @@ const Services = () => {
                 <h3 className={`mb-2 font-['Poppins'] font-semibold text-gray-900 dark:text-white text-lg sm:text-xl`}>
                   {service.title}
                 </h3>
-                <p className={`font-['Inter'] text-gray-600 dark:text-gray-300 text-sm sm:text-base`}>
+                <p className={`font-['Inter'] text-gray-600 dark:text-gray-300 text-base sm:text-lg`}>
                   {service.description}
                 </p>
               </div>
@@ -458,7 +458,7 @@ const Services = () => {
                 <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                   Inclus dans tous mes services :
                 </h4>
-                <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-base">
+                <ul className="space-y-1 text-base text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-lg">
                   <li className="flex items-center space-x-2">
                     <CheckCircle className="h-4 w-4 text-green-600 dark:text-green-400" />
                     <span>Activités adaptées à l'âge</span>
@@ -477,7 +477,7 @@ const Services = () => {
                 <h4 className="mb-2 text-sm font-semibold text-gray-900 dark:text-white sm:text-base">
                   Conditions :
                 </h4>
-                <ul className="space-y-1 text-sm text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-base">
+                <ul className="space-y-1 text-base text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-lg">
                   <li>• Le temps de garde réservé ne pourra pas être modifié</li>
                   <li>• Majoration de 5€ par enfant à partir du 3ème enfant</li>
                   <li>• Les tarifs de nuit s'appliquent à partir de 22h</li>
@@ -505,7 +505,7 @@ const Services = () => {
             <AnimatedTitle className="mb-4 font-['Poppins'] text-xl font-bold text-gray-900 dark:text-white sm:text-2xl" delay={0.6}>
               Besoin d'un service personnalisé ?
             </AnimatedTitle>
-            <p className="mb-6 px-4 font-['Inter'] text-sm text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-base">
+            <p className="mb-6 px-4 font-['Inter'] text-base text-gray-600 dark:text-gray-300 sm:mb-8 sm:text-lg">
               Chaque famille est unique. Contactez-moi pour un devis adapté à vos
               besoins spécifiques.
             </p>

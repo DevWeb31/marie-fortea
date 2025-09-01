@@ -98,13 +98,13 @@ export const getButtonColors = (variant: keyof typeof buttonColors, theme: 'ligh
 // Classes CSS prêtes à l'emploi avec tailles UX optimisées
 export const buttonClasses = {
   primary: {
-    light: 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300',
-    dark: 'bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transition-all duration-300'
+    light: 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white hover:text-blue-100 shadow-lg hover:shadow-xl transition-all duration-300',
+    dark: 'bg-gradient-to-r from-blue-400 to-blue-500 hover:from-blue-500 hover:to-blue-600 text-white hover:text-blue-100 shadow-lg hover:shadow-xl transition-all duration-300'
   },
   
   secondary: {
-    light: 'bg-transparent hover:bg-blue-50 text-blue-600 border-2 border-blue-200 hover:text-blue-700 hover:border-blue-300 transition-all duration-300',
-    dark: 'bg-transparent hover:bg-blue-900/30 text-blue-400 border-2 border-blue-300 hover:text-blue-300 hover:border-blue-200 transition-all duration-300'
+    light: 'bg-transparent hover:bg-blue-50 text-blue-600 border-2 border-blue-200 hover:text-blue-800 hover:border-blue-300 transition-all duration-300',
+    dark: 'bg-transparent hover:bg-blue-900/30 text-blue-400 border-2 border-blue-300 hover:text-blue-100 hover:border-blue-200 transition-all duration-300'
   },
   
   success: {
