@@ -161,14 +161,24 @@ const PricingManagement: React.FC = () => {
     });
   };
 
+  // Mettre à jour un prix de nuit
+  const updateServiceNightPrice = (service: string, price: number) => {
+    if (!config) return;
+    setConfig({
+      ...config,
+      serviceNightPrices: {
+        ...config.serviceNightPrices,
+        [service]: price
+      }
+    });
+  };
+
   // Obtenir le nom d'affichage d'un service
   const getServiceDisplayName = (service: string): string => {
     const serviceNames: { [key: string]: string } = {
       'babysitting': 'Garde d\'enfants',
       'event_support': 'Soutien événementiel',
-      'overnight_care': 'Garde de nuit',
-      'weekend_care': 'Garde de weekend',
-      'holiday_care': 'Garde pendant les vacances',
+      'evening_care': 'Garde en soirée',
       'emergency_care': 'Garde d\'urgence'
     };
     return serviceNames[service] || service.replace('_', ' ');
@@ -294,22 +304,42 @@ const PricingManagement: React.FC = () => {
             </div>
 
             {selectedService && (
-              <div>
-                <Label htmlFor="servicePrice">
-                  Prix pour "{getServiceDisplayName(selectedService)}" (€/heure)
-                </Label>
-                <Input
-                  id="servicePrice"
-                  type="number"
-                  step="0.01"
-                  min="0"
-                  value={config.servicePrices[selectedService as keyof typeof config.servicePrices]}
-                  onChange={(e) => updateServicePrice(selectedService, parseFloat(e.target.value) || 0)}
-                  className="mt-1"
-                />
-                <p className="text-sm text-gray-500 mt-1">
-                  Modifiez le prix pour ce type de service
-                </p>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="servicePrice">
+                    Prix de jour pour "{getServiceDisplayName(selectedService)}" (€/heure)
+                  </Label>
+                  <Input
+                    id="servicePrice"
+                    type="number"
+                    step="0.01"
+                    min="0"
+                    value={config.servicePrices[selectedService as keyof typeof config.servicePrices]}
+                    onChange={(e) => updateServicePrice(selectedService, parseFloat(e.target.value) || 0)}
+                    className="mt-1"
+                  />
+                </div>
+
+                {/* Tarif de nuit si applicable */}
+                {config.serviceNightConfig[selectedService as keyof typeof config.serviceNightConfig] && (
+                  <div>
+                    <Label htmlFor="serviceNightPrice">
+                      Prix de nuit pour "{getServiceDisplayName(selectedService)}" (€/heure)
+                    </Label>
+                    <Input
+                      id="serviceNightPrice"
+                      type="number"
+                      step="0.01"
+                      min="0"
+                      value={config.serviceNightPrices[selectedService as keyof typeof config.serviceNightPrices] || 0}
+                      onChange={(e) => updateServiceNightPrice(selectedService, parseFloat(e.target.value) || 0)}
+                      className="mt-1"
+                    />
+                    <p className="text-sm text-gray-500 mt-1">
+                      Tarif appliqué à partir de 22h
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 
@@ -320,7 +350,14 @@ const PricingManagement: React.FC = () => {
               <div className="mt-2 space-y-2">
                 {Object.entries(config.servicePrices).map(([service, price]) => (
                   <div key={service} className="flex items-center justify-between p-2 bg-gray-50 dark:bg-gray-800 rounded">
-                    <span className="text-sm">{getServiceDisplayName(service)}</span>
+                    <div>
+                      <span className="text-sm font-medium">{getServiceDisplayName(service)}</span>
+                      {config.serviceNightConfig[service as keyof typeof config.serviceNightConfig] && (
+                        <div className="text-xs text-gray-500 mt-1">
+                          Nuit: {config.serviceNightPrices[service as keyof typeof config.serviceNightPrices]}€/h
+                        </div>
+                      )}
+                    </div>
                     <span className="font-semibold text-sm">{price}€/heure</span>
                   </div>
                 ))}
@@ -355,9 +392,7 @@ const PricingManagement: React.FC = () => {
                 <SelectContent>
                   <SelectItem value="babysitting">{getServiceDisplayName('babysitting')}</SelectItem>
                   <SelectItem value="event_support">{getServiceDisplayName('event_support')}</SelectItem>
-                  <SelectItem value="overnight_care">{getServiceDisplayName('overnight_care')}</SelectItem>
-                  <SelectItem value="weekend_care">{getServiceDisplayName('weekend_care')}</SelectItem>
-                  <SelectItem value="holiday_care">{getServiceDisplayName('holiday_care')}</SelectItem>
+                  <SelectItem value="evening_care">{getServiceDisplayName('evening_care')}</SelectItem>
                   <SelectItem value="emergency_care">{getServiceDisplayName('emergency_care')}</SelectItem>
                 </SelectContent>
               </Select>

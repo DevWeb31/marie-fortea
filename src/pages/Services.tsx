@@ -23,6 +23,7 @@ import {
 const Services = () => {
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [additionalChildRate, setAdditionalChildRate] = useState<number>(5);
 
   // Charger les prix dynamiques
   useEffect(() => {
@@ -36,6 +37,7 @@ const Services = () => {
           setServices(getDefaultServices());
         } else if (pricingData) {
           setServices(getDynamicServices(pricingData));
+          setAdditionalChildRate(pricingData.additionalChildRate || 5);
         }
       } catch (error) {
         console.error('Erreur lors du chargement des prix:', error);
@@ -49,153 +51,139 @@ const Services = () => {
   }, []);
 
   // Fonction pour obtenir les services par défaut avec les nouveaux tarifs
-  const getDefaultServices = () => [
-    {
-      icon: <Heart className="h-8 w-8 text-pink-500" />,
-      title: 'Garde d\'enfants',
-      subtitle: 'Journée entière ou demi-journée',
-      description:
-        'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
-      features: [
-        'Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)',
-        'Activitités adaptées à l\'âge',
-        'Matériel pédagogique fourni',
-        'Carnet de suivi d\'accompagnement',
-      ],
-      pricing: {
-        day: '20€/heure',
-        night: null,
-        note: 'Tarif de jour uniquement'
+  const getDefaultServices = () => {
+    const defaultAdditionalChildRate = 5;
+    
+    return [
+      {
+        icon: <Heart className="h-8 w-8 text-pink-500" />,
+        title: 'Garde d\'enfants',
+        subtitle: 'Journée entière ou demi-journée',
+        description:
+          'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
+        features: [
+          `Garde de 1 à 3 enfants (majoration de ${defaultAdditionalChildRate}€ pour le 3ème enfant)`,
+          'Activitités adaptées à l\'âge',
+          'Matériel pédagogique fourni',
+          'Carnet de suivi d\'accompagnement',
+        ],
+        pricing: {
+          day: '20€/heure',
+          night: null,
+          note: 'Tarif de jour uniquement'
+        },
+        color: 'bg-pink-50 border-pink-200',
+        iconBg: 'bg-pink-100',
+        minimum: 'Minimum = 3 heures',
       },
-      color: 'bg-pink-50 border-pink-200',
-      iconBg: 'bg-pink-100',
-      minimum: 'Minimum = 3 heures',
-    },
-    {
-      icon: <Users className="h-8 w-8 text-blue-500" />,
-      title: 'Soutien événementiel',
-      subtitle: 'Tarif de nuit à partir de 22h',
-      description:
-        'Profitez de vos événements en toute tranquillité pendant que je m\'occupe de vos enfants avec bienveillance.',
-      features: [
-        'Garde pendant événements',
-        'Activités adaptées',
-        'Garde de 1 à 6 enfants (majoration 5€ par enfant à partir du 3ème enfant)',
-        'Flexibilité horaires',
-      ],
-      pricing: {
-        day: '25€/heure',
-        night: '30€/heure',
-        note: null
+      {
+        icon: <Users className="h-8 w-8 text-blue-500" />,
+        title: 'Soutien événementiel',
+        subtitle: 'Tarif de nuit à partir de 22h',
+        description:
+          'Profitez de vos événements en toute tranquillité pendant que je m\'occupe de vos enfants avec bienveillance.',
+        features: [
+          'Garde pendant événements',
+          'Activités adaptées',
+          `Garde de 1 à 6 enfants (majoration ${defaultAdditionalChildRate}€ par enfant à partir du 3ème enfant)`,
+          'Flexibilité horaires',
+        ],
+        pricing: {
+          day: '25€/heure',
+          night: '30€/heure',
+          note: null
+        },
+        color: 'bg-blue-50 border-blue-200',
+        iconBg: 'bg-blue-100',
+        minimum: 'Minimum = 4 heures',
       },
-      color: 'bg-blue-50 border-blue-200',
-      iconBg: 'bg-blue-100',
-      minimum: 'Minimum = 4 heures',
-    },
-    {
-      icon: <Calendar className="h-8 w-8 text-green-500" />,
-      title: 'Garde en soirée',
-      subtitle: 'À partir de 18h, tarif nuit à partir de 22h',
-      description:
-        'Pour vos soirées, je propose une garde flexible et adaptée à vos besoins.',
-      features: [
-        'Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)',
-        'Activités adaptées à l\'âge',
-        'Flexibilité horaires',
-      ],
-      pricing: {
-        day: '20€/heure',
-        night: '25€/heure',
-        note: null
+      {
+        icon: <Calendar className="h-8 w-8 text-green-500" />,
+        title: 'Garde en soirée',
+        subtitle: 'À partir de 18h, tarif nuit à partir de 22h',
+        description:
+          'Pour vos soirées, je propose une garde flexible et adaptée à vos besoins.',
+        features: [
+          `Garde de 1 à 3 enfants (majoration de ${defaultAdditionalChildRate}€ pour le 3ème enfant)`,
+          'Activités adaptées à l\'âge',
+          'Flexibilité horaires',
+        ],
+        pricing: {
+          day: '20€/heure',
+          night: '25€/heure',
+          note: null
+        },
+        color: 'bg-green-50 border-green-200',
+        iconBg: 'bg-green-100',
+        minimum: 'Minimum = 3 heures',
       },
-      color: 'bg-green-50 border-green-200',
-      iconBg: 'bg-green-100',
-      minimum: 'Minimum = 3 heures',
-    },
-    {
-      icon: <Clock className="h-8 w-8 text-orange-500" />,
-      title: 'Garde d\'urgence',
-      subtitle: 'Disponibilité rapide',
-      description:
-        'En cas d\'imprévu, je suis disponible rapidement pour vous dépanner et assurer la garde de vos enfants.',
-      features: [
-        'Réponse sous 2h (aux horaires indiqués)',
-        'Disponible le week-end et jours fériés',
-        'Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)',
-      ],
-      pricing: {
-        day: '40€/heure',
-        night: null,
-        note: null
+      {
+        icon: <Clock className="h-8 w-8 text-orange-500" />,
+        title: 'Garde d\'urgence',
+        subtitle: 'Disponibilité rapide',
+        description:
+          'En cas d\'imprévu, je suis disponible rapidement pour vous dépanner et assurer la garde de vos enfants.',
+        features: [
+          'Réponse sous 2h (aux horaires indiqués)',
+          'Disponible le week-end et jours fériés',
+          `Garde de 1 à 3 enfants (majoration de ${defaultAdditionalChildRate}€ pour le 3ème enfant)`,
+        ],
+        pricing: {
+          day: '40€/heure',
+          night: null,
+          note: null
+        },
+        color: 'bg-orange-50 border-orange-200',
+        iconBg: 'bg-orange-100',
+        minimum: 'Minimum = 2 heures',
       },
-      color: 'bg-orange-50 border-orange-200',
-      iconBg: 'bg-orange-100',
-      minimum: 'Minimum = 2 heures',
-    },
-  ];
+    ];
+  };
 
   // Fonction pour obtenir les services dynamiques
   const getDynamicServices = (pricingData: any) => {
+    const additionalChildRate = pricingData.additionalChildRate || 5;
+    
     const serviceMapping: { [key: string]: any } = {
       babysitting: {
         icon: <Heart className="h-8 w-8 text-pink-500" />,
         title: 'Garde d\'enfants',
         subtitle: 'Journée entière ou demi-journée',
         description: 'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
-        features: ['Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)', 'Activitités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
+        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activitités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
         color: 'bg-pink-50 border-pink-200',
         iconBg: 'bg-pink-100',
         minimum: 'Minimum = 3 heures',
-        pricing: {
-          day: '20€/heure',
-          night: null,
-          note: 'Tarif de jour uniquement'
-        }
       },
       emergency_care: {
         icon: <Clock className="h-8 w-8 text-orange-500" />,
         title: 'Garde d\'urgence',
         subtitle: 'Disponibilité rapide',
         description: 'En cas d\'imprévu, je suis disponible rapidement pour vous dépanner et assurer la garde de vos enfants.',
-        features: ['Réponse sous 2h (aux horaires indiqués)', 'Disponible le week-end et jours fériés', 'Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)'],
+        features: ['Réponse sous 2h (aux horaires indiqués)', 'Disponible le week-end et jours fériés', `Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`],
         color: 'bg-orange-50 border-orange-200',
         iconBg: 'bg-orange-100',
         minimum: 'Minimum = 2 heures',
-        pricing: {
-          day: '40€/heure',
-          night: null,
-          note: null
-        }
       },
       event_support: {
         icon: <Users className="h-8 w-8 text-blue-500" />,
         title: 'Soutien événementiel',
         subtitle: 'Tarif de nuit à partir de 22h',
         description: 'Profitez de vos événements en toute tranquillité pendant que je m\'occupe de vos enfants avec bienveillance.',
-        features: ['Garde pendant événements', 'Activités adaptées', 'Garde de 1 à 6 enfants (majoration de 5€ par enfant à partir du 3ème enfant)', 'Flexibilité horaires'],
+        features: ['Garde pendant événements', 'Activités adaptées', `Garde de 1 à 6 enfants (majoration de ${additionalChildRate}€ par enfant à partir du 3ème enfant)`, 'Flexibilité horaires'],
         color: 'bg-blue-50 border-blue-200',
         iconBg: 'bg-blue-100',
         minimum: 'Minimum = 4 heures',
-        pricing: {
-          day: '25€/heure',
-          night: '30€/heure',
-          note: null
-        }
       },
-      weekend_care: {
+      evening_care: {
         icon: <Calendar className="h-8 w-8 text-green-500" />,
         title: 'Garde en soirée',
         subtitle: 'À partir de 18h, tarif nuit à partir de 22h',
         description: 'Pour vos soirées, je propose une garde flexible et adaptée à vos besoins.',
-        features: ['Garde de 1 à 3 enfants (majoration de 5€ pour le 3ème enfant)', 'Activités adaptées à l\'âge', 'Flexibilité horaires'],
+        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activités adaptées à l\'âge', 'Flexibilité horaires'],
         color: 'bg-green-50 border-green-200',
         iconBg: 'bg-green-100',
         minimum: 'Minimum = 3 heures',
-        pricing: {
-          day: '20€/heure',
-          night: '25€/heure',
-          note: null
-        }
       },
     };
 
@@ -205,9 +193,17 @@ const Services = () => {
         console.warn(`Service type "${service.type}" not found in mapping`);
         return null;
       }
+
+      // Créer l'objet pricing dynamique basé sur les données de la base
+      const pricing = {
+        day: `${service.price}€/heure`,
+        night: service.nightPrice ? `${service.nightPrice}€/heure` : null,
+        note: service.hasNightPrice ? null : 'Tarif de jour uniquement'
+      };
+
       return {
         ...serviceInfo,
-        pricing: serviceInfo.pricing
+        pricing
       };
     }).filter(Boolean); // Filtrer les services null
   };
@@ -479,7 +475,7 @@ const Services = () => {
                 </h4>
                 <ul className="space-y-1 text-base text-gray-700 dark:text-gray-300 sm:space-y-2 sm:text-lg">
                   <li>• Le temps de garde réservé ne pourra pas être modifié</li>
-                  <li>• Majoration de 5€ par enfant à partir du 3ème enfant</li>
+                  <li>• Majoration de {additionalChildRate}€ par enfant à partir du 3ème enfant</li>
                   <li>• Les tarifs de nuit s'appliquent à partir de 22h</li>
                 </ul>
               </div>

@@ -35,48 +35,40 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       code: 'babysitting',
       name: 'Garde d\'enfants',
       description: 'Garde d\'enfants professionnelle',
-      basePrice: 15.00,
-      minDurationHours: 1,
+      basePrice: 20.00,
+      nightPrice: null,
+      hasNightPrice: false,
+      minDurationHours: 3,
       isActive: true
     },
     {
       code: 'event_support',
       name: 'Soutien événementiel',
       description: 'Garde d\'enfants pour événements',
-      basePrice: 18.00,
-      minDurationHours: 2,
-      isActive: true
-    },
-    {
-      code: 'overnight_care',
-      name: 'Garde de nuit',
-      description: 'Garde d\'enfants nocturne',
-      basePrice: 22.50,
+      basePrice: 25.00,
+      nightPrice: 30.00,
+      hasNightPrice: true,
       minDurationHours: 4,
       isActive: true
     },
     {
-      code: 'weekend_care',
-      name: 'Garde de weekend',
-      description: 'Garde d\'enfants de weekend',
-      basePrice: 19.50,
+      code: 'evening_care',
+      name: 'Garde en soirée',
+      description: 'Garde d\'enfants en soirée',
+      basePrice: 20.00,
+      nightPrice: 25.00,
+      hasNightPrice: true,
       minDurationHours: 3,
-      isActive: true
-    },
-    {
-      code: 'holiday_care',
-      name: 'Garde pendant les vacances',
-      description: 'Garde d\'enfants pendant les vacances',
-      basePrice: 21.00,
-      minDurationHours: 2,
       isActive: true
     },
     {
       code: 'emergency_care',
       name: 'Garde d\'urgence',
       description: 'Garde d\'enfants en urgence',
-      basePrice: 27.00,
-      minDurationHours: 1,
+      basePrice: 40.00,
+      nightPrice: null,
+      hasNightPrice: false,
+      minDurationHours: 2,
       isActive: true
     }
   ];
@@ -181,32 +173,30 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       babysitting: {
         name: 'Garde d\'enfants',
         description: 'Garde d\'enfants professionnelle',
-        minDurationHours: 1,
+        minDurationHours: 3,
+        hasNightPrice: false,
+        nightPrice: null,
       },
       event_support: {
         name: 'Soutien événementiel',
         description: 'Garde d\'enfants pour événements',
-        minDurationHours: 2,
-      },
-      overnight_care: {
-        name: 'Garde de nuit',
-        description: 'Garde d\'enfants nocturne',
         minDurationHours: 4,
+        hasNightPrice: true,
+        nightPrice: 30,
       },
-      weekend_care: {
-        name: 'Garde de weekend',
-        description: 'Garde d\'enfants de weekend',
+      evening_care: {
+        name: 'Garde en soirée',
+        description: 'Garde d\'enfants en soirée',
         minDurationHours: 3,
-      },
-      holiday_care: {
-        name: 'Garde pendant les vacances',
-        description: 'Garde d\'enfants pendant les vacances',
-        minDurationHours: 2,
+        hasNightPrice: true,
+        nightPrice: 25,
       },
       emergency_care: {
         name: 'Garde d\'urgence',
         description: 'Garde d\'enfants en urgence',
-        minDurationHours: 1,
+        minDurationHours: 2,
+        hasNightPrice: false,
+        nightPrice: null,
       },
     };
 
@@ -214,14 +204,28 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       code: service.type,
       ...serviceMapping[service.type],
       basePrice: service.price,
+      nightPrice: service.nightPrice,
+      hasNightPrice: service.hasNightPrice,
       isActive: true
     }));
   };
 
-  // Fonction pour formater en Camel Case
+  // Fonction pour formater en Camel Case avec gestion des tirets
   const formatToCamelCase = (value: string): string => {
     if (!value) return '';
-    return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+    // Diviser par les tirets, mettre en majuscule la première lettre de chaque partie, puis rejoindre
+    return value.split('-').map(part => 
+      part.charAt(0).toUpperCase() + part.slice(1).toLowerCase()
+    ).join('-');
+  };
+
+  // Fonction pour formater le nom de famille avec gestion des espaces
+  const formatLastName = (value: string): string => {
+    if (!value) return '';
+    // Diviser par les espaces, mettre en majuscule la première lettre de chaque mot, puis rejoindre
+    return value.split(' ').map(word => 
+      word.charAt(0).toUpperCase() + word.slice(1).toLowerCase()
+    ).join(' ');
   };
 
   // Fonction pour nettoyer les caractères non autorisés (lettres et tirets uniquement)
@@ -256,15 +260,23 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
     return `${limited.slice(0, 2)} ${limited.slice(2, 4)} ${limited.slice(4, 6)} ${limited.slice(6, 8)} ${limited.slice(8)}`;
   };
 
+  // Fonction pour nettoyer l'email des caractères interdits
+  const cleanEmailInput = (value: string): string => {
+    // Supprimer les caractères spéciaux et accents, garder seulement lettres, chiffres, @, ., -, _
+    return value.replace(/[^a-zA-Z0-9@.\-_]/g, '');
+  };
+
   // Fonction pour valider et formater l'email
   const validateAndFormatEmail = (value: string): { value: string; isValid: boolean; error?: string } => {
-    const trimmedValue = value.trim().toLowerCase();
+    // Nettoyer d'abord l'email des caractères interdits
+    const cleanedValue = cleanEmailInput(value);
+    const trimmedValue = cleanedValue.trim().toLowerCase();
     
     if (!trimmedValue) {
       return { value: trimmedValue, isValid: false, error: 'Email requis' };
     }
     
-    // Vérifier les caractères interdits
+    // Vérifier les caractères interdits (double vérification)
     const forbiddenChars = /[<>()[\]\\,;:\s"{}|]/;
     if (forbiddenChars.test(trimmedValue)) {
       return { value: trimmedValue, isValid: false, error: 'Caractères interdits détectés' };
@@ -378,7 +390,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
     } else if (field === 'parentLastName') {
       // Traitement spécial pour le nom
       const processedValue = processLastName(value as string);
-      const formattedValue = formatToCamelCase(processedValue);
+      const formattedValue = formatLastName(processedValue);
       setFormData(prev => ({ ...prev, [field]: formattedValue }));
     } else if (field === 'parentPhone') {
       // Traitement spécial pour le téléphone
@@ -609,7 +621,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
                 id="parentFirstName"
                 value={formData.parentFirstName}
                 onChange={(e) => handleInputChange('parentFirstName', e.target.value)}
-                placeholder="Marie ou Marie-Claire"
+                placeholder="Jean ou Jean-Luc"
                 required
                 className="mt-1"
               />
@@ -623,7 +635,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
                 id="parentLastName"
                 value={formData.parentLastName}
                 onChange={(e) => handleInputChange('parentLastName', e.target.value)}
-                placeholder="Dupont"
+                placeholder="Dupont ou De La Fontaine"
                 required
                 className="mt-1"
               />
@@ -655,7 +667,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
                 type="email"
                 value={formData.parentEmail}
                 onChange={(e) => handleInputChange('parentEmail', e.target.value)}
-                placeholder="marie.dupont@gmail.com"
+                placeholder="exemple@email.com"
                 required
                 className={`mt-1 ${
                   formData.parentEmail && !emailValidation.isValid
@@ -708,9 +720,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
                     dynamicServices.map(service => (
                       <SelectItem key={service.code} value={service.code}>
                         <div className="flex items-center justify-between w-full">
-                          <span>{service.name}</span>
+                          <div className="flex flex-col">
+                            <span className="font-medium">{service.name}</span>
+                            {service.hasNightPrice && (
+                              <span className="text-xs text-gray-500">
+                                Jour: {service.basePrice}€/h | Nuit: {service.nightPrice}€/h
+                              </span>
+                            )}
+                          </div>
                           <Badge variant="secondary" className="ml-2">
-                            {service.basePrice}€/h
+                            {service.hasNightPrice ? `${service.basePrice}€/h` : `${service.basePrice}€/h`}
                           </Badge>
                         </div>
                       </SelectItem>
@@ -804,9 +823,14 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
               </span>
             </div>
             {formData.serviceType ? (
-              <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
-                Basé sur {getServiceTypeInfo(formData.serviceType)?.name} ({getServiceTypeInfo(formData.serviceType)?.basePrice}€/h)
-              </p>
+              <div className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+                <p>Basé sur {getServiceTypeInfo(formData.serviceType)?.name}</p>
+                {getServiceTypeInfo(formData.serviceType)?.hasNightPrice ? (
+                  <p>Tarifs: {getServiceTypeInfo(formData.serviceType)?.basePrice}€/h jour | {getServiceTypeInfo(formData.serviceType)?.nightPrice}€/h nuit</p>
+                ) : (
+                  <p>Tarif: {getServiceTypeInfo(formData.serviceType)?.basePrice}€/h</p>
+                )}
+              </div>
             ) : (
               <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
                 Sélectionnez un service pour voir l'estimation

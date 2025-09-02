@@ -16,6 +16,7 @@ import TestEmail from '@/pages/TestEmail';
 import Footer from '@/components/Footer';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
+import MouseTrail from '@/components/MouseTrail';
 import './App.css';
 
 // Composant wrapper pour le scroll automatique
@@ -42,6 +43,9 @@ function AppContent() {
       <div className="floating-sphere-1"></div>
       <div className="floating-sphere-2"></div>
       <div className="floating-sphere-3"></div>
+      
+      {/* Effet de traînée de bulles */}
+      <MouseTrail />
       
       <Navigation />
       <main>

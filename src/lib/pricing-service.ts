@@ -6,10 +6,22 @@ export interface PricingConfig {
   servicePrices: {
     babysitting: number;
     event_support: number;
-    overnight_care: number;
-    weekend_care: number;
-    holiday_care: number;
+    evening_care: number;
     emergency_care: number;
+  };
+  
+  // Tarifs de nuit par type de service
+  serviceNightPrices: {
+    event_support: number;
+    evening_care: number;
+  };
+  
+  // Configuration des tarifs de nuit
+  serviceNightConfig: {
+    event_support: boolean;
+    evening_care: boolean;
+    babysitting: boolean;
+    emergency_care: boolean;
   };
   
   // Supplément par enfant (à partir du 3ème enfant)
@@ -54,12 +66,20 @@ export class PricingService {
 
       const config: PricingConfig = {
         servicePrices: {
-          babysitting: parseFloat(settingsMap['pricing_service_babysitting'] || '15'),
-          event_support: parseFloat(settingsMap['pricing_service_event_support'] || '18'),
-          overnight_care: parseFloat(settingsMap['pricing_service_overnight_care'] || '22.50'),
-          weekend_care: parseFloat(settingsMap['pricing_service_weekend_care'] || '19.50'),
-          holiday_care: parseFloat(settingsMap['pricing_service_holiday_care'] || '21'),
-          emergency_care: parseFloat(settingsMap['pricing_service_emergency_care'] || '27'),
+          babysitting: parseFloat(settingsMap['pricing_service_babysitting'] || '20'),
+          event_support: parseFloat(settingsMap['pricing_service_event_support'] || '25'),
+          evening_care: parseFloat(settingsMap['pricing_service_evening_care'] || '20'),
+          emergency_care: parseFloat(settingsMap['pricing_service_emergency_care'] || '40'),
+        },
+        serviceNightPrices: {
+          event_support: parseFloat(settingsMap['pricing_service_event_support_night'] || '30'),
+          evening_care: parseFloat(settingsMap['pricing_service_evening_care_night'] || '25'),
+        },
+        serviceNightConfig: {
+          event_support: settingsMap['pricing_service_event_support_has_night'] === 'true',
+          evening_care: settingsMap['pricing_service_evening_care_has_night'] === 'true',
+          babysitting: settingsMap['pricing_service_babysitting_has_night'] === 'true',
+          emergency_care: settingsMap['pricing_service_emergency_care_has_night'] === 'true',
         },
         additionalChildRate: parseFloat(settingsMap['pricing_additional_child_rate'] || '5'),
         lastUpdated: new Date(settingsMap['pricing_last_updated'] || Date.now())
@@ -86,6 +106,20 @@ export class PricingService {
       if (config.servicePrices) {
         Object.entries(config.servicePrices).forEach(([service, price]) => {
           updates.push(SiteSettingsService.upsertSetting(`pricing_service_${service}`, price.toString()));
+        });
+      }
+
+      // Mettre à jour les tarifs de nuit
+      if (config.serviceNightPrices) {
+        Object.entries(config.serviceNightPrices).forEach(([service, price]) => {
+          updates.push(SiteSettingsService.upsertSetting(`pricing_service_${service}_night`, price.toString()));
+        });
+      }
+
+      // Mettre à jour la configuration des tarifs de nuit
+      if (config.serviceNightConfig) {
+        Object.entries(config.serviceNightConfig).forEach(([service, hasNight]) => {
+          updates.push(SiteSettingsService.upsertSetting(`pricing_service_${service}_has_night`, hasNight.toString()));
         });
       }
 
@@ -167,7 +201,9 @@ export class PricingService {
         services: Object.entries(config.servicePrices).map(([service, price]) => ({
           type: service,
           name: this.getServiceDisplayName(service),
-          price: price
+          price: price,
+          nightPrice: config.serviceNightPrices[service as keyof typeof config.serviceNightPrices] || null,
+          hasNightPrice: config.serviceNightConfig[service as keyof typeof config.serviceNightConfig] || false
         })),
         lastUpdated: config.lastUpdated
       };
@@ -184,9 +220,7 @@ export class PricingService {
     const serviceNames: { [key: string]: string } = {
       'babysitting': 'Garde d\'enfants',
       'event_support': 'Soutien événementiel',
-      'overnight_care': 'Garde de nuit',
-      'weekend_care': 'Garde de weekend',
-      'holiday_care': 'Garde pendant les vacances',
+      'evening_care': 'Garde en soirée',
       'emergency_care': 'Garde d\'urgence'
     };
     return serviceNames[serviceType] || serviceType;
@@ -197,12 +231,20 @@ export class PricingService {
     try {
       const defaultConfig: PricingConfig = {
         servicePrices: {
-          babysitting: 15,
-          event_support: 18,
-          overnight_care: 22.50,
-          weekend_care: 19.50,
-          holiday_care: 21,
-          emergency_care: 27,
+          babysitting: 20,
+          event_support: 25,
+          evening_care: 20,
+          emergency_care: 40,
+        },
+        serviceNightPrices: {
+          event_support: 30,
+          evening_care: 25,
+        },
+        serviceNightConfig: {
+          event_support: true,
+          evening_care: true,
+          babysitting: false,
+          emergency_care: false,
         },
         additionalChildRate: 5,
         lastUpdated: new Date()
