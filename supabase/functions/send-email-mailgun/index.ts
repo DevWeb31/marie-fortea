@@ -99,11 +99,19 @@ serve(async (req) => {
     );
 
   } catch (error) {
-    // Retourner une réponse d'erreur
+    console.error('Erreur dans send-email-mailgun:', error);
+    
+    // Retourner une réponse d'erreur avec plus de détails
     return new Response(
       JSON.stringify({ 
         success: false, 
         error: error.message || 'Erreur lors de l\'envoi de l\'email',
+        details: {
+          mailgunConfigured: !!(Deno.env.get('MAILGUN_API_KEY') && Deno.env.get('MAILGUN_DOMAIN')),
+          hasApiKey: !!Deno.env.get('MAILGUN_API_KEY'),
+          hasDomain: !!Deno.env.get('MAILGUN_DOMAIN'),
+          errorType: error.name || 'UnknownError'
+        },
         timestamp: new Date().toISOString()
       }),
       { 

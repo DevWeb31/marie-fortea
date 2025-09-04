@@ -28,21 +28,25 @@ export class EmailService {
       // Préparer le contenu de l'email
       const emailData = this.prepareBookingNotificationEmail(bookingRequest, notificationEmail.data);
 
-      // En production, utiliser Mailgun directement
-      
-      // Vérifier si la configuration Mailgun est disponible
-      const mailgunConfigured = await this.isMailgunConfigured();
-      
-      if (mailgunConfigured) {
+      // Essayer d'envoyer via Mailgun d'abord
+      try {
+        const result = await this.sendEmailViaMailgun(emailData);
+        console.log('Email envoyé avec succès via Mailgun');
+        return { data: true, error: null };
+      } catch (mailgunError) {
+        console.warn('Échec de l\'envoi via Mailgun, utilisation du fallback:', mailgunError);
+        
+        // Essayer le fallback SMTP
         try {
-          const result = await this.sendEmailViaMailgun(emailData);
+          const fallbackResult = await this.sendEmailViaFallback(emailData);
+          console.log('Email envoyé avec succès via fallback');
           return { data: true, error: null };
-        } catch (mailgunError) {
-          // Fallback vers la simulation
+        } catch (fallbackError) {
+          console.warn('Échec de l\'envoi via fallback, utilisation de la simulation:', fallbackError);
         }
       }
 
-      // Envoyer l'email via Mailgun ou fallback vers la simulation
+      // Dernier recours : simulation locale
       const { data, error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
@@ -307,20 +311,52 @@ ID de la demande : ${bookingRequest.id}
 
   // Envoyer un email via Mailgun
   private static async sendEmailViaMailgun(emailData: EmailData): Promise<any> {
-    // Utiliser l'Edge Function send-email-mailgun
-    const { data, error } = await supabase.functions.invoke('send-email-mailgun', {
-      body: emailData
-    });
+    try {
+      // Utiliser l'Edge Function send-email-mailgun
+      const { data, error } = await supabase.functions.invoke('send-email-mailgun', {
+        body: emailData
+      });
 
-    if (error) {
-      throw new Error(`Erreur Mailgun: ${error.message}`);
+      if (error) {
+        console.warn('Erreur Mailgun:', error.message);
+        throw new Error(`Erreur Mailgun: ${error.message}`);
+      }
+
+      // Vérifier si c'est une simulation
+      if (data && data.simulated) {
+        console.log('Email simulé via Mailgun (configuration manquante)');
+      }
+
+      return data;
+    } catch (error) {
+      console.warn('Échec de l\'envoi via Mailgun, utilisation du fallback:', error);
+      throw error;
     }
+  }
 
-    // Vérifier si c'est une simulation
-    if (data && data.simulated) {
+  // Envoyer un email via fallback (SMTP ou simulation)
+  private static async sendEmailViaFallback(emailData: EmailData): Promise<any> {
+    try {
+      // Utiliser l'Edge Function send-email-fallback
+      const { data, error } = await supabase.functions.invoke('send-email-fallback', {
+        body: emailData
+      });
+
+      if (error) {
+        console.warn('Erreur fallback:', error.message);
+        throw new Error(`Erreur fallback: ${error.message}`);
+      }
+
+      // Vérifier si c'est une simulation
+      if (data && data.simulated) {
+        console.log('Email simulé via fallback');
+      }
+
+      return data;
+    } catch (error) {
+      console.warn('Échec de l\'envoi via fallback:', error);
+      throw error;
     }
-
-    return data;
   }
 
   // Vérifier si Mailgun est configuré
