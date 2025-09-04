@@ -318,7 +318,6 @@ ID de la demande : ${bookingRequest.id}
 
     // Vérifier si c'est une simulation
     if (data && data.simulated) {
-      console.log('Email simulé en mode développement:', data.message);
     }
 
     return data;

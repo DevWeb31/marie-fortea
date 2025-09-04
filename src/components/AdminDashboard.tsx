@@ -16,7 +16,6 @@ import {
 import AdminBookingManager from './AdminBookingManager';
 import BookingKanbanBoard from './BookingKanbanBoard';
 import StatusChangeHistory from './StatusChangeHistory';
-import StatusTestComponent from './StatusTestComponent';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -368,7 +367,9 @@ const AdminDashboard: React.FC = () => {
 
           {/* Onglet Test */}
           <TabsContent value="test" className="space-y-6">
-            <StatusTestComponent />
+            <div className="text-center text-gray-500">
+              Composant de test supprimé
+            </div>
           </TabsContent>
         </Tabs>
       </div>

@@ -214,7 +214,7 @@ const SuccessAnimation: React.FC<SuccessAnimationProps> = ({
       </div>
 
       {/* Styles CSS pour les animations */}
-      <style jsx>{`
+      <style>{`
         @keyframes pulse {
           0%, 100% {
             transform: scale(1);

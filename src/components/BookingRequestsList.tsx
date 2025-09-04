@@ -18,7 +18,6 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import { BookingService } from '@/lib/booking-service';
@@ -31,17 +30,12 @@ import {
   formatDate 
 } from '@/types/booking';
 import {
-  Search,
-  Filter,
   Eye,
   Phone,
-  Mail,
   MessageSquare,
   Calendar,
   Clock,
-  MapPin,
   Baby,
-  Euro,
   RefreshCw,
   CheckCircle,
   XCircle,
@@ -49,8 +43,7 @@ import {
   Trash2,
   RotateCcw,
   Trash,
-  CheckSquare,
-  Square
+  CheckSquare
 } from 'lucide-react';
 import ConfirmDialog from '@/components/ui/confirm-dialog';
 import { supabase } from '@/lib/supabase';
@@ -544,8 +537,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleMoveToTrash = async (id: string) => {
     try {
-      console.log('🔄 Mise en corbeille avec mise à jour automatique du statut...');
-      console.log('Réservation:', id);
 
       // 1. D'abord, mettre à jour le statut vers "cancelled" (annulée)
       const { error: statusError } = await supabase
@@ -566,8 +557,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      console.log('✅ Statut mis à jour vers "cancelled"');
-
       // 2. Ensuite, mettre la réservation dans la corbeille
       const result = await BookingService.moveToTrash(id);
       
@@ -581,7 +570,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
-        console.log('✅ Réservation mise dans la corbeille avec succès');
         toast({
           title: 'Réservation supprimée',
           description: 'La réservation a été mise dans la corbeille et le statut a été mis à jour vers "Annulée"',
@@ -603,8 +591,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleRestoreFromTrash = async (id: string) => {
     try {
-      console.log('🔄 Restauration avec sélection de nouveau statut...');
-      console.log('Réservation:', id);
 
       // 1. D'abord, restaurer la réservation de la corbeille
       const result = await BookingService.restoreFromTrash(id);
@@ -618,7 +604,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
-        console.log('✅ Réservation restaurée avec succès');
         
         // 2. Ouvrir le dialogue de sélection de statut
         const request = deletedRequests.find(r => r.id === id);
@@ -691,8 +676,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleArchiveBooking = async (id: string) => {
     try {
-      console.log('🔄 Archivage avec mise à jour automatique du statut...');
-      console.log('Réservation:', id);
 
       // 1. D'abord, mettre à jour le statut vers "completed" (terminée)
       const { error: statusError } = await supabase
@@ -713,8 +696,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      console.log('✅ Statut mis à jour vers "completed"');
-
       // 2. Ensuite, archiver la réservation
       const result = await BookingService.archiveBooking(id);
       
@@ -728,7 +709,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
-        console.log('✅ Réservation archivée avec succès');
         toast({
           title: 'Réservation archivée',
           description: 'La réservation a été archivée avec succès et le statut a été mis à jour vers "Terminée"',
@@ -750,8 +730,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   const handleUnarchiveBooking = async (id: string) => {
     try {
-      console.log('🔄 Désarchivage avec sélection de nouveau statut...');
-      console.log('Réservation:', id);
 
       // 1. D'abord, désarchiver la réservation
       const result = await BookingService.unarchiveBooking(id);
@@ -766,7 +744,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
       }
 
       if (result.data) {
-        console.log('✅ Réservation désarchivée avec succès');
         
         // 2. Ouvrir le dialogue de sélection de statut
         const request = archivedRequests.find(r => r.id === id);
@@ -792,9 +769,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
     setIsUpdating(true);
     try {
-      console.log('🔄 Mise à jour du statut après restauration...');
-      console.log('Réservation:', restoreStatusDialog.requestId);
-      console.log('Nouveau statut:', newStatus);
 
       // Mettre à jour le statut
       const { error: statusError } = await supabase
@@ -815,7 +789,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      console.log('✅ Statut mis à jour avec succès');
       toast({
         title: 'Réservation restaurée',
         description: `La réservation a été restaurée avec succès et le statut a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
@@ -849,9 +822,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
     setIsUpdating(true);
     try {
-      console.log('🔄 Mise à jour du statut après désarchivage...');
-      console.log('Réservation:', unarchiveStatusDialog.requestId);
-      console.log('Nouveau statut:', newStatus);
 
       // Mettre à jour le statut
       const { error: statusError } = await supabase
@@ -872,7 +842,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      console.log('✅ Statut mis à jour avec succès');
       toast({
         title: 'Réservation désarchivée',
         description: `La réservation a été désarchivée avec succès et le statut a été mis à jour vers "${formatBookingStatus(newStatus)}"`,
@@ -904,11 +873,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
     setIsUpdating(true);
     try {
-      console.log('🔄 Mise à jour ULTRA SIMPLE du statut...');
-      console.log('Réservation:', selectedRequest.id);
-      console.log('Ancien statut:', selectedRequest.status);
-      console.log('Nouveau statut:', newStatus);
-      console.log('Note:', statusNote);
 
       // UNIQUEMENT la mise à jour du statut dans booking_requests
       const { error: statusError } = await supabase
@@ -929,7 +893,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         return;
       }
 
-      console.log('✅ Statut mis à jour avec succès - AUCUNE autre table utilisée');
 
       // Tentative d'ajout de note (optionnel, sans historique complexe)
       if (statusNote && statusNote.trim()) {
@@ -948,7 +911,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
             console.warn('⚠️ Erreur lors de l\'ajout de la note:', noteError);
             // Ne pas échouer si la note échoue
           } else {
-            console.log('✅ Note ajoutée avec succès');
           }
         } catch (noteError) {
           console.warn('⚠️ Erreur lors de l\'ajout de la note:', noteError);
@@ -982,17 +944,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
   // Fonction supprimée - plus nécessaire avec la logique ultra-simple
 
-  // Fonction pour obtenir les transitions disponibles (simplifiée)
-  const getAvailableTransitions = (currentStatus: string) => {
-    // Toutes les transitions sont autorisées (simplification)
-    return [
-      { fromCode: currentStatus, toCode: 'pending', requiresAdminApproval: false },
-      { fromCode: currentStatus, toCode: 'contacted', requiresAdminApproval: false },
-      { fromCode: currentStatus, toCode: 'confirmed', requiresAdminApproval: false },
-      { fromCode: currentStatus, toCode: 'cancelled', requiresAdminApproval: false },
-      { fromCode: currentStatus, toCode: 'completed', requiresAdminApproval: false },
-    ];
-  };
 
   const handleAddNote = async () => {
     if (!selectedRequest || !adminNote.trim()) return;
@@ -1039,9 +990,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
     setIsUpdating(true);
     try {
-      console.log('🔄 Désarchivage en lot avec mise à jour du statut...');
-      console.log('Réservations:', bulkUnarchiveStatusDialog.selectedRequests.length);
-      console.log('Nouveau statut:', newStatus);
 
       // 1. D'abord, désarchiver toutes les réservations
       await Promise.all(
@@ -1051,7 +999,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         })
       );
 
-      console.log('✅ Toutes les réservations désarchivées');
 
       // 2. Ensuite, mettre à jour le statut de toutes les réservations
       await Promise.all(
@@ -1068,7 +1015,6 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
         })
       );
 
-      console.log('✅ Statuts mis à jour avec succès');
       toast({
         title: 'Réservations désarchivées',
         description: `${bulkUnarchiveStatusDialog.selectedRequests.length} réservation(s) désarchivée(s) avec succès et le statut a été mis à jour vers "${formatBookingStatus(newStatus)}"`,

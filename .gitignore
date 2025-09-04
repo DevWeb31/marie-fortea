@@ -32,6 +32,28 @@ ENV_EXAMPLE.md
 .env.development
 .env.production
 
+# Fichiers avec données sensibles
+*.env.backup
+*.env.old
+.env.*.local
+.env.*.backup
+
+# Clés et tokens sensibles
+*secret*
+*key*
+*token*
+*credential*
+*password*
+
+# Fichiers de configuration avec données réelles
+config.local.*
+settings.local.*
+secrets.*
+
+# Fichiers de déploiement avec données sensibles
+deploy.local.*
+production.local.*
+
 # IDE and editors
 .vscode/
 .idea/
@@ -107,6 +129,7 @@ dist
 # Temporary folders
 tmp/
 temp/
+docs/temp/
 
 # Vercel
 .vercel

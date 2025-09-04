@@ -441,7 +441,6 @@ const AdminBookingManager: React.FC = () => {
                 <Button
                   onClick={() => {
                     // TODO: Implémenter le changement de statut
-                    console.log('Changer le statut vers:', newStatus);
                     setChangeStatusDialog(false);
                   }}
                   disabled={!newStatus}
