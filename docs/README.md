@@ -13,6 +13,7 @@ Bienvenue dans la documentation du projet Marie Fortea. Cette documentation est 
 ### Guides de déploiement
 - [**Déploiement en production**](./deployment/production.md) - Guide complet de déploiement
 - [**Gestion des environnements**](./deployment/environments.md) - Configuration dev/prod
+- [**Configuration Mailgun**](./deployment/mailgun-setup.md) - Configuration email en production
 
 ## 🛠️ Développement
 
