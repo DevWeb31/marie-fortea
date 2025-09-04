@@ -52,7 +52,7 @@ const Navigation = () => {
               <ThemeToggle />
               <Button
                 asChild
-                className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 text-white hover:from-blue-600 hover:to-blue-700"
+                className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 px-6 py-2 text-white hover:from-blue-600 hover:to-blue-700 hover:text-blue-100"
               >
                 <Link to="/booking">Réserver maintenant</Link>
               </Button>
@@ -116,7 +116,7 @@ const Navigation = () => {
                 </div>
                 <Button
                   asChild
-                  className="mt-3 w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-2.5 text-white hover:from-blue-600 hover:to-blue-700 transition-all duration-200 hover:scale-[1.02]"
+                  className="mt-3 w-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600 py-2.5 text-white hover:from-blue-600 hover:to-blue-700 hover:text-blue-100 transition-all duration-200 hover:scale-[1.02]"
                   onClick={() => setIsOpen(false)}
                 >
                   <Link to="/booking">Réserver maintenant</Link>

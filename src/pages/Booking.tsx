@@ -10,9 +10,9 @@ import {
   Star,
   Shield,
   CheckCircle,
-  Phone,
   Calendar,
-  Heart
+  MessageCircle,
+  Workflow
 } from 'lucide-react';
 
 const Booking = () => {
@@ -127,7 +127,8 @@ const Booking = () => {
             {/* Contact Direct */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-zinc-800/50 dark:to-zinc-700/50 backdrop-blur-sm rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg text-gray-900 dark:text-white">
+                <CardTitle className="font-['Poppins'] text-base sm:text-lg flex items-center text-gray-900 dark:text-white">
+                  <MessageCircle className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Contact Direct
                 </CardTitle>
               </CardHeader>
@@ -135,9 +136,9 @@ const Booking = () => {
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={handlePhoneClick}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                   >
-                    <Phone className="h-5 w-5 text-white" />
+                    <span className="text-white text-sm">📞</span>
                   </button>
                   <div>
                     <div className="text-sm font-medium sm:text-base text-left">
@@ -163,7 +164,8 @@ const Booking = () => {
             {/* Processus Simplifié */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
               <CardHeader className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-zinc-800/50 dark:to-zinc-700/50 backdrop-blur-sm rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
+                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg flex items-center">
+                  <Workflow className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Processus Simplifié
                 </CardTitle>
               </CardHeader>

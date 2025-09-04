@@ -14,19 +14,13 @@ import {
 } from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
 import { PricingService, PricingConfig } from '@/lib/pricing-service';
-import { Euro, Save, RefreshCw, Calculator, TrendingUp, Users, Clock, AlertTriangle } from 'lucide-react';
+import { Euro, Save, RefreshCw, TrendingUp, Users, Clock, AlertTriangle } from 'lucide-react';
 
 const PricingManagement: React.FC = () => {
   const { toast } = useToast();
   const [config, setConfig] = useState<PricingConfig | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [previewCalculation, setPreviewCalculation] = useState<any>(null);
-  const [previewInputs, setPreviewInputs] = useState({
-    serviceType: 'babysitting',
-    durationHours: 2,
-    childrenCount: 1
-  });
   const [selectedService, setSelectedService] = useState<string>('');
 
   // Charger la configuration des prix
@@ -85,32 +79,6 @@ const PricingManagement: React.FC = () => {
       });
     } finally {
       setSaving(false);
-    }
-  };
-
-  // Calculer un exemple de prix
-  const calculatePreview = async () => {
-    try {
-      const { data, error } = await PricingService.calculatePrice(
-        previewInputs.serviceType,
-        previewInputs.durationHours,
-        previewInputs.childrenCount
-      );
-      if (error) {
-        toast({
-          title: 'Erreur',
-          description: error,
-          variant: 'destructive',
-        });
-      } else {
-        setPreviewCalculation(data);
-      }
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Erreur lors du calcul',
-        variant: 'destructive',
-      });
     }
   };
 
@@ -367,102 +335,7 @@ const PricingManagement: React.FC = () => {
         </Card>
       </div>
 
-      {/* Calculateur de prix en temps réel */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Calculator className="h-5 w-5 mr-2" />
-            Calculateur de Prix
-          </CardTitle>
-          <CardDescription>
-            Testez vos tarifs avec différents paramètres
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
-            <div>
-              <Label htmlFor="previewService">Type de service</Label>
-              <Select
-                value={previewInputs.serviceType}
-                onValueChange={(value) => setPreviewInputs({ ...previewInputs, serviceType: value })}
-              >
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Sélectionnez un type de service" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="babysitting">{getServiceDisplayName('babysitting')}</SelectItem>
-                  <SelectItem value="event_support">{getServiceDisplayName('event_support')}</SelectItem>
-                  <SelectItem value="evening_care">{getServiceDisplayName('evening_care')}</SelectItem>
-                  <SelectItem value="emergency_care">{getServiceDisplayName('emergency_care')}</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
 
-            <div>
-              <Label htmlFor="previewDuration">Durée (heures)</Label>
-              <Input
-                id="previewDuration"
-                type="number"
-                min="0.5"
-                step="0.5"
-                value={previewInputs.durationHours}
-                onChange={(e) => setPreviewInputs({ ...previewInputs, durationHours: parseFloat(e.target.value) || 1 })}
-                className="mt-1"
-              />
-            </div>
-
-            <div>
-              <Label htmlFor="previewChildren">Nombre d'enfants</Label>
-              <Input
-                id="previewChildren"
-                type="number"
-                min="1"
-                max="10"
-                value={previewInputs.childrenCount}
-                onChange={(e) => setPreviewInputs({ ...previewInputs, childrenCount: parseInt(e.target.value) || 1 })}
-                className="mt-1"
-              />
-            </div>
-          </div>
-
-          <Button onClick={calculatePreview} className="mb-4">
-            <Calculator className="h-4 w-4 mr-2" />
-            Calculer le prix
-          </Button>
-
-          {previewCalculation && (
-            <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Résultat du calcul :</h4>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span>Prix de base ({previewCalculation.breakdown.durationHours}h × {previewCalculation.breakdown.hourlyRate}€) :</span>
-                  <span>{previewCalculation.baseAmount.toFixed(2)}€</span>
-                </div>
-                <div className="text-sm text-gray-500 mb-2">
-                  Service : {getServiceDisplayName(previewCalculation.breakdown.serviceType)}
-                </div>
-                {previewCalculation.additionalChildrenAmount > 0 && (
-                  <div className="flex justify-between">
-                    <span>Supplément enfants supplémentaires :</span>
-                    <span>+{previewCalculation.additionalChildrenAmount.toFixed(2)}€</span>
-                  </div>
-                )}
-                {previewCalculation.additionalChildrenAmount > 0 && (
-                  <div className="flex justify-between">
-                    <span>Supplément enfants supplémentaires (à partir du 3ème) :</span>
-                    <span>+{previewCalculation.additionalChildrenAmount.toFixed(2)}€</span>
-                  </div>
-                )}
-                <Separator />
-                <div className="flex justify-between font-bold text-lg">
-                  <span>Total :</span>
-                  <span className="text-green-600">{previewCalculation.totalAmount.toFixed(2)}€</span>
-                </div>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
 
       {/* Informations sur la dernière mise à jour */}
       <Card>

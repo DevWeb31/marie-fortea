@@ -317,16 +317,18 @@ export class BookingService {
       return 'La date de garde ne peut pas être dans le passé';
     }
 
-    // Vérifier que l'heure de fin est après l'heure de début
-    if (data.startTime >= data.endTime) {
-      return 'L\'heure de fin doit être après l\'heure de début';
-    }
-
-    // Vérifier la durée minimale (3 heures)
+    // Vérifier que l'heure de fin est après l'heure de début (en tenant compte du passage à minuit)
     const startTime = new Date(`2000-01-01T${data.startTime}`);
     const endTime = new Date(`2000-01-01T${data.endTime}`);
+    
+    // Si l'heure de fin est avant l'heure de début, c'est le lendemain
+    if (endTime <= startTime) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+    
     const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
     
+    // Vérifier la durée minimale (3 heures)
     if (durationHours < 3) {
       return 'La durée minimale de garde est de 3 heures';
     }

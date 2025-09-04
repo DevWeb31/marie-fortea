@@ -319,6 +319,14 @@ const AdminBookingManager: React.FC = () => {
                             <p className="text-sm text-gray-600">
                               {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
                             </p>
+                            <p className="text-sm text-gray-600">
+                              Durée: {booking.durationHours} heures
+                            </p>
+                            {booking.estimatedTotal && (
+                              <p className="text-sm font-medium text-green-600">
+                                {booking.estimatedTotal.toFixed(2)}€
+                              </p>
+                            )}
                           </div>
                           
                           <div>

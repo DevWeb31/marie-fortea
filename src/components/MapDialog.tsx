@@ -119,44 +119,45 @@ const MapDialog: React.FC<MapDialogProps> = ({ isOpen, onClose }) => {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl w-[90vw] h-[80vh] p-0">
-        <DialogHeader className="p-6 pb-0">
-          <DialogTitle className="text-xl font-semibold">
+      <DialogContent className="w-[95vw] max-w-xs sm:max-w-sm md:max-w-2xl lg:max-w-4xl h-[85vh] sm:h-[80vh] p-0">
+        <DialogHeader className="p-3 sm:p-4 md:p-6 pb-0">
+          <DialogTitle className="text-base sm:text-lg md:text-xl font-semibold">
             Zone de service - Montaigut sur Save
           </DialogTitle>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="absolute right-4 top-4 h-8 w-8 p-0"
+            className="absolute right-2 top-2 sm:right-4 sm:top-4 h-6 w-6 sm:h-8 sm:w-8 p-0 bg-white/80 hover:bg-white dark:bg-gray-800/80 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700"
           >
-            <X className="h-4 w-4" />
+            <X className="h-3 w-3 sm:h-4 sm:w-4" />
           </Button>
         </DialogHeader>
         
-        <div className="px-6 pb-6">
-          <p className="text-sm text-gray-600 mb-4">
+        <div className="px-3 sm:px-4 md:px-6 pb-3 sm:pb-4 md:pb-6">
+          <p className="text-xs sm:text-sm text-gray-600 mb-2 sm:mb-3 md:mb-4">
             Carte interactive montrant la zone de service de Marie Fortea avec un rayon de 20 km autour de Montaigut sur Save.
           </p>
           
-          <div className="w-full h-[60vh] rounded-lg border border-gray-200 relative bg-gray-50" style={{ minHeight: '400px' }}>
+          <div className="w-full h-[65vh] sm:h-[60vh] md:h-[55vh] rounded-lg border border-gray-200 relative bg-gray-50" style={{ minHeight: '300px' }}>
             {isLoading && (
               <div className="absolute inset-0 flex items-center justify-center bg-gray-50 bg-opacity-75 rounded-lg">
                 <div className="flex items-center space-x-2">
-                  <Loader2 className="h-6 w-6 animate-spin text-blue-500" />
-                  <span className="text-gray-600">Chargement de la carte...</span>
+                  <Loader2 className="h-4 w-4 sm:h-6 sm:w-6 animate-spin text-blue-500" />
+                  <span className="text-xs sm:text-sm text-gray-600">Chargement de la carte...</span>
                 </div>
               </div>
             )}
             
             {error && (
               <div className="absolute inset-0 flex items-center justify-center bg-red-50 bg-opacity-75 rounded-lg">
-                <div className="text-center">
-                  <p className="text-red-600 mb-2">{error}</p>
+                <div className="text-center p-4">
+                  <p className="text-xs sm:text-sm text-red-600 mb-2">{error}</p>
                   <Button 
                     onClick={() => window.location.reload()} 
                     variant="outline" 
                     size="sm"
+                    className="text-xs sm:text-sm"
                   >
                     Réessayer
                   </Button>

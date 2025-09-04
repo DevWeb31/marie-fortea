@@ -8,6 +8,7 @@ interface CaptchaProps {
   onVerified: (token: string) => void;
   onError?: (error: string) => void;
   className?: string;
+  resetTrigger?: number; // Prop pour déclencher une réinitialisation
 }
 
 interface CaptchaChallenge {
@@ -16,7 +17,7 @@ interface CaptchaChallenge {
   token: string;
 }
 
-const Captcha: React.FC<CaptchaProps> = ({ onVerified, onError, className = '' }) => {
+const Captcha: React.FC<CaptchaProps> = ({ onVerified, onError, className = '', resetTrigger }) => {
   const [challenge, setChallenge] = useState<CaptchaChallenge | null>(null);
   const [userAnswer, setUserAnswer] = useState<string>('');
   const [isVerified, setIsVerified] = useState(false);
@@ -50,6 +51,17 @@ const Captcha: React.FC<CaptchaProps> = ({ onVerified, onError, className = '' }
   useEffect(() => {
     setChallenge(generateChallenge());
   }, []);
+
+  // Réinitialiser le captcha quand resetTrigger change
+  useEffect(() => {
+    if (resetTrigger !== undefined) {
+      setChallenge(generateChallenge());
+      setUserAnswer('');
+      setIsVerified(false);
+      setIsLoading(false);
+      setError('');
+    }
+  }, [resetTrigger]);
 
   // Valider la réponse
   const validateAnswer = async () => {

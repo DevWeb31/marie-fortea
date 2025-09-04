@@ -1,6 +1,21 @@
 -- Migration pour créer la table des demandes de réservation
 -- Date: 2025-01-17
 
+-- Fonction pour calculer la durée en tenant compte du passage à minuit
+CREATE OR REPLACE FUNCTION calculate_duration_hours_corrected(start_time TIME, end_time TIME)
+RETURNS DECIMAL(4,2) AS $$
+BEGIN
+    -- Si l'heure de fin est avant l'heure de début, c'est le lendemain
+    IF end_time <= start_time THEN
+        -- Ajouter 24 heures pour le passage à minuit
+        RETURN EXTRACT(EPOCH FROM (end_time + INTERVAL '24 hours' - start_time)) / 3600;
+    ELSE
+        -- Même jour
+        RETURN EXTRACT(EPOCH FROM (end_time - start_time)) / 3600;
+    END IF;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
 -- Table principale des demandes de réservation
 CREATE TABLE IF NOT EXISTS booking_requests (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -22,7 +37,7 @@ CREATE TABLE IF NOT EXISTS booking_requests (
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     duration_hours DECIMAL(4,2) GENERATED ALWAYS AS (
-        EXTRACT(EPOCH FROM (end_time - start_time)) / 3600
+        calculate_duration_hours_corrected(start_time, end_time)
     ) STORED,
     
     -- Informations sur les enfants
