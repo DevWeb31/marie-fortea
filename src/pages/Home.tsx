@@ -5,7 +5,6 @@ import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
-import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import AnimatedNumber from '@/components/AnimatedNumber';
 
 import {
@@ -18,19 +17,14 @@ import {
   Baby,
   Calendar,
   MapPin,
-  Phone,
 } from 'lucide-react';
 
 const Home = () => {
-  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [whyMarieMousePosition, setWhyMarieMousePosition] = useState({ x: 0, y: 0 });
   const imageRef = useRef<HTMLDivElement>(null);
   const whyMarieImageRef = useRef<HTMLDivElement>(null);
 
-  const handlePhoneClick = () => {
-    setIsPhoneDialogOpen(true);
-  };
 
   const handleMouseMove = (e: React.MouseEvent) => {
     if (imageRef.current) {
@@ -449,7 +443,7 @@ const Home = () => {
             d'urgence.
           </p>
 
-          <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
+          <div className="flex justify-center px-4">
             <HarmoniousButton
               asChild
               variant="primary"
@@ -460,23 +454,10 @@ const Home = () => {
                 Faire une demande
               </Link>
             </HarmoniousButton>
-
-            <button
-              onClick={handlePhoneClick}
-              className="inline-flex items-center justify-center rounded-lg bg-gray-100 px-6 py-3 text-lg font-semibold text-gray-700 backdrop-blur-sm transition-all duration-200 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-            >
-              <Phone className="h-6 w-6" />
-            </button>
           </div>
         </div>
       </section>
 
-      {/* Phone Hours Dialog */}
-      <PhoneHoursDialog
-        isOpen={isPhoneDialogOpen}
-        onClose={() => setIsPhoneDialogOpen(false)}
-        phoneNumber="07 57 57 93 30"
-      />
     </div>
   );
 };

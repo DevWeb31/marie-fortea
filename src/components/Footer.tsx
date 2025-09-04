@@ -95,7 +95,7 @@ const Footer = () => {
               <div className="flex items-start space-x-3">
                 <button
                   onClick={handlePhoneClick}
-                  className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-blue-500 hover:bg-blue-600 transition-colors duration-200 cursor-pointer"
+                  className="mt-0.5 flex h-8 w-8 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                 >
                   <span className="text-white text-xs font-bold">📞</span>
                 </button>

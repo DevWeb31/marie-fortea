@@ -317,16 +317,18 @@ export class BookingService {
       return 'La date de garde ne peut pas être dans le passé';
     }
 
-    // Vérifier que l'heure de fin est après l'heure de début
-    if (data.startTime >= data.endTime) {
-      return 'L\'heure de fin doit être après l\'heure de début';
-    }
-
-    // Vérifier la durée minimale (3 heures)
+    // Vérifier que l'heure de fin est après l'heure de début (en tenant compte du passage à minuit)
     const startTime = new Date(`2000-01-01T${data.startTime}`);
     const endTime = new Date(`2000-01-01T${data.endTime}`);
+    
+    // Si l'heure de fin est avant l'heure de début, c'est le lendemain
+    if (endTime <= startTime) {
+      endTime.setDate(endTime.getDate() + 1);
+    }
+    
     const durationHours = (endTime.getTime() - startTime.getTime()) / (1000 * 60 * 60);
     
+    // Vérifier la durée minimale (3 heures)
     if (durationHours < 3) {
       return 'La durée minimale de garde est de 3 heures';
     }
@@ -370,23 +372,20 @@ export class BookingService {
   // Mettre une réservation dans la corbeille (soft delete)
   static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
     try {
-      console.log('🔄 Tentative de mise à la corbeille pour:', id);
       
       // Première tentative : utiliser la fonction RPC
       const { data: rpcData, error: rpcError } = await supabase
         .rpc('soft_delete_booking_request', { booking_id: id });
 
       if (rpcError) {
-        console.warn('Fonction RPC échouée, tentative de mise à jour directe:', rpcError.message);
+        // Fonction RPC échouée, tentative de mise à jour directe
       } else if (rpcData === true) {
-        console.log('✅ RPC réussi pour la réservation:', id);
         return { data: true, error: null };
       } else {
         console.warn('RPC retourne false, tentative de mise à jour directe');
       }
       
       // Solution de contournement : mise à jour directe de la table
-      console.log('🔄 Tentative de mise à jour directe...');
       
       const { data: directData, error: directError } = await supabase
         .from('booking_requests')
@@ -403,7 +402,6 @@ export class BookingService {
       }
 
       if (directData && directData.length > 0) {
-        console.log('✅ Mise à jour directe réussie pour la réservation:', id);
         return { data: true, error: null };
       } else {
         console.warn('⚠️ Aucune ligne affectée par la mise à jour directe');
@@ -422,10 +420,8 @@ export class BookingService {
 
         if (checkData) {
           if (checkData.deleted_at) {
-            console.log('ℹ️ Réservation déjà dans la corbeille');
             return { data: null, error: 'Réservation déjà dans la corbeille' };
           } else if (checkData.archived_at) {
-            console.log('ℹ️ Réservation déjà archivée');
             return { data: null, error: 'Réservation déjà archivée' };
           } else {
             console.error('❌ Réservation trouvée mais mise à jour impossible - problème de permissions RLS');

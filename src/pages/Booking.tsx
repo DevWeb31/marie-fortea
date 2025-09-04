@@ -10,9 +10,9 @@ import {
   Star,
   Shield,
   CheckCircle,
-  Phone,
   Calendar,
-  Heart
+  MessageCircle,
+  Workflow
 } from 'lucide-react';
 
 const Booking = () => {
@@ -96,9 +96,9 @@ const Booking = () => {
           <div className="order-1 space-y-4 sm:space-y-6 lg:order-2">
             {/* Sécurité et Confiance */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
-              <CardHeader className="bg-gradient-to-br from-green-500 to-blue-500 text-white rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg flex items-center">
-                  <Shield className="mr-2 h-5 w-5" />
+              <CardHeader className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-zinc-800/50 dark:to-zinc-700/50 backdrop-blur-sm rounded-t-xl">
+                <CardTitle className="font-['Poppins'] text-base sm:text-lg flex items-center text-gray-900 dark:text-white">
+                  <Shield className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Sécurité & Confiance
                 </CardTitle>
               </CardHeader>
@@ -126,8 +126,9 @@ const Booking = () => {
 
             {/* Contact Direct */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
-              <CardHeader className="bg-gradient-to-br from-blue-500 to-green-500 text-white rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base sm:text-lg">
+              <CardHeader className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-zinc-800/50 dark:to-zinc-700/50 backdrop-blur-sm rounded-t-xl">
+                <CardTitle className="font-['Poppins'] text-base sm:text-lg flex items-center text-gray-900 dark:text-white">
+                  <MessageCircle className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Contact Direct
                 </CardTitle>
               </CardHeader>
@@ -135,9 +136,9 @@ const Booking = () => {
                 <div className="flex items-center space-x-3">
                   <button
                     onClick={handlePhoneClick}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-blue-600 hover:bg-blue-700 transition-colors duration-200 cursor-pointer"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 shadow-lg hover:shadow-xl transition-all duration-300 cursor-pointer"
                   >
-                    <Phone className="h-5 w-5 text-white" />
+                    <span className="text-white text-sm">📞</span>
                   </button>
                   <div>
                     <div className="text-sm font-medium sm:text-base text-left">
@@ -162,8 +163,9 @@ const Booking = () => {
 
             {/* Processus Simplifié */}
             <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
-              <CardHeader className="rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg">
+              <CardHeader className="bg-gradient-to-r from-blue-50/50 to-green-50/50 dark:from-zinc-800/50 dark:to-zinc-700/50 backdrop-blur-sm rounded-t-xl">
+                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg flex items-center">
+                  <Workflow className="mr-2 h-5 w-5 text-blue-600 dark:text-blue-400" />
                   Processus Simplifié
                 </CardTitle>
               </CardHeader>
@@ -197,35 +199,7 @@ const Booking = () => {
               </CardContent>
             </Card>
 
-            {/* Pourquoi me faire confiance */}
-            <Card className="border-0 shadow-lg rounded-xl overflow-hidden dark:border-zinc-800 dark:bg-zinc-900/90 backdrop-blur-sm">
-              <CardHeader className="rounded-t-xl">
-                <CardTitle className="font-['Poppins'] text-base dark:text-white sm:text-lg flex items-center">
-                  <Heart className="mr-2 h-4 w-4 text-red-500" />
-                  Pourquoi me faire confiance ?
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-3 p-4 sm:space-y-4 sm:p-6">
-                <div className="space-y-2 text-sm text-gray-700 dark:text-gray-300">
-                  <div className="flex items-start space-x-2">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Expérience de 10+ ans en garde d'enfants</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <div className="w-2 h-2 bg-green-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Formation en puériculture et premiers secours</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <div className="w-2 h-2 bg-purple-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Références vérifiées et satisfaites</span>
-                  </div>
-                  <div className="flex items-start space-x-2">
-                    <div className="w-2 h-2 bg-orange-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <span>Approche bienveillante et adaptée à chaque enfant</span>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
+
           </div>
         </div>
       </div>

@@ -244,9 +244,13 @@ SELECT
     bs.name as status_name,
     bs.color as status_color,
     bs.icon as status_icon,
-    bs.description as status_description
+    bs.description as status_description,
+    st.name as service_name,
+    st.base_price,
+    (st.base_price * br.duration_hours) as estimated_total
 FROM booking_requests br
 JOIN booking_statuses bs ON br.status_id = bs.id
+LEFT JOIN service_types st ON br.service_type = st.code
 WHERE br.deleted_at IS NULL
 ORDER BY br.created_at DESC;
 

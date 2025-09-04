@@ -1,5 +1,4 @@
 import React from 'react';
-import TestBookingForm from '@/components/TestBookingForm';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { AlertCircle, Mail, Settings, Database } from 'lucide-react';
 
@@ -86,7 +85,9 @@ const TestEmail: React.FC = () => {
         </div>
 
         {/* Formulaire de test */}
-        <TestBookingForm />
+        <div className="text-center text-gray-500">
+          Composant de test supprimé
+        </div>
 
         {/* Liens utiles */}
         <Card className="mt-8">

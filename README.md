@@ -77,6 +77,27 @@ Le site se déploie automatiquement sur Vercel via GitHub Actions lors des pushe
 
 ## 📚 **Documentation**
 
+### 📖 Documentation complète
+- **[Documentation complète](./docs/README.md)** - Index de toute la documentation
+
+### 🚀 Démarrage rapide
+- [Installation](./docs/getting-started/installation.md) - Guide d'installation
+- [Configuration Supabase](./docs/getting-started/configuration.md) - Configuration initiale
+- [Scripts utilitaires](./scripts/README.md) - Scripts de configuration et déploiement
+
+### 🚀 Déploiement
+- [Déploiement en production](./docs/deployment/production.md) - Guide de déploiement
+- [Gestion des environnements](./docs/deployment/environments.md) - Configuration dev/prod
+
+### 🛠️ Développement
+- [Structure de la base de données](./docs/development/database.md) - Schéma et relations
+- [Système de réservation](./docs/development/booking-system.md) - Architecture
+- [Système d'email](./docs/development/email-system.md) - Configuration email
+
+### 🔐 Sécurité
+- [Guide de sécurité](./docs/security/security-guide.md) - Bonnes pratiques
+
+### Documentation externe
 - [Architecture DevWeb31](https://devweb31.com)
 - [Documentation Supabase](https://supabase.com/docs)
 - [Documentation Vercel](https://vercel.com/docs)

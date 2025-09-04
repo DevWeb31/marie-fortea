@@ -284,7 +284,6 @@ const BookingKanbanBoard: React.FC = () => {
                           className="w-full h-8 text-xs text-gray-500 hover:text-gray-700"
                           onClick={() => {
                             // TODO: Implémenter l'ajout de réservation
-                            console.log('Ajouter une réservation dans:', column.title);
                           }}
                         >
                           <Plus className="w-3 h-3 mr-1" />
@@ -353,7 +352,6 @@ const BookingKanbanBoard: React.FC = () => {
                 <Button
                   onClick={() => {
                     // TODO: Implémenter le changement de statut
-                    console.log('Changer le statut vers:', newStatus);
                     setChangeStatusDialog(false);
                   }}
                   disabled={!newStatus}
@@ -486,7 +484,6 @@ const BookingKanbanBoard: React.FC = () => {
                   variant="outline"
                   onClick={() => {
                     // TODO: Implémenter l'édition
-                    console.log('Éditer la réservation');
                   }}
                   className="flex-1"
                 >

@@ -1,11 +1,9 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import HarmoniousButton from '@/components/ui/harmonious-button';
 import { Link } from 'react-router-dom';
 import { AnimatedSection, AnimatedTitle, AnimatedCard } from '@/components/ScrollAnimation';
-import PhoneHoursDialog from '@/components/PhoneHoursDialog';
 import AnimatedNumber from '@/components/AnimatedNumber';
 import {
   Award,
@@ -13,26 +11,18 @@ import {
   Star,
   GraduationCap,
   Users,
-  Clock,
-  Baby,
   Shield,
   BookOpen,
-  CheckCircle,
   MapPin,
   Calendar,
-  Phone,
 } from 'lucide-react';
 
 const About = () => {
-  const [isPhoneDialogOpen, setIsPhoneDialogOpen] = useState(false);
   const [aboutImageMousePosition, setAboutImageMousePosition] = useState({ x: 0, y: 0 });
   const [serviceAreaMousePosition, setServiceAreaMousePosition] = useState({ x: 0, y: 0 });
   const aboutImageRef = useRef<HTMLDivElement>(null);
   const serviceAreaImageRef = useRef<HTMLDivElement>(null);
 
-  const handlePhoneClick = () => {
-    setIsPhoneDialogOpen(true);
-  };
 
   const handleAboutImageMouseMove = (e: React.MouseEvent) => {
     if (aboutImageRef.current) {
@@ -554,7 +544,7 @@ const About = () => {
             Contactez-moi pour discuter de vos besoins et planifier une première
             rencontre.
           </p>
-          <div className="flex flex-col justify-center gap-3 px-4 sm:flex-row sm:gap-4">
+          <div className="flex justify-center px-4">
             <HarmoniousButton
               asChild
               variant="primary"
@@ -565,22 +555,9 @@ const About = () => {
                 Faire une demande
               </Link>
             </HarmoniousButton>
-            
-            <button
-              onClick={handlePhoneClick}
-              className="inline-flex items-center justify-center rounded-lg bg-gray-100 px-6 py-3 text-lg font-semibold text-gray-700 backdrop-blur-sm transition-all duration-200 hover:bg-gray-200 hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-300 focus:ring-offset-2 dark:bg-gray-800 dark:text-gray-200 dark:hover:bg-gray-700"
-            >
-              <Phone className="h-6 w-6" />
-            </button>
           </div>
         </AnimatedSection>
 
-        {/* Phone Hours Dialog */}
-        <PhoneHoursDialog
-          isOpen={isPhoneDialogOpen}
-          onClose={() => setIsPhoneDialogOpen(false)}
-          phoneNumber="07 57 57 93 30"
-        />
       </div>
     </div>
   );

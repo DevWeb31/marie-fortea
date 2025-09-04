@@ -6,7 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
 import { SiteSettingsService } from '@/lib/site-settings-service';
-import { hashPassword, verifyPassword } from '@/lib/password-utils';
+import { hashPassword } from '@/lib/password-utils';
 import { getCurrentConfig } from '@/config/environments';
 import { 
   Mail, 
@@ -323,17 +323,6 @@ const SmtpSettingsManager: React.FC = () => {
     return editedValues[key] || '';
   };
 
-  const getSettingDisplayName = (key: string) => {
-    const displayNames: { [key: string]: string } = {
-      'smtp_host': 'Serveur SMTP',
-      'smtp_port': 'Port SMTP',
-      'smtp_username': 'Nom d\'utilisateur',
-      'smtp_password': 'Mot de passe',
-      'smtp_from': 'Email d\'expédition',
-      'smtp_encryption': 'Type d\'encryption'
-    };
-    return displayNames[key] || key;
-  };
 
   const getSettingDescription = (key: string) => {
     const descriptions: { [key: string]: string } = {
