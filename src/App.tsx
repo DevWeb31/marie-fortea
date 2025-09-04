@@ -7,6 +7,7 @@ import Home from '@/pages/Home';
 import Services from '@/pages/Services';
 import About from '@/pages/About';
 import Booking from '@/pages/Booking';
+import NotFound from '@/pages/NotFound';
 import AdminLogin from '@/pages/AdminLogin';
 import AdminDashboard from '@/pages/AdminDashboard';
 import PricingManagement from '@/pages/PricingManagement';
@@ -55,6 +56,7 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/test-email" element={<TestEmail />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
