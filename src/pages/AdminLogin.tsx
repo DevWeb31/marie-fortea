@@ -146,7 +146,7 @@ const AdminLogin = () => {
             <div className="mt-6 text-center">
               <button
                 onClick={() => navigate('/')}
-                className="text-sm text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-300 transition-colors duration-200"
+                className="text-sm text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 bg-gray-100 hover:bg-gray-200 dark:bg-transparent dark:hover:bg-gray-800/50 px-3 py-2 rounded-lg transition-all duration-200"
               >
                 ← Retour à l'accueil
               </button>

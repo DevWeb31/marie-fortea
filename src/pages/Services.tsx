@@ -63,7 +63,7 @@ const Services = () => {
           'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
         features: [
           `Garde de 1 à 3 enfants (majoration de ${defaultAdditionalChildRate}€ pour le 3ème enfant)`,
-          'Activitités adaptées à l\'âge',
+          'Activités adaptées à l\'âge',
           'Matériel pédagogique fourni',
           'Carnet de suivi d\'accompagnement',
         ],

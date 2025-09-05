@@ -17,6 +17,7 @@ import SuccessAnimation from './SuccessAnimation';
 import { BookingService } from '@/lib/booking-service';
 import { PricingService } from '@/lib/pricing-service';
 import { Calendar, Baby, User, CheckCircle, AlertCircle, Calculator } from 'lucide-react';
+import { FormDatePicker } from '@/components/ui/date-picker';
 
 interface BookingFormProps {
   onSuccess?: () => void;
@@ -1280,18 +1281,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
             </div>
             
             <div>
-              <Label htmlFor="startDate" className="text-sm font-medium">
-                Date de garde *
-              </Label>
-              <Input
+              <FormDatePicker
                 id="startDate"
-                type="date"
+                label="Date de garde"
                 value={formData.startDate}
-                onChange={(e) => handleInputChange('startDate', e.target.value)}
-                min={new Date().toISOString().split('T')[0]}
+                onChange={(value) => handleInputChange('startDate', value)}
+                minDate={new Date().toISOString().split('T')[0]}
                 required
                 disabled={!formData.serviceType}
-                className={`mt-1 ${!formData.serviceType ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ''}`}
+                placeholder="Sélectionner une date"
+                className={!formData.serviceType ? 'opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800' : ''}
               />
             </div>
           </div>

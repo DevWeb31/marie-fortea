@@ -209,4 +209,42 @@ export class SiteSettingsService {
       return { data: null, error: 'Erreur lors du test de connexion SMTP' };
     }
   }
+
+  // Vérifier si le mode maintenance est activé
+  static async isMaintenanceModeEnabled(): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const result = await this.getSettingByKey('maintenance_mode');
+      
+      if (result.error) {
+        return { data: null, error: result.error };
+      }
+      
+      if (result.data === null) {
+        // Si le paramètre n'existe pas, le créer avec la valeur par défaut
+        await this.upsertSetting('maintenance_mode', 'false');
+        return { data: false, error: null };
+      }
+      
+      return { data: result.data === 'true', error: null };
+    } catch (error) {
+      console.error('Erreur lors de la vérification du mode maintenance:', error);
+      return { data: null, error: 'Erreur lors de la vérification du mode maintenance' };
+    }
+  }
+
+  // Activer ou désactiver le mode maintenance
+  static async setMaintenanceMode(enabled: boolean): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const result = await this.upsertSetting('maintenance_mode', enabled.toString());
+      
+      if (result.error) {
+        return { data: null, error: result.error };
+      }
+      
+      return { data: true, error: null };
+    } catch (error) {
+      console.error('Erreur lors de la modification du mode maintenance:', error);
+      return { data: null, error: 'Erreur lors de la modification du mode maintenance' };
+    }
+  }
 }

@@ -30,15 +30,15 @@ export class EmailService {
 
       // Essayer d'envoyer via Mailgun d'abord
       try {
-        const result = await this.sendEmailViaMailgun(emailData);
-        console.log('Email envoyé avec succès via Mailgun');
+        await this.sendEmailViaMailgun(emailData);
+        console.log('Email envoyé avec succès');
         return { data: true, error: null };
       } catch (mailgunError) {
         console.warn('Échec de l\'envoi via Mailgun, utilisation du fallback:', mailgunError);
         
         // Essayer le fallback SMTP
         try {
-          const fallbackResult = await this.sendEmailViaFallback(emailData);
+          await this.sendEmailViaFallback(emailData);
           console.log('Email envoyé avec succès via fallback');
           return { data: true, error: null };
         } catch (fallbackError) {
@@ -47,7 +47,7 @@ export class EmailService {
       }
 
       // Dernier recours : simulation locale
-      const { data, error } = await this.sendEmailViaInbucket(emailData);
+      const { error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
         console.error('Erreur lors de l\'envoi de l\'email:', error);
@@ -373,7 +373,7 @@ ID de la demande : ${bookingRequest.id}
   // Envoyer un email personnalisé
   static async sendCustomEmail(emailData: EmailData): Promise<{ data: boolean | null; error: string | null }> {
     try {
-      const { data, error } = await this.sendEmailViaInbucket(emailData);
+      const { error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
         console.error('Erreur lors de l\'envoi de l\'email:', error);

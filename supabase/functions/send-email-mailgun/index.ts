@@ -1,4 +1,7 @@
+// @ts-ignore - Deno environment
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts';
+
+declare const Deno: any;
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -88,7 +91,7 @@ serve(async (req) => {
     return new Response(
       JSON.stringify({ 
         success: true, 
-        message: 'Email envoyé avec succès via Mailgun',
+        message: 'Email envoyé avec succès',
         mailgunId: result.id,
         timestamp: new Date().toISOString()
       }),
