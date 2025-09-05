@@ -124,8 +124,7 @@ const SiteSettingsManager: React.FC = () => {
   };
 
   const isBooleanSetting = (key: string) => {
-    return key === 'enable_booking_email_notifications' || 
-           key === 'maintenance_mode';
+    return key === 'enable_booking_email_notifications';
   };
 
   const getSettingDisplayName = (key: string) => {
@@ -136,8 +135,7 @@ const SiteSettingsManager: React.FC = () => {
       'contact_phone': 'Téléphone de contact',
       'booking_notification_email': 'Email de réception des réservations',
       'enable_booking_email_notifications': 'Activer les notifications par email',
-      'booking_email_template': 'Template d\'email',
-      'maintenance_mode': 'Mode maintenance'
+      'booking_email_template': 'Template d\'email'
     };
     return displayNames[key] || key;
   };
@@ -150,8 +148,7 @@ const SiteSettingsManager: React.FC = () => {
       'contact_phone': 'Numéro de téléphone affiché sur le site',
       'booking_notification_email': 'Adresse email qui recevra les notifications de nouvelles réservations',
       'enable_booking_email_notifications': 'Activer ou désactiver l\'envoi automatique d\'emails lors de nouvelles réservations',
-      'booking_email_template': 'Template utilisé pour les emails de notification (défaut: "default")',
-      'maintenance_mode': 'Activer le mode maintenance du site'
+      'booking_email_template': 'Template utilisé pour les emails de notification (défaut: "default")'
     };
     return descriptions[key] || 'Paramètre de configuration';
   };
@@ -210,7 +207,7 @@ const SiteSettingsManager: React.FC = () => {
           {[
             { id: 'general', label: 'Général', icon: Settings },
             { id: 'email', label: 'Notifications', icon: Mail },
-            { id: 'smtp', label: 'Configuration SMTP', icon: Mail }
+            { id: 'smtp', label: 'SMTP (Fallback)', icon: Mail }
           ].map((tab) => {
             const Icon = tab.icon;
             return (
@@ -247,7 +244,12 @@ const SiteSettingsManager: React.FC = () => {
               </CardHeader>
               <CardContent className="space-y-4">
                 {settings
-                  .filter(setting => !setting.key.includes('booking') && !setting.key.includes('email') && !setting.key.includes('smtp'))
+                  .filter(setting => 
+                    !setting.key.includes('booking') && 
+                    !setting.key.includes('email') && 
+                    !setting.key.includes('smtp') &&
+                    !setting.key.includes('pricing')
+                  )
                   .map(setting => (
                     <div key={setting.key} className="space-y-2">
                       <Label htmlFor={setting.key} className="text-sm font-medium">

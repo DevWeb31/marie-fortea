@@ -18,6 +18,7 @@ import {
   Plus,
   Trash2
 } from 'lucide-react';
+import { FormDatePicker } from '@/components/ui/date-picker';
 
 interface ChildDetail {
   id: string;
@@ -351,16 +352,13 @@ const DetailedBookingForm: React.FC<DetailedBookingFormProps> = ({
       <div className="space-y-4">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="confirmedStartDate" className="text-sm font-medium">
-              Date de début *
-            </Label>
-            <Input
+            <FormDatePicker
               id="confirmedStartDate"
-              type="date"
+              label="Date de début"
               value={formData.confirmedStartDate}
-              onChange={(e) => handleInputChange('confirmedStartDate', e.target.value)}
+              onChange={(value) => handleInputChange('confirmedStartDate', value)}
               required
-              className="mt-1"
+              placeholder="Sélectionner une date"
             />
           </div>
           
@@ -381,16 +379,13 @@ const DetailedBookingForm: React.FC<DetailedBookingFormProps> = ({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
-            <Label htmlFor="confirmedEndDate" className="text-sm font-medium">
-              Date de fin *
-            </Label>
-            <Input
+            <FormDatePicker
               id="confirmedEndDate"
-              type="date"
+              label="Date de fin"
               value={formData.confirmedEndDate}
-              onChange={(e) => handleInputChange('confirmedEndDate', e.target.value)}
+              onChange={(value) => handleInputChange('confirmedEndDate', value)}
               required
-              className="mt-1"
+              placeholder="Sélectionner une date"
             />
           </div>
           
@@ -488,16 +483,14 @@ const DetailedBookingForm: React.FC<DetailedBookingFormProps> = ({
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
               <div>
-                <Label htmlFor={`birthDate-${child.id}`} className="text-sm font-medium">
-                  Date de naissance *
-                </Label>
-                <Input
+                <FormDatePicker
                   id={`birthDate-${child.id}`}
-                  type="date"
+                  label="Date de naissance"
                   value={child.birthDate}
-                  onChange={(e) => handleChildChange(child.id, 'birthDate', e.target.value)}
+                  onChange={(value) => handleChildChange(child.id, 'birthDate', value)}
                   required
-                  className="mt-1"
+                  placeholder="Sélectionner une date"
+                  maxDate={new Date().toISOString().split('T')[0]}
                 />
               </div>
               
