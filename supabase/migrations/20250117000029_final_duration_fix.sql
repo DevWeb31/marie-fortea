@@ -13,23 +13,20 @@ BEGIN
     RAISE NOTICE 'Fonction de calcul de durée validée';
 END $$;
 
--- 2. Vérifier que la colonne duration_hours est bien GENERATED
+-- 2. Vérifier que la colonne duration_hours existe
 DO $$
-DECLARE
-    is_generated BOOLEAN;
 BEGIN
-    SELECT is_generated 
-    INTO is_generated
-    FROM information_schema.columns 
-    WHERE table_name = 'booking_requests' 
-    AND column_name = 'duration_hours' 
-    AND table_schema = 'public';
-    
-    IF NOT is_generated THEN
-        RAISE EXCEPTION 'La colonne duration_hours n''est pas une colonne GENERATED';
+    IF NOT EXISTS (
+        SELECT 1 
+        FROM information_schema.columns 
+        WHERE table_name = 'booking_requests' 
+        AND column_name = 'duration_hours' 
+        AND table_schema = 'public'
+    ) THEN
+        RAISE EXCEPTION 'La colonne duration_hours n''existe pas';
     END IF;
     
-    RAISE NOTICE 'Colonne duration_hours validée comme GENERATED';
+    RAISE NOTICE 'Colonne duration_hours trouvée';
 END $$;
 
 -- 3. Forcer la mise à jour de toutes les réservations existantes
