@@ -7,6 +7,7 @@ import {
   getBookingStatusIcon
 } from '../types/booking-status';
 import { supabase } from '../lib/supabase';
+import { formatDuration } from '../lib/duration-utils';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -26,6 +27,7 @@ import {
   Plus,
   RefreshCw
 } from 'lucide-react';
+
 
 interface BookingWithStatus extends BookingRequest {
   statusCode: string;
@@ -65,7 +67,46 @@ const BookingKanbanBoard: React.FC = () => {
         return;
       }
 
-      setBookings(data || []);
+      // Mapper les données de snake_case vers camelCase
+      const mappedBookings = (data || []).map((booking: any) => ({
+        ...booking,
+        // Mapper les champs snake_case vers camelCase
+        parentName: booking.parent_name,
+        parentEmail: booking.parent_email,
+        parentPhone: booking.parent_phone,
+        parentAddress: booking.parent_address,
+        serviceType: booking.service_type,
+        requestedDate: booking.requested_date,
+        startTime: booking.start_time,
+        endTime: booking.end_time,
+        durationHours: booking.duration_hours,
+        childrenCount: booking.children_count,
+        childrenDetails: booking.children_details,
+        childrenAges: booking.children_ages,
+        specialInstructions: booking.special_instructions,
+        emergencyContact: booking.emergency_contact,
+        emergencyPhone: booking.emergency_phone,
+        preferredContactMethod: booking.preferred_contact_method,
+        contactNotes: booking.contact_notes,
+        captchaVerified: booking.captcha_verified,
+        ipAddress: booking.ip_address,
+        userAgent: booking.user_agent,
+        utmSource: booking.utm_source,
+        utmMedium: booking.utm_medium,
+        utmCampaign: booking.utm_campaign,
+        estimatedTotal: booking.estimated_total, // Mapper le prix estimé
+        deletedAt: booking.deleted_at,
+        archivedAt: booking.archived_at,
+        statusCode: booking.status_code,
+        statusName: booking.status_name,
+        statusColor: booking.status_color,
+        statusIcon: booking.status_icon,
+        statusDescription: booking.status_description,
+        serviceName: booking.service_name,
+        basePrice: booking.base_price
+      }));
+
+      setBookings(mappedBookings);
     } catch (error) {
       console.error('Erreur lors du chargement des réservations:', error);
     } finally {
@@ -240,7 +281,7 @@ const BookingKanbanBoard: React.FC = () => {
                               {/* Détails rapides */}
                               <div className="flex items-center justify-between text-xs text-gray-500">
                                 <span>{booking.childrenCount} enfant(s)</span>
-                                <span>{booking.durationHours}h</span>
+                                <span>{formatDuration(booking.durationHours)}</span>
                               </div>
                               
                               {/* Actions rapides */}
@@ -435,7 +476,7 @@ const BookingKanbanBoard: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-gray-500">Durée:</span>
-                    <p className="font-medium">{selectedBooking.durationHours}h</p>
+                    <p className="font-medium">{formatDuration(selectedBooking.durationHours)}</p>
                   </div>
                 </div>
               </div>

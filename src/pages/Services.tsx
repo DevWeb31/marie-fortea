@@ -150,7 +150,7 @@ const Services = () => {
         title: 'Garde d\'enfants',
         subtitle: 'Journée entière ou demi-journée',
         description: 'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
-        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activitités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
+        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
         color: 'bg-pink-50 border-pink-200',
         iconBg: 'bg-pink-100',
         minimum: 'Minimum = 3 heures',

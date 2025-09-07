@@ -102,7 +102,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
 
         {/* Contenu du tableau de bord */}
         <TabsContent value="dashboard" className="space-y-6">
-          <Card>
+          <Card className="rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <BarChart3 className="h-5 w-5" />
@@ -120,7 +120,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
 
         {/* Contenu du gestionnaire de statuts */}
         <TabsContent value="manager" className="space-y-6">
-          <Card>
+          <Card className="rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Settings className="h-5 w-5" />
@@ -138,7 +138,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
 
         {/* Contenu du workflow de transition */}
         <TabsContent value="workflow" className="space-y-6">
-          <Card>
+          <Card className="rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <Workflow className="h-5 w-5" />
@@ -147,7 +147,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="p-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="p-6 border border-blue-200 dark:border-blue-800 rounded-xl">
                   <div className="flex items-start space-x-3">
                     <Info className="h-5 w-5 text-blue-600 mt-0.5" />
                     <div>
@@ -173,7 +173,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
 
         {/* Contenu de l'historique */}
         <TabsContent value="history" className="space-y-6">
-          <Card>
+          <Card className="rounded-xl">
             <CardHeader>
               <CardTitle className="flex items-center space-x-2">
                 <History className="h-5 w-5" />
@@ -182,7 +182,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
             </CardHeader>
             <CardContent>
               <div className="space-y-6">
-                <div className="p-6 bg-gray-50 dark:bg-gray-800 rounded-lg">
+                <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-xl">
                   <div className="flex items-start space-x-3">
                     <Eye className="h-5 w-5 text-gray-600 mt-0.5" />
                     <div>
@@ -212,7 +212,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
       </Tabs>
 
       {/* Informations sur le système */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Info className="h-5 w-5" />
@@ -253,7 +253,7 @@ const BookingStatusManagement: React.FC<BookingStatusManagementProps> = ({
             </div>
           </div>
 
-          <div className="mt-6 p-4 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
+          <div className="mt-6 p-4 border border-yellow-200 dark:border-yellow-800 rounded-xl">
             <div className="flex items-start space-x-3">
               <AlertCircle className="h-5 w-5 text-yellow-600 mt-0.5" />
               <div>

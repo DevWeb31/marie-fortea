@@ -165,19 +165,20 @@ const SiteSettingsManager: React.FC = () => {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-          <h2 className="text-2xl font-bold tracking-tight">Paramètres du site</h2>
-          <p className="text-muted-foreground">
+          <h2 className="text-xl sm:text-2xl font-bold tracking-tight">Paramètres du site</h2>
+          <p className="text-sm sm:text-base text-muted-foreground">
             Gérez la configuration générale de votre site et les notifications de réservation.
           </p>
         </div>
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
           <Button
             variant="outline"
             onClick={loadSettings}
             disabled={isSaving}
+            className="w-full sm:w-auto"
           >
             <RefreshCw className="mr-2 h-4 w-4" />
             Actualiser
@@ -185,6 +186,7 @@ const SiteSettingsManager: React.FC = () => {
           <Button
             onClick={saveSettings}
             disabled={!hasChanges() || isSaving}
+            className="w-full sm:w-auto"
           >
             {isSaving ? (
               <>
@@ -203,7 +205,7 @@ const SiteSettingsManager: React.FC = () => {
 
       {/* Navigation des onglets */}
       <div className="border-b border-gray-200 dark:border-gray-700">
-        <nav className="flex space-x-8">
+        <nav className="flex space-x-4 sm:space-x-8 overflow-x-auto">
           {[
             { id: 'general', label: 'Général', icon: Settings },
             { id: 'email', label: 'Notifications', icon: Mail },
@@ -214,14 +216,15 @@ const SiteSettingsManager: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as 'general' | 'email' | 'smtp')}
-                className={`flex items-center space-x-2 py-4 px-1 border-b-2 font-medium text-sm transition-colors duration-200 ${
+                className={`flex items-center space-x-1 sm:space-x-2 py-3 sm:py-4 px-1 border-b-2 font-medium text-xs sm:text-sm transition-colors duration-200 whitespace-nowrap ${
                   activeTab === tab.id
                     ? 'border-blue-500 text-blue-600 dark:text-blue-400'
                     : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300 dark:text-gray-400 dark:hover:text-gray-300'
                 }`}
               >
-                <Icon className="h-4 w-4" />
-                <span>{tab.label}</span>
+                <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+                <span className="hidden sm:inline">{tab.label}</span>
+                <span className="sm:hidden">{tab.label.split(' ')[0]}</span>
               </button>
             );
           })}
@@ -232,23 +235,24 @@ const SiteSettingsManager: React.FC = () => {
         {activeTab === 'general' && (
           <>
             {/* Paramètres généraux */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Settings className="mr-2 h-5 w-5" />
+            <Card className="rounded-xl">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <Settings className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Paramètres généraux
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Configuration générale du site et informations de contact
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 px-4 sm:px-6">
                 {settings
                   .filter(setting => 
                     !setting.key.includes('booking') && 
                     !setting.key.includes('email') && 
                     !setting.key.includes('smtp') &&
-                    !setting.key.includes('pricing')
+                    !setting.key.includes('pricing') &&
+                    setting.key !== 'maintenance_mode'
                   )
                   .map(setting => (
                     <div key={setting.key} className="space-y-2">
@@ -274,17 +278,17 @@ const SiteSettingsManager: React.FC = () => {
         {activeTab === 'email' && (
           <>
             {/* Paramètres des réservations */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center">
-                  <Mail className="mr-2 h-5 w-5" />
+            <Card className="rounded-xl">
+              <CardHeader className="px-4 sm:px-6">
+                <CardTitle className="flex items-center text-base sm:text-lg">
+                  <Mail className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Paramètres des réservations
                 </CardTitle>
-                <CardDescription>
+                <CardDescription className="text-sm">
                   Configuration des notifications et emails de réservation
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
+              <CardContent className="space-y-4 px-4 sm:px-6">
                 {/* Email de notification */}
                 <div className="space-y-2">
                   <Label htmlFor="booking_notification_email" className="text-sm font-medium">
@@ -345,9 +349,9 @@ const SiteSettingsManager: React.FC = () => {
 
       {/* Indicateur de modifications */}
       {hasChanges() && (
-        <div className="flex items-center p-4 bg-amber-50 dark:bg-amber-900/20 rounded-lg border border-amber-200 dark:border-amber-800">
-          <AlertCircle className="mr-2 h-5 w-5 text-amber-600" />
-          <span className="text-sm text-amber-700 dark:text-amber-300">
+        <div className="flex items-center p-3 sm:p-4 bg-amber-50 dark:bg-amber-900/20 rounded-xl border border-amber-200 dark:border-amber-800">
+          <AlertCircle className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-amber-600 flex-shrink-0" />
+          <span className="text-xs sm:text-sm text-amber-700 dark:text-amber-300">
             Vous avez des modifications non sauvegardées. N'oubliez pas de sauvegarder vos changements.
           </span>
         </div>
@@ -355,9 +359,9 @@ const SiteSettingsManager: React.FC = () => {
 
       {/* Indicateur de succès */}
       {!hasChanges() && settings.length > 0 && (
-        <div className="flex items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg border border-green-200 dark:border-green-800">
-          <CheckCircle className="mr-2 h-5 w-5 text-green-600" />
-          <span className="text-sm text-green-700 dark:text-green-300">
+        <div className="flex items-center p-3 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-xl border border-green-200 dark:border-green-800">
+          <CheckCircle className="mr-2 h-4 w-4 sm:h-5 sm:w-5 text-green-600 flex-shrink-0" />
+          <span className="text-xs sm:text-sm text-green-700 dark:text-green-300">
             Tous les paramètres sont à jour.
           </span>
         </div>

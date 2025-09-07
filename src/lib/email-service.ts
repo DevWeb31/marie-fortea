@@ -1,6 +1,8 @@
 import { supabase } from './supabase';
 import { SiteSettingsService } from './site-settings-service';
 import { BookingRequest } from '@/types/booking';
+import { formatDuration } from './duration-utils';
+
 
 export interface EmailData {
   to: string;
@@ -120,7 +122,7 @@ export class EmailService {
               <span class="label">Heure de fin :</span> ${bookingRequest.endTime}
             </div>
             <div class="value">
-              <span class="label">Durée estimée :</span> ${bookingRequest.durationHours || 'À calculer'} heures
+              <span class="label">Durée estimée :</span> ${bookingRequest.durationHours ? formatDuration(bookingRequest.durationHours) : 'À calculer'}
             </div>
           </div>
 
@@ -192,7 +194,7 @@ Type de service : ${this.getServiceTypeName(bookingRequest.serviceType)}
 Date demandée : ${new Date(bookingRequest.requestedDate).toLocaleDateString('fr-FR')}
 Heure de début : ${bookingRequest.startTime}
 Heure de fin : ${bookingRequest.endTime}
-Durée estimée : ${bookingRequest.durationHours || 'À calculer'} heures
+Durée estimée : ${bookingRequest.durationHours ? formatDuration(bookingRequest.durationHours) : 'À calculer'}
 
 INFORMATIONS SUR LES ENFANTS
 Nombre d'enfants : ${bookingRequest.childrenCount}

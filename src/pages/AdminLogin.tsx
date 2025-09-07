@@ -50,14 +50,14 @@ const AdminLogin = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-green-50 flex items-center justify-center p-4 dark:from-zinc-900 dark:to-zinc-800 relative">
+    <div className="min-h-screen flex items-center justify-center p-4 relative">
       {/* Sélecteur de thème en haut à droite */}
       <div className="absolute top-4 right-4">
         <ThemeToggle />
       </div>
       
       <div className="w-full max-w-md">
-        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80">
+        <Card className="shadow-2xl border-0 bg-white/80 backdrop-blur-sm dark:bg-zinc-900/80 rounded-2xl">
           <CardHeader className="text-center pb-6">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
               <Lock className="h-8 w-8 text-blue-600 dark:text-blue-400" />

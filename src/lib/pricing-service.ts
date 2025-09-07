@@ -149,9 +149,14 @@ export class PricingService {
     childrenCount: number
   ): Promise<{ data: PriceCalculation | null; error: string | null }> {
     try {
+      console.log('🔧 Calcul de prix demandé:', { serviceType, durationHours, childrenCount });
+      
       const { data: config, error } = await this.getPricingConfig();
       
+      console.log('📋 Configuration récupérée:', { config, error });
+      
       if (error || !config) {
+        console.error('❌ Configuration des prix non disponible:', error);
         return { data: null, error: error || 'Configuration des prix non disponible' };
       }
 
