@@ -21,7 +21,6 @@ export class BookingService {
       }
 
       // Calculer le prix AVANT l'insertion
-      console.log('🔄 Calcul du prix avant insertion...');
       
       // Calculer la durée
       const startDateTime = new Date(`${data.requestedDate}T${data.startTime}`);
@@ -34,11 +33,6 @@ export class BookingService {
       const durationMs = endDateTime.getTime() - startDateTime.getTime();
       const durationHours = durationMs / (1000 * 60 * 60);
       
-      console.log('📊 Données de calcul:', {
-        serviceType: data.serviceType,
-        durationHours: durationHours,
-        childrenCount: data.childrenCount
-      });
       
       // Calculer le prix avec le service de prix
       let estimatedTotal = 0;
@@ -50,22 +44,17 @@ export class BookingService {
         );
         
         if (priceError) {
-          console.error('❌ Erreur calcul prix:', priceError);
           // Utiliser un calcul de fallback simple
           const fallbackPrice = data.serviceType === 'babysitting' ? 15 : 
                                data.serviceType === 'event_support' ? 18 :
                                data.serviceType === 'evening_care' ? 20 : 27;
           estimatedTotal = fallbackPrice * durationHours;
-          console.log('🔄 Utilisation du prix de fallback:', estimatedTotal);
         } else if (priceCalculation) {
           estimatedTotal = priceCalculation.totalAmount;
-          console.log('✅ Prix calculé avec succès:', estimatedTotal);
         } else {
-          console.error('❌ Aucun calcul de prix retourné');
           estimatedTotal = 15 * durationHours; // Fallback
         }
       } catch (error) {
-        console.error('❌ Exception lors du calcul:', error);
         estimatedTotal = 15 * durationHours; // Fallback simple
       }
 
@@ -94,7 +83,6 @@ export class BookingService {
         estimated_total: estimatedTotal // Prix calculé et inclus directement
       };
       
-      console.log('💾 Données d\'insertion avec prix:', { estimated_total: estimatedTotal });
 
 
 
@@ -109,7 +97,6 @@ export class BookingService {
       }
 
       // Le prix est maintenant calculé automatiquement par le trigger de la base de données
-      console.log('✅ Réservation créée avec succès. Prix calculé automatiquement par la base de données.');
 
       // Convertir les données de la base vers notre format
       const bookingRequest: BookingRequest = {
@@ -165,11 +152,9 @@ export class BookingService {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Erreur lors de la récupération des demandes:', error);
         return { data: null, error: 'Erreur lors de la récupération des demandes' };
       }
 
-      console.log('🔍 Données brutes de active_booking_requests:', data?.[0]); // Debug
       
       const summaries: BookingRequestSummary[] = data.map(row => ({
         id: row.id,
@@ -188,11 +173,9 @@ export class BookingService {
         estimatedTotal: row.estimated_total
       }));
       
-      console.log('💰 estimatedTotal mappé dans BookingService:', summaries[0]?.estimatedTotal); // Debug
 
       return { data: summaries, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération des demandes:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération des demandes' };
     }
   }
@@ -207,7 +190,6 @@ export class BookingService {
         .single();
 
       if (error) {
-        console.error('Erreur lors de la récupération de la demande:', error);
         return { data: null, error: 'Erreur lors de la récupération de la demande' };
       }
 
@@ -244,7 +226,6 @@ export class BookingService {
 
       return { data: bookingRequest, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération de la demande:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération de la demande' };
     }
   }
@@ -258,7 +239,6 @@ export class BookingService {
         .eq('id', id);
 
       if (error) {
-        console.error('Erreur lors de la mise à jour du statut:', error);
         return { data: null, error: 'Erreur lors de la mise à jour du statut' };
       }
 
@@ -269,7 +249,6 @@ export class BookingService {
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la mise à jour du statut:', error);
       return { data: null, error: 'Erreur inattendue lors de la mise à jour du statut' };
     }
   }
@@ -286,13 +265,11 @@ export class BookingService {
         });
 
       if (error) {
-        console.error('Erreur lors de l\'ajout de la note:', error);
         return { data: null, error: 'Erreur lors de l\'ajout de la note' };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de l\'ajout de la note:', error);
       return { data: null, error: 'Erreur inattendue lors de l\'ajout de la note' };
     }
   }
@@ -307,7 +284,6 @@ export class BookingService {
         .order('name');
 
       if (error) {
-        console.error('Erreur lors de la récupération des types de services:', error);
         return { data: null, error: 'Erreur lors de la récupération des types de services' };
       }
 
@@ -324,7 +300,6 @@ export class BookingService {
 
       return { data: serviceTypes, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération des types de services:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération des types de services' };
     }
   }
@@ -433,7 +408,6 @@ export class BookingService {
   // Mettre une réservation dans la corbeille (soft delete)
   static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
     try {
-      console.log('🔄 Tentative de mise en corbeille pour ID:', id);
       
       // D'abord, vérifier l'état actuel de la réservation
       const { data: checkData, error: checkError } = await supabase
@@ -443,29 +417,22 @@ export class BookingService {
         .single();
 
       if (checkError) {
-        console.error('❌ Erreur lors de la vérification:', checkError.message);
         return { data: null, error: `Erreur lors de la vérification: ${checkError.message}` };
       }
 
       if (!checkData) {
-        console.error('❌ Réservation non trouvée');
         return { data: null, error: 'Réservation non trouvée' };
       }
 
-      console.log('📋 État actuel de la réservation:', checkData);
-
       if (checkData.deleted_at) {
-        console.log('⚠️ Réservation déjà dans la corbeille');
         return { data: null, error: 'Réservation déjà dans la corbeille' };
       }
 
       if (checkData.archived_at) {
-        console.log('⚠️ Réservation déjà archivée');
         return { data: null, error: 'Réservation déjà archivée' };
       }
 
       // Mise à jour directe de la table
-      console.log('🔄 Mise à jour en cours...');
       const { data: directData, error: directError } = await supabase
         .from('booking_requests')
         .update({ 
@@ -475,21 +442,15 @@ export class BookingService {
         .select('id, deleted_at');
 
       if (directError) {
-        console.error('❌ Erreur de mise à jour directe:', directError.message);
         return { data: null, error: `Erreur lors de la mise en corbeille: ${directError.message}` };
       }
 
-      console.log('✅ Résultat de la mise à jour:', directData);
-
       if (directData && directData.length > 0) {
-        console.log('✅ Mise en corbeille réussie');
         return { data: true, error: null };
       } else {
-        console.error('❌ Aucune ligne mise à jour - problème de permissions RLS');
         return { data: null, error: 'Problème de permissions - impossible de mettre à jour la réservation' };
       }
     } catch (error) {
-      console.error('❌ Exception lors de la mise en corbeille:', error);
       return { data: null, error: 'Erreur inattendue lors de la mise en corbeille' };
     }
   }

@@ -32,7 +32,6 @@ const Services = () => {
         const { data: pricingData, error } = await PricingService.getPublicPricing();
         
         if (error) {
-          console.error('Erreur lors du chargement des prix:', error);
           // Fallback vers les prix par défaut
           setServices(getDefaultServices());
         } else if (pricingData) {
@@ -40,7 +39,6 @@ const Services = () => {
           setAdditionalChildRate(pricingData.additionalChildRate || 5);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des prix:', error);
         setServices(getDefaultServices());
       } finally {
         setLoading(false);
@@ -190,7 +188,6 @@ const Services = () => {
     return (pricingData.services || []).map((service: any) => {
       const serviceInfo = serviceMapping[service.type];
       if (!serviceInfo) {
-        console.warn(`Service type "${service.type}" not found in mapping`);
         return null;
       }
 

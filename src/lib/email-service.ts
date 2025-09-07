@@ -33,18 +33,14 @@ export class EmailService {
       // Essayer d'envoyer via Mailgun d'abord
       try {
         await this.sendEmailViaMailgun(emailData);
-        console.log('Email envoyé avec succès');
         return { data: true, error: null };
       } catch (mailgunError) {
-        console.warn('Échec de l\'envoi via Mailgun, utilisation du fallback:', mailgunError);
         
         // Essayer le fallback SMTP
         try {
           await this.sendEmailViaFallback(emailData);
-          console.log('Email envoyé avec succès via fallback');
           return { data: true, error: null };
         } catch (fallbackError) {
-          console.warn('Échec de l\'envoi via fallback, utilisation de la simulation:', fallbackError);
         }
       }
 
@@ -52,13 +48,11 @@ export class EmailService {
       const { error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
-        console.error('Erreur lors de l\'envoi de l\'email:', error);
         return { data: null, error: 'Erreur lors de l\'envoi de l\'email' };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de l\'envoi de l\'email:', error);
       return { data: null, error: 'Erreur inattendue lors de l\'envoi de l\'email' };
     }
   }
@@ -320,18 +314,15 @@ ID de la demande : ${bookingRequest.id}
       });
 
       if (error) {
-        console.warn('Erreur Mailgun:', error.message);
         throw new Error(`Erreur Mailgun: ${error.message}`);
       }
 
       // Vérifier si c'est une simulation
       if (data && data.simulated) {
-        console.log('Email simulé via Mailgun (configuration manquante)');
       }
 
       return data;
     } catch (error) {
-      console.warn('Échec de l\'envoi via Mailgun, utilisation du fallback:', error);
       throw error;
     }
   }
@@ -345,18 +336,15 @@ ID de la demande : ${bookingRequest.id}
       });
 
       if (error) {
-        console.warn('Erreur fallback:', error.message);
         throw new Error(`Erreur fallback: ${error.message}`);
       }
 
       // Vérifier si c'est une simulation
       if (data && data.simulated) {
-        console.log('Email simulé via fallback');
       }
 
       return data;
     } catch (error) {
-      console.warn('Échec de l\'envoi via fallback:', error);
       throw error;
     }
   }
@@ -378,13 +366,11 @@ ID de la demande : ${bookingRequest.id}
       const { error } = await this.sendEmailViaInbucket(emailData);
 
       if (error) {
-        console.error('Erreur lors de l\'envoi de l\'email:', error);
         return { data: null, error: 'Erreur lors de l\'envoi de l\'email' };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de l\'envoi de l\'email:', error);
       return { data: null, error: 'Erreur inattendue lors de l\'envoi de l\'email' };
     }
   }

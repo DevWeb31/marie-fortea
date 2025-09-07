@@ -78,7 +78,6 @@ const AdminBookingManager: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Erreur lors du chargement des réservations:', error);
         return;
       }
 
@@ -121,12 +120,9 @@ const AdminBookingManager: React.FC = () => {
         basePrice: booking.base_price
       }));
 
-      console.log('📊 Données brutes de la DB:', data?.[0]); // Debug pour voir les données brutes
-      console.log('📊 Données mappées:', mappedBookings[0]); // Debug pour voir la première réservation
-      console.log('💰 estimatedTotal mappé:', mappedBookings[0]?.estimatedTotal); // Debug spécifique pour le prix
       setBookings(mappedBookings);
     } catch (error) {
-      console.error('Erreur lors du chargement des réservations:', error);
+      // Erreur silencieuse
     } finally {
       setLoading(false);
     }
@@ -141,13 +137,12 @@ const AdminBookingManager: React.FC = () => {
         .order('sort_order', { ascending: true });
 
       if (error) {
-        console.error('Erreur lors du chargement des compteurs:', error);
         return;
       }
 
       setStatusCounts(data || []);
     } catch (error) {
-      console.error('Erreur lors du chargement des compteurs:', error);
+      // Erreur silencieuse
     }
   };
 

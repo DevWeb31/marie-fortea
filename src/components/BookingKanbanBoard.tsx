@@ -63,7 +63,6 @@ const BookingKanbanBoard: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Erreur lors du chargement des réservations:', error);
         return;
       }
 
@@ -108,7 +107,7 @@ const BookingKanbanBoard: React.FC = () => {
 
       setBookings(mappedBookings);
     } catch (error) {
-      console.error('Erreur lors du chargement des réservations:', error);
+      // Erreur silencieuse
     } finally {
       setLoading(false);
     }

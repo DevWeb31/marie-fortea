@@ -17,7 +17,6 @@ export class SiteSettingsService {
         .order('key');
 
       if (error) {
-        console.error('Erreur lors de la récupération des paramètres:', error);
         return { data: null, error: 'Erreur lors de la récupération des paramètres' };
       }
 
@@ -30,7 +29,6 @@ export class SiteSettingsService {
 
       return { data: settings, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération des paramètres:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération des paramètres' };
     }
   }
@@ -45,13 +43,11 @@ export class SiteSettingsService {
         .single();
 
       if (error) {
-        console.error(`Erreur lors de la récupération du paramètre ${key}:`, error);
         return { data: null, error: `Erreur lors de la récupération du paramètre ${key}` };
       }
 
       return { data: data.value, error: null };
     } catch (error) {
-      console.error(`Erreur inattendue lors de la récupération du paramètre ${key}:`, error);
       return { data: null, error: `Erreur inattendue lors de la récupération du paramètre ${key}` };
     }
   }
@@ -68,13 +64,11 @@ export class SiteSettingsService {
         .eq('key', key);
 
       if (error) {
-        console.error(`Erreur lors de la mise à jour du paramètre ${key}:`, error);
         return { data: null, error: `Erreur lors de la mise à jour du paramètre ${key}` };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error(`Erreur inattendue lors de la mise à jour du paramètre ${key}:`, error);
       return { data: null, error: `Erreur inattendue lors de la mise à jour du paramètre ${key}` };
     }
   }
@@ -91,13 +85,11 @@ export class SiteSettingsService {
         });
 
       if (error) {
-        console.error(`Erreur lors de la création du paramètre ${key}:`, error);
         return { data: null, error: `Erreur lors de la création du paramètre ${key}` };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error(`Erreur inattendue lors de la création du paramètre ${key}:`, error);
       return { data: null, error: `Erreur inattendue lors de la création du paramètre ${key}` };
     }
   }
@@ -116,7 +108,6 @@ export class SiteSettingsService {
         return await this.createSetting(key, value);
       }
     } catch (error) {
-      console.error(`Erreur lors de l'upsert du paramètre ${key}:`, error);
       return { data: null, error: `Erreur lors de l'upsert du paramètre ${key}` };
     }
   }
@@ -157,7 +148,6 @@ export class SiteSettingsService {
 
       return { data: settings, error: null };
     } catch (error) {
-      console.error('Erreur lors de la récupération des paramètres SMTP:', error);
       return { data: null, error: 'Erreur lors de la récupération des paramètres SMTP' };
     }
   }
@@ -182,7 +172,6 @@ export class SiteSettingsService {
 
       return { data: isConfigured, error: null };
     } catch (error) {
-      console.error('Erreur lors de la vérification de la configuration SMTP:', error);
       return { data: null, error: 'Erreur lors de la vérification de la configuration SMTP' };
     }
   }
@@ -205,7 +194,6 @@ export class SiteSettingsService {
       // Pour l'instant, on retourne true si la configuration est complète
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur lors du test de connexion SMTP:', error);
       return { data: null, error: 'Erreur lors du test de connexion SMTP' };
     }
   }
@@ -227,7 +215,6 @@ export class SiteSettingsService {
       
       return { data: result.data === 'true', error: null };
     } catch (error) {
-      console.error('Erreur lors de la vérification du mode maintenance:', error);
       return { data: null, error: 'Erreur lors de la vérification du mode maintenance' };
     }
   }
@@ -243,7 +230,6 @@ export class SiteSettingsService {
       
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur lors de la modification du mode maintenance:', error);
       return { data: null, error: 'Erreur lors de la modification du mode maintenance' };
     }
   }
