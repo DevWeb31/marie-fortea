@@ -495,10 +495,6 @@ const BookingKanbanBoard: React.FC = () => {
                     <span className="text-gray-500">Durée:</span>
                     <p className="font-medium">
                       {formatDuration(selectedBooking.durationHours)}
-                      {/* DEBUG PROD */}
-                      <span className="text-xs text-red-500 ml-2">
-                        [DEBUG: {selectedBooking.durationHours}]
-                      </span>
                     </p>
                   </div>
                 </div>

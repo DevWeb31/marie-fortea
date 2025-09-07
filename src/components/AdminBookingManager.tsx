@@ -385,10 +385,6 @@ const AdminBookingManager: React.FC = () => {
                             </p>
                             <p className="text-sm text-gray-600">
                               Durée: {formatDuration(booking.durationHours)}
-                              {/* DEBUG PROD */}
-                              <span className="text-xs text-red-500 ml-2">
-                                [DEBUG: {booking.durationHours}]
-                              </span>
                             </p>
                             {booking.estimatedTotal && (
                               <p className="text-sm font-medium text-green-600">
@@ -581,10 +577,6 @@ const AdminBookingManager: React.FC = () => {
                         <Label className="text-sm text-gray-500">Durée</Label>
                         <p className="font-medium">
                           {formatDuration(selectedBooking.durationHours)}
-                          {/* DEBUG PROD */}
-                          <span className="text-xs text-red-500 ml-2">
-                            [DEBUG: {selectedBooking.durationHours}]
-                          </span>
                         </p>
                       </div>
                     </div>
