@@ -1373,6 +1373,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
                                   Durée: {formatDuration(request.durationHours)}
+                                  {/* DEBUG PROD */}
+                                  <span className="text-xs text-red-500 ml-2">
+                                    [DEBUG: {request.durationHours}]
+                                  </span>
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1581,6 +1585,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
                                   Durée: {formatDuration(request.durationHours)}
+                                  {/* DEBUG PROD */}
+                                  <span className="text-xs text-red-500 ml-2">
+                                    [DEBUG: {request.durationHours}]
+                                  </span>
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1771,6 +1779,10 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
                                   Durée: {formatDuration(request.durationHours)}
+                                  {/* DEBUG PROD */}
+                                  <span className="text-xs text-red-500 ml-2">
+                                    [DEBUG: {request.durationHours}]
+                                  </span>
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1845,7 +1857,12 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                   <p><strong>Service:</strong> {selectedRequest.serviceName}</p>
                   <p><strong>Date:</strong> {formatDate(selectedRequest.requestedDate)}</p>
                   <p><strong>Heures:</strong> {formatTimeWithoutSeconds(selectedRequest.startTime)} - {formatTimeWithoutSeconds(selectedRequest.endTime)}</p>
-                  <p><strong>Durée:</strong> {formatDuration(selectedRequest.durationHours)}</p>
+                  <p><strong>Durée:</strong> {formatDuration(selectedRequest.durationHours)}
+                    {/* DEBUG PROD */}
+                    <span className="text-xs text-red-500 ml-2">
+                      [DEBUG: {selectedRequest.durationHours}]
+                    </span>
+                  </p>
                   <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€</p>
                 </div>
               </div>

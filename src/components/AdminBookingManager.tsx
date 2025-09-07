@@ -72,28 +72,52 @@ const AdminBookingManager: React.FC = () => {
     try {
       setLoading(true);
       
+      console.log('🔍 DEBUG PROD - Début du chargement des réservations...');
+      
       const { data, error } = await supabase
         .from('booking_requests_with_status')
         .select('*')
         .order('created_at', { ascending: false });
+      
+      console.log('🔍 DEBUG PROD - Réponse Supabase:', {
+        data: data?.length || 0,
+        error: error?.message || 'Aucune erreur',
+        firstRecord: data?.[0] ? {
+          id: data[0].id,
+          duration_hours: data[0].duration_hours,
+          start_time: data[0].start_time,
+          end_time: data[0].end_time
+        } : 'Aucune donnée'
+      });
 
       if (error) {
         return;
       }
 
       // Mapper les données de snake_case vers camelCase
-      const mappedBookings = (data || []).map((booking: any) => ({
-        ...booking,
-        // Mapper les champs snake_case vers camelCase
-        parentName: booking.parent_name,
-        parentEmail: booking.parent_email,
-        parentPhone: booking.parent_phone,
-        parentAddress: booking.parent_address,
-        serviceType: booking.service_type,
-        requestedDate: booking.requested_date,
-        startTime: booking.start_time,
-        endTime: booking.end_time,
-        durationHours: booking.duration_hours,
+      const mappedBookings = (data || []).map((booking: any) => {
+        // DEBUG: Log des données brutes pour la production
+        console.log('🔍 DEBUG PROD - Données brutes booking:', {
+          id: booking.id,
+          parent_name: booking.parent_name,
+          start_time: booking.start_time,
+          end_time: booking.end_time,
+          duration_hours: booking.duration_hours,
+          duration_hours_type: typeof booking.duration_hours
+        });
+        
+        return {
+          ...booking,
+          // Mapper les champs snake_case vers camelCase
+          parentName: booking.parent_name,
+          parentEmail: booking.parent_email,
+          parentPhone: booking.parent_phone,
+          parentAddress: booking.parent_address,
+          serviceType: booking.service_type,
+          requestedDate: booking.requested_date,
+          startTime: booking.start_time,
+          endTime: booking.end_time,
+          durationHours: booking.duration_hours,
         childrenCount: booking.children_count,
         childrenDetails: booking.children_details,
         childrenAges: booking.children_ages,
@@ -118,7 +142,8 @@ const AdminBookingManager: React.FC = () => {
         statusDescription: booking.status_description,
         serviceName: booking.service_name,
         basePrice: booking.base_price
-      }));
+        };
+      });
 
       setBookings(mappedBookings);
     } catch (error) {
@@ -360,6 +385,10 @@ const AdminBookingManager: React.FC = () => {
                             </p>
                             <p className="text-sm text-gray-600">
                               Durée: {formatDuration(booking.durationHours)}
+                              {/* DEBUG PROD */}
+                              <span className="text-xs text-red-500 ml-2">
+                                [DEBUG: {booking.durationHours}]
+                              </span>
                             </p>
                             {booking.estimatedTotal && (
                               <p className="text-sm font-medium text-green-600">
@@ -550,7 +579,13 @@ const AdminBookingManager: React.FC = () => {
                       </div>
                       <div>
                         <Label className="text-sm text-gray-500">Durée</Label>
-                        <p className="font-medium">{formatDuration(selectedBooking.durationHours)}</p>
+                        <p className="font-medium">
+                          {formatDuration(selectedBooking.durationHours)}
+                          {/* DEBUG PROD */}
+                          <span className="text-xs text-red-500 ml-2">
+                            [DEBUG: {selectedBooking.durationHours}]
+                          </span>
+                        </p>
                       </div>
                     </div>
                   </div>
