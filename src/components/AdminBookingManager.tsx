@@ -9,6 +9,7 @@ import {
   formatStatusDisplay
 } from '../types/booking-status';
 import { supabase } from '../lib/supabase';
+import { formatDuration } from '../lib/duration-utils';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -36,6 +37,7 @@ import {
   Edit,
   History
 } from 'lucide-react';
+
 
 interface BookingWithStatus extends BookingRequest {
   statusCode: string;
@@ -76,13 +78,51 @@ const AdminBookingManager: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Erreur lors du chargement des réservations:', error);
         return;
       }
 
-      setBookings(data || []);
+      // Mapper les données de snake_case vers camelCase
+      const mappedBookings = (data || []).map((booking: any) => ({
+        ...booking,
+        // Mapper les champs snake_case vers camelCase
+        parentName: booking.parent_name,
+        parentEmail: booking.parent_email,
+        parentPhone: booking.parent_phone,
+        parentAddress: booking.parent_address,
+        serviceType: booking.service_type,
+        requestedDate: booking.requested_date,
+        startTime: booking.start_time,
+        endTime: booking.end_time,
+        durationHours: booking.duration_hours,
+        childrenCount: booking.children_count,
+        childrenDetails: booking.children_details,
+        childrenAges: booking.children_ages,
+        specialInstructions: booking.special_instructions,
+        emergencyContact: booking.emergency_contact,
+        emergencyPhone: booking.emergency_phone,
+        preferredContactMethod: booking.preferred_contact_method,
+        contactNotes: booking.contact_notes,
+        captchaVerified: booking.captcha_verified,
+        ipAddress: booking.ip_address,
+        userAgent: booking.user_agent,
+        utmSource: booking.utm_source,
+        utmMedium: booking.utm_medium,
+        utmCampaign: booking.utm_campaign,
+        estimatedTotal: booking.estimated_total, // Mapper le prix estimé
+        deletedAt: booking.deleted_at,
+        archivedAt: booking.archived_at,
+        statusCode: booking.status_code,
+        statusName: booking.status_name,
+        statusColor: booking.status_color,
+        statusIcon: booking.status_icon,
+        statusDescription: booking.status_description,
+        serviceName: booking.service_name,
+        basePrice: booking.base_price
+      }));
+
+      setBookings(mappedBookings);
     } catch (error) {
-      console.error('Erreur lors du chargement des réservations:', error);
+      // Erreur silencieuse
     } finally {
       setLoading(false);
     }
@@ -97,13 +137,12 @@ const AdminBookingManager: React.FC = () => {
         .order('sort_order', { ascending: true });
 
       if (error) {
-        console.error('Erreur lors du chargement des compteurs:', error);
         return;
       }
 
       setStatusCounts(data || []);
     } catch (error) {
-      console.error('Erreur lors du chargement des compteurs:', error);
+      // Erreur silencieuse
     }
   };
 
@@ -320,7 +359,7 @@ const AdminBookingManager: React.FC = () => {
                               {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
                             </p>
                             <p className="text-sm text-gray-600">
-                              Durée: {booking.durationHours} heures
+                              Durée: {formatDuration(booking.durationHours)}
                             </p>
                             {booking.estimatedTotal && (
                               <p className="text-sm font-medium text-green-600">
@@ -511,7 +550,7 @@ const AdminBookingManager: React.FC = () => {
                       </div>
                       <div>
                         <Label className="text-sm text-gray-500">Durée</Label>
-                        <p className="font-medium">{selectedBooking.durationHours}h</p>
+                        <p className="font-medium">{formatDuration(selectedBooking.durationHours)}</p>
                       </div>
                     </div>
                   </div>

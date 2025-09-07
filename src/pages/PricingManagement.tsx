@@ -186,39 +186,39 @@ const PricingManagement: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
-      <div className="flex items-center justify-between">
+    <div className="container mx-auto p-4 sm:p-6 space-y-4 sm:space-y-6">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-4 sm:space-y-0">
         <div>
-          <h1 className="text-3xl font-bold">Gestion des Prix</h1>
-          <p className="text-gray-600 dark:text-gray-400">
+          <h1 className="text-2xl sm:text-3xl font-bold">Gestion des Prix</h1>
+          <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400">
             Configurez les tarifs de vos services de garde d'enfants
           </p>
         </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" onClick={loadPricingConfig}>
+        <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-2">
+          <Button variant="outline" onClick={loadPricingConfig} className="w-full sm:w-auto">
             <RefreshCw className="h-4 w-4 mr-2" />
             Actualiser
           </Button>
-          <Button onClick={saveConfig} disabled={saving}>
+          <Button onClick={saveConfig} disabled={saving} className="w-full sm:w-auto">
             {saving ? <RefreshCw className="h-4 w-4 animate-spin mr-2" /> : <Save className="h-4 w-4 mr-2" />}
             Sauvegarder
           </Button>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         {/* Configuration du supplément enfants */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Users className="h-5 w-5 mr-2" />
+        <Card className="rounded-xl">
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="flex items-center text-base sm:text-lg">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Supplément Enfants
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Configurez le supplément pour les enfants supplémentaires (à partir du 3ème enfant)
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 px-4 sm:px-6">
             <div>
               <Label htmlFor="additionalChildRate">Supplément par enfant supplémentaire (€/heure)</Label>
               <Input
@@ -238,17 +238,17 @@ const PricingManagement: React.FC = () => {
         </Card>
 
         {/* Prix par type de service */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <Euro className="h-5 w-5 mr-2" />
+        <Card className="rounded-xl">
+          <CardHeader className="px-4 sm:px-6">
+            <CardTitle className="flex items-center text-base sm:text-lg">
+              <Euro className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
               Prix par Service
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-sm">
               Définissez le prix direct par heure pour chaque type de service
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-4 px-4 sm:px-6">
             <div>
               <Label htmlFor="serviceType">Type de service</Label>
               <Select
@@ -338,24 +338,24 @@ const PricingManagement: React.FC = () => {
 
 
       {/* Informations sur la dernière mise à jour */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Clock className="h-5 w-5 mr-2" />
+      <Card className="rounded-xl">
+        <CardHeader className="px-4 sm:px-6">
+          <CardTitle className="flex items-center text-base sm:text-lg">
+            <Clock className="h-4 w-4 sm:h-5 sm:w-5 mr-2" />
             Informations
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="flex items-center justify-between">
+        <CardContent className="px-4 sm:px-6">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
             <div>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 Dernière mise à jour : {config.lastUpdated.toLocaleString('fr-FR')}
               </p>
-              <p className="text-sm text-gray-600 dark:text-gray-400">
+              <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                 Les modifications seront automatiquement appliquées sur le site public
               </p>
             </div>
-            <Badge variant="secondary">
+            <Badge variant="secondary" className="w-fit">
               Configuration active
             </Badge>
           </div>

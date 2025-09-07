@@ -87,7 +87,6 @@ export class PricingService {
 
       return { data: config, error: null };
     } catch (error) {
-      console.error('Erreur lors de la récupération de la configuration des prix:', error);
       return { data: null, error: 'Erreur lors de la récupération de la configuration des prix' };
     }
   }
@@ -137,7 +136,6 @@ export class PricingService {
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur lors de la mise à jour de la configuration des prix:', error);
       return { data: null, error: 'Erreur lors de la mise à jour de la configuration des prix' };
     }
   }
@@ -181,7 +179,6 @@ export class PricingService {
 
       return { data: calculation, error: null };
     } catch (error) {
-      console.error('Erreur lors du calcul du prix:', error);
       return { data: null, error: 'Erreur lors du calcul du prix' };
     }
   }
@@ -210,7 +207,6 @@ export class PricingService {
 
       return { data: publicPricing, error: null };
     } catch (error) {
-      console.error('Erreur lors de la récupération des prix publics:', error);
       return { data: null, error: 'Erreur lors de la récupération des prix publics' };
     }
   }
@@ -252,7 +248,6 @@ export class PricingService {
 
       return await this.updatePricingConfig(defaultConfig);
     } catch (error) {
-      console.error('Erreur lors de l\'initialisation des prix par défaut:', error);
       return { data: null, error: 'Erreur lors de l\'initialisation des prix par défaut' };
     }
   }

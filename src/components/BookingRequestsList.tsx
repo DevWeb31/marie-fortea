@@ -19,8 +19,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from '@/components/ui/dialog';
-import { useToast } from '@/hooks/use-toast';
+import { useCustomToast } from '@/components/ui/custom-toaster';
 import { BookingService } from '@/lib/booking-service';
+import { formatDuration } from '@/lib/duration-utils';
 import { 
   BookingRequestSummary, 
   LegacyBookingStatus,
@@ -61,12 +62,13 @@ const formatTimeWithoutSeconds = (time: string): string => {
   return time;
 };
 
+
 interface BookingRequestsListProps {
   className?: string;
 }
 
 const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '' }) => {
-  const { toast } = useToast();
+  const { toast } = useCustomToast();
   const [requests, setRequests] = useState<BookingRequestSummary[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<BookingRequestSummary[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -1104,7 +1106,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Filtres et recherche */}
-      <Card className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700">
+      <Card className="bg-white dark:bg-zinc-800 border-gray-200 dark:border-zinc-700 rounded-xl">
         <CardHeader className="p-4 sm:p-6 pb-0">
           <CardTitle>Filtres et Recherche</CardTitle>
         </CardHeader>
@@ -1245,7 +1247,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                 <div>
                   {/* Barre d'actions en lot */}
                   {selectedItems.size > 0 && (
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 mb-4">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3 sm:p-4 mb-4">
                       <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                           <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
@@ -1319,7 +1321,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                     {filteredRequests.map((request) => (
                       <div
                         key={request.id}
-                        className={`border rounded-lg p-4 transition-colors ${
+                        className={`border rounded-xl p-4 transition-colors ${
                           selectedItems.has(request.id) 
                             ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' 
                             : `${getStatusBackgroundColor(request.status)} hover:bg-opacity-80`
@@ -1370,7 +1372,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Durée: {request.durationHours}h
+                                  Durée: {formatDuration(request.durationHours)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1450,7 +1452,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                 <div>
                   {/* Barre d'actions en lot */}
                   {selectedItems.size > 0 && (
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 mb-4">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3 sm:p-4 mb-4">
                       <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                           <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
@@ -1524,7 +1526,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                     {archivedRequests.map((request) => (
                       <div
                         key={request.id}
-                        className={`border rounded-lg p-4 transition-colors ${
+                        className={`border rounded-xl p-4 transition-colors ${
                           selectedItems.has(request.id) 
                             ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' 
                             : `${getStatusBackgroundColor(request.status)} hover:bg-opacity-80`
@@ -1578,7 +1580,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Durée: {request.durationHours}h
+                                  Durée: {formatDuration(request.durationHours)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1640,7 +1642,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                 <div>
                   {/* Barre d'actions en lot */}
                   {selectedItems.size > 0 && (
-                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-3 sm:p-4 mb-4">
+                    <div className="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-xl p-3 sm:p-4 mb-4">
                       <div className="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex flex-col sm:flex-row sm:items-center space-y-2 sm:space-y-0 sm:space-x-4">
                           <span className="text-sm font-medium text-blue-800 dark:text-blue-200">
@@ -1714,7 +1716,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                     {deletedRequests.map((request) => (
                       <div
                         key={request.id}
-                        className={`border rounded-lg p-4 transition-colors ${
+                        className={`border rounded-xl p-4 transition-colors ${
                           selectedItems.has(request.id) 
                             ? 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800' 
                             : `${getStatusBackgroundColor(request.status)} hover:bg-opacity-80`
@@ -1768,7 +1770,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Durée: {request.durationHours}h
+                                  Durée: {formatDuration(request.durationHours)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="font-medium text-green-600 dark:text-green-400 truncate">
@@ -1843,7 +1845,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                   <p><strong>Service:</strong> {selectedRequest.serviceName}</p>
                   <p><strong>Date:</strong> {formatDate(selectedRequest.requestedDate)}</p>
                   <p><strong>Heures:</strong> {formatTimeWithoutSeconds(selectedRequest.startTime)} - {formatTimeWithoutSeconds(selectedRequest.endTime)}</p>
-                  <p><strong>Durée:</strong> {selectedRequest.durationHours}h</p>
+                  <p><strong>Durée:</strong> {formatDuration(selectedRequest.durationHours)}</p>
                   <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€</p>
                 </div>
               </div>

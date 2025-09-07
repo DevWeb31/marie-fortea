@@ -279,7 +279,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Workflow des statuts */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Info className="h-5 w-5" />
@@ -313,7 +313,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
       </Card>
 
       {/* Transitions autorisées */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <ArrowRight className="h-5 w-5" />
@@ -325,7 +325,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
             {BOOKING_STATUSES.map(status => {
               const transitions = getAvailableTransitions(status.code);
               return (
-                <div key={status.code} className="border rounded-lg p-4">
+                <div key={status.code} className="border rounded-xl p-4">
                   <div className="flex items-center space-x-2 mb-3">
                     <div className={`p-2 rounded-full ${getStatusColorClass(status.code)}`}>
                       {getStatusIcon(status.code)}
@@ -383,7 +383,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
           {selectedBooking && (
             <div className="space-y-4">
               {/* Informations de la réservation */}
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+              <div className="rounded-xl p-3 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center space-x-2 mb-2">
                   <User className="h-4 w-4 text-gray-500" />
                   <span className="font-medium">{selectedBooking.parentName}</span>
@@ -522,7 +522,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
           {selectedBooking && (
             <div className="space-y-4">
               {/* Informations de la réservation */}
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-3">
+              <div className="rounded-xl p-3 border border-gray-200 dark:border-gray-700">
                 <div className="flex items-center space-x-2 mb-2">
                   <User className="h-4 w-4 text-gray-500" />
                   <span className="font-medium">{selectedBooking.parentName}</span>
@@ -547,7 +547,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
               ) : (
                 <div className="space-y-3">
                   {statusHistory.map((change, index) => (
-                    <div key={change.id} className="border rounded-lg p-3">
+                    <div key={change.id} className="border rounded-xl p-3">
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-2">
                           <div className={`p-2 rounded-full ${getStatusColorClass(change.toStatus)}`}>
@@ -571,7 +571,7 @@ const BookingStatusManager: React.FC<BookingStatusManagerProps> = ({
                       )}
                       
                       {change.notes && (
-                        <div className="bg-blue-50 dark:bg-blue-900/20 rounded p-2">
+                        <div className="rounded p-2 border border-blue-200 dark:border-blue-800">
                           <p className="text-sm text-blue-800 dark:text-blue-200">{change.notes}</p>
                         </div>
                       )}

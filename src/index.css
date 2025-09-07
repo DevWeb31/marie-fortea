@@ -101,6 +101,20 @@ button:focus-visible {
   .animate-shake {
     animation: gentle-bounce 0.6s ease-in-out;
   }
+
+  @keyframes progress-bar {
+    from {
+      transform: scaleX(1);
+    }
+    to {
+      transform: scaleX(0);
+    }
+  }
+
+  .animate-progress-bar {
+    animation: progress-bar linear forwards;
+    transform-origin: left center;
+  }
   :root {
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;

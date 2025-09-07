@@ -107,7 +107,6 @@ export function FormDatePicker({
   label,
 }: FormDatePickerProps) {
   const [isMobile, setIsMobile] = React.useState(false);
-  const [showCalendar, setShowCalendar] = React.useState(false);
 
   React.useEffect(() => {
     // Détecter si on est sur mobile
@@ -128,7 +127,6 @@ export function FormDatePicker({
       const dateString = format(date, 'yyyy-MM-dd');
       onChange(dateString);
     }
-    setShowCalendar(false);
   };
 
   const selectedDate = value ? new Date(value) : undefined;
@@ -142,65 +140,21 @@ export function FormDatePicker({
             {label} {required && '*'}
           </label>
         )}
-        <div className="relative">
-          <input
-            id={id}
-            type="date"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            min={minDate}
-            max={maxDate}
-            disabled={disabled}
-            required={required}
-            className={cn(
-              "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-              disabled && "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800",
-              className
-            )}
-          />
-          <Button
-            type="button"
-            variant="ghost"
-            size="sm"
-            className="absolute right-1 top-1 h-8 w-8 p-0 bg-white dark:bg-gray-800 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-800 dark:hover:text-gray-100 border border-gray-200 dark:border-gray-600"
-            onClick={() => setShowCalendar(true)}
-            disabled={disabled}
-          >
-            <CalendarIcon className="h-4 w-4" />
-          </Button>
-        </div>
-        
-        {/* Calendrier en modal pour mobile */}
-        {showCalendar && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="w-full max-w-sm rounded-lg bg-white dark:bg-gray-800 p-4 shadow-xl border border-gray-200 dark:border-gray-700">
-              <div className="mb-4 flex items-center justify-between">
-                <h3 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Sélectionner une date</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setShowCalendar(false)}
-                  className="bg-white dark:bg-gray-800 text-gray-500 hover:text-gray-700 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-gray-200 dark:hover:bg-gray-700 border border-gray-200 dark:border-gray-600"
-                >
-                  ×
-                </Button>
-              </div>
-              <Calendar
-                mode="single"
-                selected={selectedDate}
-                onSelect={handleDateSelect}
-                disabled={(date) => {
-                  if (disabled) return true;
-                  if (minDate && date < new Date(minDate)) return true;
-                  if (maxDate && date > new Date(maxDate)) return true;
-                  return false;
-                }}
-                initialFocus
-                className="rounded-md border-0"
-              />
-            </div>
-          </div>
-        )}
+        <input
+          id={id}
+          type="date"
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          min={minDate}
+          max={maxDate}
+          disabled={disabled}
+          required={required}
+          className={cn(
+            "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
+            disabled && "opacity-50 cursor-not-allowed bg-gray-100 dark:bg-gray-800",
+            className
+          )}
+        />
       </div>
     );
   }

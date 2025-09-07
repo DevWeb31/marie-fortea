@@ -124,14 +124,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
         const { data: pricingData, error } = await PricingService.getPublicPricing();
         
         if (error) {
-          console.error('Erreur lors du chargement des services:', error);
           // Fallback vers les services par défaut
           setDynamicServices(getDefaultServices());
         } else if (pricingData) {
           setDynamicServices(getDynamicServices(pricingData));
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des services:', error);
         setDynamicServices(getDefaultServices());
       } finally {
         setServicesLoading(false);
@@ -166,7 +164,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
           );
           
           if (error) {
-            console.error('Erreur lors du calcul du prix:', error);
             // Fallback vers l'ancien calcul
             const basePrice = getServiceTypeInfo(formData.serviceType)?.basePrice || 0;
             const total = basePrice * Math.max(1, durationHours);
@@ -175,7 +172,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
             setEstimatedTotal(calculation.totalAmount);
           }
         } catch (error) {
-          console.error('Erreur lors du calcul du prix:', error);
           // Fallback vers l'ancien calcul
           const basePrice = getServiceTypeInfo(formData.serviceType)?.basePrice || 0;
           const total = basePrice * Math.max(1, durationHours);

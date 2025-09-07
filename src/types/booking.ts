@@ -97,6 +97,9 @@ export interface BookingRequest {
   statusColor?: string;
   statusIcon?: string;
   statusDescription?: string;
+  
+  // Prix estimé
+  estimatedTotal?: number;
 }
 
 export interface CreateBookingRequest {

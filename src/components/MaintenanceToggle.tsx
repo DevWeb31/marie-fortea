@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { useToast } from '@/hooks/use-toast';
+import { useCustomToast } from '@/components/ui/custom-toaster';
 import { SiteSettingsService } from '@/lib/site-settings-service';
 import { Wrench, AlertTriangle } from 'lucide-react';
 
 const MaintenanceToggle: React.FC = () => {
-  const { toast } = useToast();
+  const { toast } = useCustomToast();
   const [isMaintenanceMode, setIsMaintenanceMode] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState(true);
   const [isToggling, setIsToggling] = useState(false);
@@ -38,6 +38,7 @@ const MaintenanceToggle: React.FC = () => {
           title: 'Erreur',
           description: result.error,
           variant: 'destructive',
+          duration: 4000,
         });
         return;
       }
@@ -50,12 +51,14 @@ const MaintenanceToggle: React.FC = () => {
           ? 'Le site est maintenant en mode maintenance' 
           : 'Le site est maintenant accessible au public',
         variant: enabled ? 'default' : 'default',
+        duration: 4000,
       });
     } catch (error) {
       toast({
         title: 'Erreur',
         description: 'Erreur lors de la modification du mode maintenance',
         variant: 'destructive',
+        duration: 4000,
       });
     } finally {
       setIsToggling(false);
@@ -64,7 +67,7 @@ const MaintenanceToggle: React.FC = () => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center space-x-2 px-4 py-2 bg-gray-50 dark:bg-gray-800 rounded-lg">
+      <div className="flex items-center space-x-2 px-4 py-2 bg-gray-50 dark:bg-gray-800 rounded-xl">
         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-gray-600"></div>
         <span className="text-sm text-gray-600 dark:text-gray-300">Chargement...</span>
       </div>
@@ -72,7 +75,7 @@ const MaintenanceToggle: React.FC = () => {
   }
 
   return (
-    <div className={`flex items-center justify-between px-4 py-3 rounded-lg border transition-colors ${
+    <div className={`flex items-center justify-between px-4 py-3 rounded-xl border transition-colors ${
       isMaintenanceMode 
         ? 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800' 
         : 'bg-gray-50 dark:bg-gray-800 border-gray-200 dark:border-gray-700'

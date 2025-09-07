@@ -291,7 +291,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
 
       {/* Métriques principales */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Total Réservations</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
@@ -304,7 +304,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">En Attente</CardTitle>
             <Clock className="h-4 w-4 text-muted-foreground" />
@@ -319,7 +319,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Confirmées</CardTitle>
             <CalendarCheck className="h-4 w-4 text-muted-foreground" />
@@ -334,7 +334,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="rounded-xl">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Taux de Conversion</CardTitle>
             <TrendingUp className="h-4 w-4 text-muted-foreground" />
@@ -349,7 +349,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
       </div>
 
       {/* Répartition des statuts */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <BarChart3 className="h-5 w-5" />
@@ -401,7 +401,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
       </Card>
 
       {/* Actions rapides */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Plus className="h-5 w-5" />
@@ -431,7 +431,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
       </Card>
 
       {/* Activité récente */}
-      <Card>
+      <Card className="rounded-xl">
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Clock className="h-5 w-5" />
@@ -441,7 +441,7 @@ const BookingStatusDashboard: React.FC<BookingStatusDashboardProps> = ({
         <CardContent>
           <div className="space-y-4">
             {recentActivity.map((activity) => (
-              <div key={activity.id} className="flex items-center space-x-4 p-3 border rounded-lg">
+              <div key={activity.id} className="flex items-center space-x-4 p-3 border rounded-xl">
                 <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-full">
                   <Eye className="h-4 w-4 text-blue-600" />
                 </div>

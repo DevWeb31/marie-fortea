@@ -32,7 +32,6 @@ const Services = () => {
         const { data: pricingData, error } = await PricingService.getPublicPricing();
         
         if (error) {
-          console.error('Erreur lors du chargement des prix:', error);
           // Fallback vers les prix par défaut
           setServices(getDefaultServices());
         } else if (pricingData) {
@@ -40,7 +39,6 @@ const Services = () => {
           setAdditionalChildRate(pricingData.additionalChildRate || 5);
         }
       } catch (error) {
-        console.error('Erreur lors du chargement des prix:', error);
         setServices(getDefaultServices());
       } finally {
         setLoading(false);
@@ -150,7 +148,7 @@ const Services = () => {
         title: 'Garde d\'enfants',
         subtitle: 'Journée entière ou demi-journée',
         description: 'Je m\'occupe de vos enfants avec des activités adaptées et une approche bienveillante.',
-        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activitités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
+        features: [`Garde de 1 à 3 enfants (majoration de ${additionalChildRate}€ pour le 3ème enfant)`, 'Activités adaptées à l\'âge', 'Matériel pédagogique fourni', 'Carnet de suivi d\'accompagnement'],
         color: 'bg-pink-50 border-pink-200',
         iconBg: 'bg-pink-100',
         minimum: 'Minimum = 3 heures',
@@ -190,7 +188,6 @@ const Services = () => {
     return (pricingData.services || []).map((service: any) => {
       const serviceInfo = serviceMapping[service.type];
       if (!serviceInfo) {
-        console.warn(`Service type "${service.type}" not found in mapping`);
         return null;
       }
 

@@ -61,7 +61,7 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen">
       {/* En-tête principal */}
       <div className="bg-white border-b sticky top-0 z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 py-3 sm:py-4">
@@ -99,7 +99,7 @@ const AdminDashboard: React.FC = () => {
             <div className="flex space-x-2 overflow-x-auto pb-2 scrollbar-hide">
               <button
                 onClick={() => setActiveTab('overview')}
-                className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 rounded-xl border-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'overview'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -113,7 +113,7 @@ const AdminDashboard: React.FC = () => {
               
               <button
                 onClick={() => setActiveTab('bookings')}
-                className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 rounded-xl border-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'bookings'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -127,7 +127,7 @@ const AdminDashboard: React.FC = () => {
               
               <button
                 onClick={() => setActiveTab('kanban')}
-                className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 rounded-xl border-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'kanban'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -141,7 +141,7 @@ const AdminDashboard: React.FC = () => {
               
               <button
                 onClick={() => setActiveTab('history')}
-                className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 rounded-xl border-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'history'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -155,7 +155,7 @@ const AdminDashboard: React.FC = () => {
               
               <button
                 onClick={() => setActiveTab('test')}
-                className={`flex-shrink-0 px-4 py-3 rounded-lg border-2 font-medium text-sm whitespace-nowrap ${
+                className={`flex-shrink-0 px-4 py-3 rounded-xl border-2 font-medium text-sm whitespace-nowrap ${
                   activeTab === 'test'
                     ? 'border-blue-500 bg-blue-50 text-blue-700'
                     : 'border-gray-200 bg-white text-gray-600 hover:border-gray-300'
@@ -199,7 +199,7 @@ const AdminDashboard: React.FC = () => {
           <TabsContent value="overview" className="space-y-6">
             {/* Statistiques principales */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-xs sm:text-sm font-medium">Total Réservations</CardTitle>
                   <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
@@ -212,7 +212,7 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-xs sm:text-sm font-medium">Nouvelles</CardTitle>
                   <Clock className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
@@ -225,7 +225,7 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-xs sm:text-sm font-medium">Confirmées</CardTitle>
                   <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
@@ -238,7 +238,7 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2 px-4 sm:px-6">
                   <CardTitle className="text-xs sm:text-sm font-medium">Terminées</CardTitle>
                   <TrendingUp className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground flex-shrink-0" />
@@ -254,14 +254,14 @@ const AdminDashboard: React.FC = () => {
 
             {/* Graphiques et métriques */}
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="px-4 sm:px-6">
                   <CardTitle className="text-sm sm:text-base">Activité Récente</CardTitle>
                 </CardHeader>
                 <CardContent className="px-4 sm:px-6">
                   <div className="space-y-2 sm:space-y-3">
                     {recentActivity.map((activity) => (
-                      <div key={activity.id} className="flex items-center gap-3 p-2 sm:p-3 rounded-lg hover:bg-gray-50">
+                      <div key={activity.id} className="flex items-center gap-3 p-2 sm:p-3 rounded-xl hover:bg-gray-50">
                         {getStatusIcon(activity.status)}
                         <div className="flex-1">
                           <p className={`text-sm font-medium ${getStatusColor(activity.status)}`}>
@@ -275,7 +275,7 @@ const AdminDashboard: React.FC = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="rounded-xl">
                 <CardHeader className="px-4 sm:px-6">
                   <CardTitle className="text-sm sm:text-base">Métriques de Performance</CardTitle>
                 </CardHeader>
@@ -305,7 +305,7 @@ const AdminDashboard: React.FC = () => {
             </div>
 
             {/* Actions rapides */}
-            <Card>
+            <Card className="rounded-xl">
               <CardHeader className="px-4 sm:px-6">
                 <CardTitle className="text-sm sm:text-base">Actions Rapides</CardTitle>
               </CardHeader>

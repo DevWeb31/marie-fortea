@@ -315,7 +315,7 @@ const StatusTransitionWorkflow: React.FC<StatusTransitionWorkflowProps> = ({
           {selectedBooking && (
             <div className="space-y-6">
               {/* En-tête avec informations de la réservation */}
-              <div className="bg-gray-50 dark:bg-gray-800 rounded-lg p-4">
+              <div className="border border-gray-200 dark:border-gray-700 rounded-xl p-4">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="flex items-center space-x-2">
@@ -361,7 +361,7 @@ const StatusTransitionWorkflow: React.FC<StatusTransitionWorkflowProps> = ({
               {/* Étapes du workflow */}
               <div className="space-y-4">
                 {workflowSteps.map((step, index) => (
-                  <div key={step.id} className="border rounded-lg p-4">
+                  <div key={step.id} className="border rounded-xl p-4">
                     <div className="flex items-center space-x-3 mb-3">
                       <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
                         step.isCompleted 
@@ -394,7 +394,7 @@ const StatusTransitionWorkflow: React.FC<StatusTransitionWorkflowProps> = ({
                         
                         {/* Messages de validation */}
                         {validation.errors.length > 0 && (
-                          <div className="mt-3 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md">
+                          <div className="mt-3 p-3 border border-red-200 dark:border-red-800 rounded-md">
                             <div className="flex items-center space-x-2 text-red-800 dark:text-red-200">
                               <AlertTriangle className="h-4 w-4" />
                               <span className="font-medium">Erreurs de validation :</span>
@@ -408,7 +408,7 @@ const StatusTransitionWorkflow: React.FC<StatusTransitionWorkflowProps> = ({
                         )}
 
                         {validation.warnings.length > 0 && (
-                          <div className="mt-3 p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+                          <div className="mt-3 p-3 border border-yellow-200 dark:border-yellow-800 rounded-md">
                             <div className="flex items-center space-x-2 text-yellow-800 dark:text-yellow-200">
                               <Warning className="h-4 w-4" />
                               <span className="font-medium">Avertissements :</span>
@@ -501,7 +501,7 @@ const ValidationStep: React.FC<{ booking: BookingRequestSummary }> = ({ booking 
       </div>
     </div>
     
-    <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+    <div className="p-3 border border-green-200 dark:border-green-800 rounded-md">
       <div className="flex items-center space-x-2 text-green-800 dark:text-green-200">
         <CheckCircle className="h-4 w-4" />
         <span className="text-sm font-medium">Toutes les informations sont complètes et valides</span>
@@ -532,7 +532,7 @@ const ReasonStep: React.FC<{
       </Select>
     </div>
     
-    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+    <div className="p-3 border border-blue-200 dark:border-blue-800 rounded-md">
       <div className="flex items-center space-x-2 text-blue-800 dark:text-blue-200">
         <Info className="h-4 w-4" />
         <span className="text-sm">Cette raison sera enregistrée dans l'historique des changements</span>
@@ -558,7 +558,7 @@ const NotesStep: React.FC<{
       />
     </div>
     
-    <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-md">
+    <div className="p-3 border border-yellow-200 dark:border-yellow-800 rounded-md">
       <div className="flex items-center space-x-2 text-yellow-800 dark:text-yellow-200">
         <Warning className="h-4 w-4" />
         <span className="text-sm">Les notes sont recommandées pour tracer les décisions importantes</span>
@@ -589,7 +589,7 @@ const ApprovalStep: React.FC<{
         </div>
       </div>
     ) : (
-      <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-md">
+      <div className="p-3 border border-green-200 dark:border-green-800 rounded-md">
         <div className="flex items-center space-x-2 text-green-800 dark:text-green-200">
           <CheckCircle className="h-4 w-4" />
           <span className="text-sm">Aucune approbation administrative requise pour cette transition</span>
@@ -597,7 +597,7 @@ const ApprovalStep: React.FC<{
       </div>
     )}
     
-    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+    <div className="p-3 border border-blue-200 dark:border-blue-800 rounded-md">
       <div className="flex items-center space-x-2 text-blue-800 dark:text-blue-200">
         <Shield className="h-4 w-4" />
         <span className="text-sm">Cette transition respecte les règles de workflow définies</span>
@@ -614,7 +614,7 @@ const ConfirmationStep: React.FC<{
   autoActions: string[]; 
 }> = ({ fromStatus, toStatus, reason, notes, autoActions }) => (
   <div className="space-y-4">
-    <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg">
+    <div className="p-4 border border-gray-200 dark:border-gray-700 rounded-xl">
       <h4 className="font-medium mb-3">Récapitulatif de la transition</h4>
       
       <div className="grid grid-cols-2 gap-4 text-sm">
@@ -640,7 +640,7 @@ const ConfirmationStep: React.FC<{
     </div>
     
     {autoActions.length > 0 && (
-      <div className="p-3 bg-purple-50 dark:bg-purple-900/20 border border-purple-200 dark:border-purple-800 rounded-md">
+      <div className="p-3 border border-purple-200 dark:border-purple-800 rounded-md">
         <div className="flex items-center space-x-2 text-purple-800 dark:text-purple-200">
           <Zap className="h-4 w-4" />
           <span className="text-sm font-medium">Actions automatiques qui seront exécutées :</span>
@@ -653,7 +653,7 @@ const ConfirmationStep: React.FC<{
       </div>
     )}
     
-    <div className="p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-md">
+    <div className="p-3 border border-blue-200 dark:border-blue-800 rounded-md">
       <div className="flex items-center space-x-2 text-blue-800 dark:text-blue-200">
         <Target className="h-4 w-4" />
         <span className="text-sm">Vérifiez que toutes les informations sont correctes avant de confirmer</span>

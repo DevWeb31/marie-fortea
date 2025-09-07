@@ -8,6 +8,7 @@ import {
   ContactMethod
 } from '@/types/booking';
 import { EmailService } from './email-service';
+import { PricingService } from './pricing-service';
 
 export class BookingService {
   // Créer une nouvelle demande de réservation
@@ -19,7 +20,45 @@ export class BookingService {
         return { data: null, error: validationError };
       }
 
-      // Préparer les données pour l'insertion
+      // Calculer le prix AVANT l'insertion
+      
+      // Calculer la durée
+      const startDateTime = new Date(`${data.requestedDate}T${data.startTime}`);
+      const endDateTime = new Date(`${data.requestedDate}T${data.endTime}`);
+      
+      if (endDateTime <= startDateTime) {
+        endDateTime.setDate(endDateTime.getDate() + 1);
+      }
+      
+      const durationMs = endDateTime.getTime() - startDateTime.getTime();
+      const durationHours = durationMs / (1000 * 60 * 60);
+      
+      
+      // Calculer le prix avec le service de prix
+      let estimatedTotal = 0;
+      try {
+        const { data: priceCalculation, error: priceError } = await PricingService.calculatePrice(
+          data.serviceType,
+          durationHours,
+          data.childrenCount
+        );
+        
+        if (priceError) {
+          // Utiliser un calcul de fallback simple
+          const fallbackPrice = data.serviceType === 'babysitting' ? 15 : 
+                               data.serviceType === 'event_support' ? 18 :
+                               data.serviceType === 'evening_care' ? 20 : 27;
+          estimatedTotal = fallbackPrice * durationHours;
+        } else if (priceCalculation) {
+          estimatedTotal = priceCalculation.totalAmount;
+        } else {
+          estimatedTotal = 15 * durationHours; // Fallback
+        }
+      } catch (error) {
+        estimatedTotal = 15 * durationHours; // Fallback simple
+      }
+
+      // Préparer les données pour l'insertion avec le prix calculé
       const bookingData = {
         parent_name: data.parentName,
         parent_email: data.parentEmail || null,
@@ -37,11 +76,13 @@ export class BookingService {
         emergency_phone: data.emergencyPhone || null,
         preferred_contact_method: data.preferredContactMethod || 'phone',
         contact_notes: data.contactNotes || null,
-        captcha_verified: true, // Le captcha est vérifié côté client
+        captcha_verified: true,
         source: 'website',
-        ip_address: null, // Sera rempli côté serveur si nécessaire
-        user_agent: navigator.userAgent
+        ip_address: null,
+        user_agent: navigator.userAgent,
+        estimated_total: estimatedTotal // Prix calculé et inclus directement
       };
+      
 
 
 
@@ -54,6 +95,8 @@ export class BookingService {
       if (error) {
         return { data: null, error: 'Erreur lors de la création de la demande' };
       }
+
+      // Le prix est maintenant calculé automatiquement par le trigger de la base de données
 
       // Convertir les données de la base vers notre format
       const bookingRequest: BookingRequest = {
@@ -84,7 +127,8 @@ export class BookingService {
         source: result.source,
         utmSource: result.utm_source,
         utmMedium: result.utm_medium,
-        utmCampaign: result.utm_campaign
+        utmCampaign: result.utm_campaign,
+        estimatedTotal: result.estimated_total
       };
 
       // Envoyer une notification par email
@@ -108,10 +152,10 @@ export class BookingService {
         .order('created_at', { ascending: false });
 
       if (error) {
-        console.error('Erreur lors de la récupération des demandes:', error);
         return { data: null, error: 'Erreur lors de la récupération des demandes' };
       }
 
+      
       const summaries: BookingRequestSummary[] = data.map(row => ({
         id: row.id,
         status: row.status as BookingStatus,
@@ -128,10 +172,10 @@ export class BookingService {
         basePrice: row.base_price,
         estimatedTotal: row.estimated_total
       }));
+      
 
       return { data: summaries, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération des demandes:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération des demandes' };
     }
   }
@@ -146,7 +190,6 @@ export class BookingService {
         .single();
 
       if (error) {
-        console.error('Erreur lors de la récupération de la demande:', error);
         return { data: null, error: 'Erreur lors de la récupération de la demande' };
       }
 
@@ -183,7 +226,6 @@ export class BookingService {
 
       return { data: bookingRequest, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération de la demande:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération de la demande' };
     }
   }
@@ -197,7 +239,6 @@ export class BookingService {
         .eq('id', id);
 
       if (error) {
-        console.error('Erreur lors de la mise à jour du statut:', error);
         return { data: null, error: 'Erreur lors de la mise à jour du statut' };
       }
 
@@ -208,7 +249,6 @@ export class BookingService {
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la mise à jour du statut:', error);
       return { data: null, error: 'Erreur inattendue lors de la mise à jour du statut' };
     }
   }
@@ -225,13 +265,11 @@ export class BookingService {
         });
 
       if (error) {
-        console.error('Erreur lors de l\'ajout de la note:', error);
         return { data: null, error: 'Erreur lors de l\'ajout de la note' };
       }
 
       return { data: true, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de l\'ajout de la note:', error);
       return { data: null, error: 'Erreur inattendue lors de l\'ajout de la note' };
     }
   }
@@ -246,7 +284,6 @@ export class BookingService {
         .order('name');
 
       if (error) {
-        console.error('Erreur lors de la récupération des types de services:', error);
         return { data: null, error: 'Erreur lors de la récupération des types de services' };
       }
 
@@ -263,7 +300,6 @@ export class BookingService {
 
       return { data: serviceTypes, error: null };
     } catch (error) {
-      console.error('Erreur inattendue lors de la récupération des types de services:', error);
       return { data: null, error: 'Erreur inattendue lors de la récupération des types de services' };
     }
   }
@@ -373,67 +409,48 @@ export class BookingService {
   static async moveToTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
     try {
       
-      // Première tentative : utiliser la fonction RPC
-      const { data: rpcData, error: rpcError } = await supabase
-        .rpc('soft_delete_booking_request', { booking_id: id });
+      // D'abord, vérifier l'état actuel de la réservation
+      const { data: checkData, error: checkError } = await supabase
+        .from('booking_requests')
+        .select('id, deleted_at, archived_at, status')
+        .eq('id', id)
+        .single();
 
-      if (rpcError) {
-        // Fonction RPC échouée, tentative de mise à jour directe
-      } else if (rpcData === true) {
-        return { data: true, error: null };
-      } else {
-        console.warn('RPC retourne false, tentative de mise à jour directe');
+      if (checkError) {
+        return { data: null, error: `Erreur lors de la vérification: ${checkError.message}` };
       }
-      
-      // Solution de contournement : mise à jour directe de la table
-      
+
+      if (!checkData) {
+        return { data: null, error: 'Réservation non trouvée' };
+      }
+
+      if (checkData.deleted_at) {
+        return { data: null, error: 'Réservation déjà dans la corbeille' };
+      }
+
+      if (checkData.archived_at) {
+        return { data: null, error: 'Réservation déjà archivée' };
+      }
+
+      // Mise à jour directe de la table
       const { data: directData, error: directError } = await supabase
         .from('booking_requests')
         .update({ 
-          deleted_at: new Date().toISOString(),
-          updated_at: new Date().toISOString()
+          deleted_at: new Date().toISOString()
         })
         .eq('id', id)
         .select('id, deleted_at');
 
       if (directError) {
-        console.error('Erreur de mise à jour directe:', directError.message);
-        return { data: null, error: `Erreur lors de la mise en corbeille (directe): ${directError.message}` };
+        return { data: null, error: `Erreur lors de la mise en corbeille: ${directError.message}` };
       }
 
       if (directData && directData.length > 0) {
         return { data: true, error: null };
       } else {
-        console.warn('⚠️ Aucune ligne affectée par la mise à jour directe');
-        
-        // Dernière tentative : vérifier si la réservation existe et son état
-        const { data: checkData, error: checkError } = await supabase
-          .from('booking_requests')
-          .select('id, deleted_at, archived_at')
-          .eq('id', id)
-          .single();
-
-        if (checkError) {
-          console.error('Erreur lors de la vérification:', checkError.message);
-          return { data: null, error: `Erreur lors de la vérification: ${checkError.message}` };
-        }
-
-        if (checkData) {
-          if (checkData.deleted_at) {
-            return { data: null, error: 'Réservation déjà dans la corbeille' };
-          } else if (checkData.archived_at) {
-            return { data: null, error: 'Réservation déjà archivée' };
-          } else {
-            console.error('❌ Réservation trouvée mais mise à jour impossible - problème de permissions RLS');
-            return { data: null, error: 'Réservation trouvée mais mise à jour impossible - problème de permissions RLS' };
-          }
-        } else {
-          console.error('❌ Réservation non trouvée');
-          return { data: null, error: 'Réservation non trouvée' };
-        }
+        return { data: null, error: 'Problème de permissions - impossible de mettre à jour la réservation' };
       }
     } catch (error) {
-      console.error('❌ Exception lors de la mise en corbeille:', error);
       return { data: null, error: 'Erreur inattendue lors de la mise en corbeille' };
     }
   }
@@ -441,19 +458,25 @@ export class BookingService {
     // Restaurer une réservation depuis la corbeille
   static async restoreFromTrash(id: string): Promise<{ data: boolean | null; error: string | null }> {
     try {
+      // Mise à jour directe de la table (plus fiable que RPC)
       const { data, error } = await supabase
-        .rpc('restore_booking_request', { booking_id: id });
+        .from('booking_requests')
+        .update({ 
+          deleted_at: null
+        })
+        .eq('id', id)
+        .not('deleted_at', 'is', null) // S'assurer qu'elle est bien dans la corbeille
+        .select('id, deleted_at');
 
       if (error) {
-        return { data: null, error: 'Erreur lors de la restauration' };
+        return { data: null, error: `Erreur lors de la restauration: ${error.message}` };
       }
 
-      // Vérifier que la fonction a bien mis à jour une ligne
-      if (data === false) {
+      if (data && data.length > 0) {
+        return { data: true, error: null };
+      } else {
         return { data: null, error: 'Aucune réservation trouvée ou pas dans la corbeille' };
       }
-
-      return { data: true, error: null };
     } catch (error) {
       return { data: null, error: 'Erreur inattendue lors de la restauration' };
     }

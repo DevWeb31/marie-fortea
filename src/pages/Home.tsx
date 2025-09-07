@@ -283,7 +283,7 @@ const Home = () => {
         <div className="w-full px-4 sm:px-6 lg:px-8">
           <div className="grid items-center gap-8 sm:gap-12 lg:grid-cols-2 lg:gap-16">
             <div>
-              <AnimatedTitle className="mb-6 font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-3xl md:text-4xl" delay={0.4}>
+              <AnimatedTitle className="mb-6 text-center font-['Poppins'] text-2xl font-bold text-gray-900 dark:text-white sm:text-left sm:text-3xl md:text-4xl" delay={0.4}>
                 Pourquoi choisir Marie ?
               </AnimatedTitle>
 
