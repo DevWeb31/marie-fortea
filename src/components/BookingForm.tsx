@@ -16,6 +16,7 @@ import ContactSummaryModal from './ContactSummaryModal';
 import SuccessAnimation from './SuccessAnimation';
 import { BookingService } from '@/lib/booking-service';
 import { PricingService } from '@/lib/pricing-service';
+import { calculateDurationHours } from '@/lib/duration-utils';
 import { Calendar, Baby, User, CheckCircle, AlertCircle, Calculator } from 'lucide-react';
 import { FormDatePicker } from '@/components/ui/date-picker';
 
@@ -143,17 +144,8 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   useEffect(() => {
     const calculateTotal = async () => {
       if (formData.serviceType && formData.startTime && formData.endTime && formData.startDate) {
-        // Calculer la durée totale en heures
-        const startDateTime = new Date(`${formData.startDate}T${formData.startTime}`);
-        const endDateTime = new Date(`${formData.startDate}T${formData.endTime}`);
-        
-        // Si l'heure de fin est avant l'heure de début, c'est le lendemain
-        if (endDateTime <= startDateTime) {
-          endDateTime.setDate(endDateTime.getDate() + 1);
-        }
-        
-        const durationMs = endDateTime.getTime() - startDateTime.getTime();
-        const durationHours = durationMs / (1000 * 60 * 60);
+        // Calculer la durée totale en heures en utilisant la fonction correcte
+        const durationHours = calculateDurationHours(formData.startTime, formData.endTime);
         
         // Utiliser le service de prix dynamiques
         try {

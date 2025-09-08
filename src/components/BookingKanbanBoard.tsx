@@ -67,18 +67,29 @@ const BookingKanbanBoard: React.FC = () => {
       }
 
       // Mapper les données de snake_case vers camelCase
-      const mappedBookings = (data || []).map((booking: any) => ({
-        ...booking,
-        // Mapper les champs snake_case vers camelCase
-        parentName: booking.parent_name,
-        parentEmail: booking.parent_email,
-        parentPhone: booking.parent_phone,
-        parentAddress: booking.parent_address,
-        serviceType: booking.service_type,
-        requestedDate: booking.requested_date,
-        startTime: booking.start_time,
-        endTime: booking.end_time,
-        durationHours: booking.duration_hours,
+      const mappedBookings = (data || []).map((booking: any) => {
+        // DEBUG: Log des données brutes pour la production
+        console.log('🔍 DEBUG PROD KANBAN - Données brutes booking:', {
+          id: booking.id,
+          parent_name: booking.parent_name,
+          start_time: booking.start_time,
+          end_time: booking.end_time,
+          duration_hours: booking.duration_hours,
+          duration_hours_type: typeof booking.duration_hours
+        });
+        
+        return {
+          ...booking,
+          // Mapper les champs snake_case vers camelCase
+          parentName: booking.parent_name,
+          parentEmail: booking.parent_email,
+          parentPhone: booking.parent_phone,
+          parentAddress: booking.parent_address,
+          serviceType: booking.service_type,
+          requestedDate: booking.requested_date,
+          startTime: booking.start_time,
+          endTime: booking.end_time,
+          durationHours: booking.duration_hours,
         childrenCount: booking.children_count,
         childrenDetails: booking.children_details,
         childrenAges: booking.children_ages,
@@ -103,7 +114,8 @@ const BookingKanbanBoard: React.FC = () => {
         statusDescription: booking.status_description,
         serviceName: booking.service_name,
         basePrice: booking.base_price
-      }));
+        };
+      });
 
       setBookings(mappedBookings);
     } catch (error) {
@@ -280,7 +292,13 @@ const BookingKanbanBoard: React.FC = () => {
                               {/* Détails rapides */}
                               <div className="flex items-center justify-between text-xs text-gray-500">
                                 <span>{booking.childrenCount} enfant(s)</span>
-                                <span>{formatDuration(booking.durationHours)}</span>
+                                <span>
+                                  {formatDuration(booking.durationHours)}
+                                  {/* DEBUG PROD */}
+                                  <span className="text-xs text-red-500 ml-1">
+                                    [{booking.durationHours}]
+                                  </span>
+                                </span>
                               </div>
                               
                               {/* Actions rapides */}
@@ -475,7 +493,9 @@ const BookingKanbanBoard: React.FC = () => {
                   </div>
                   <div>
                     <span className="text-gray-500">Durée:</span>
-                    <p className="font-medium">{formatDuration(selectedBooking.durationHours)}</p>
+                    <p className="font-medium">
+                      {formatDuration(selectedBooking.durationHours)}
+                    </p>
                   </div>
                 </div>
               </div>

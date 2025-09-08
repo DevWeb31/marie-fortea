@@ -374,10 +374,28 @@ export const getBookingStatusDescription = (code: string): string => {
 };
 
 export const calculateDuration = (startTime: string, endTime: string): number => {
-  const start = new Date(`2000-01-01T${startTime}`);
-  const end = new Date(`2000-01-01T${endTime}`);
-  const diffMs = end.getTime() - start.getTime();
-  return Math.round((diffMs / (1000 * 60 * 60)) * 100) / 100;
+  // Convertir les heures en minutes pour faciliter le calcul
+  const parseTime = (time: string): number => {
+    const [hours, minutes] = time.split(':').map(Number);
+    return hours * 60 + minutes;
+  };
+
+  const startMinutes = parseTime(startTime);
+  const endMinutes = parseTime(endTime);
+
+  let durationMinutes: number;
+
+  // Si l'heure de fin est avant l'heure de début, c'est le lendemain
+  if (endMinutes <= startMinutes) {
+    // Ajouter 24 heures (1440 minutes) pour le passage à minuit
+    durationMinutes = (1440 - startMinutes) + endMinutes;
+  } else {
+    // Même jour
+    durationMinutes = endMinutes - startMinutes;
+  }
+
+  // Convertir en heures avec 2 décimales
+  return Math.round((durationMinutes / 60) * 100) / 100;
 };
 
 export const calculateEstimatedTotal = (serviceType: string, startTime: string, endTime: string): number => {
