@@ -2,7 +2,7 @@ import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Button } from '../components/ui/button';
-import { CheckCircle, Home, Calendar } from 'lucide-react';
+import { CheckCircle, Home } from 'lucide-react';
 
 const BookingConfirmed: React.FC = () => {
   const location = useLocation();
@@ -39,21 +39,13 @@ const BookingConfirmed: React.FC = () => {
               <p>Notre équipe vous contactera prochainement pour finaliser les derniers détails.</p>
             </div>
             
-            <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <div className="pt-4">
               <Button 
                 onClick={() => navigate('/')} 
-                className="flex-1"
+                className="w-full"
               >
                 <Home className="h-4 w-4 mr-2" />
                 Retour à l'accueil
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => navigate('/contact')}
-                className="flex-1"
-              >
-                <Calendar className="h-4 w-4 mr-2" />
-                Nous contacter
               </Button>
             </div>
           </CardContent>
