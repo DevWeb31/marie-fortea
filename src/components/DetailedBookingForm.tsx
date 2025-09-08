@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea';
 import { Checkbox } from './ui/checkbox';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { 
   MapPin, 
   User, 
@@ -98,6 +99,28 @@ const DetailedBookingForm: React.FC = () => {
       }).replace(':', ' h ');
     } catch {
       return timeString;
+    }
+  };
+
+  // Fonction pour formater le numéro de téléphone
+  const formatPhoneNumber = (value: string) => {
+    // Supprimer tous les caractères non numériques
+    const numbers = value.replace(/\D/g, '');
+    
+    // Limiter à 10 chiffres
+    const limitedNumbers = numbers.slice(0, 10);
+    
+    // Formater en XX XX XX XX XX
+    if (limitedNumbers.length <= 2) {
+      return limitedNumbers;
+    } else if (limitedNumbers.length <= 4) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2)}`;
+    } else if (limitedNumbers.length <= 6) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4)}`;
+    } else if (limitedNumbers.length <= 8) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4, 6)} ${limitedNumbers.slice(6)}`;
+    } else {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4, 6)} ${limitedNumbers.slice(6, 8)} ${limitedNumbers.slice(8)}`;
     }
   };
   
@@ -201,10 +224,10 @@ const DetailedBookingForm: React.FC = () => {
       return;
     }
 
-    // Vérifier que tous les enfants ont un nom et un âge
-    const invalidChildren = children.filter(child => !child.name.trim() || child.age <= 0);
+    // Vérifier que tous les enfants ont un nom et un âge sélectionné
+    const invalidChildren = children.filter(child => !child.name.trim() || child.age === 0);
     if (invalidChildren.length > 0) {
-      setError('Veuillez renseigner le nom et l\'âge de tous les enfants');
+      setError('Veuillez renseigner le nom et sélectionner l\'âge de tous les enfants');
       return;
     }
 
@@ -415,16 +438,21 @@ const DetailedBookingForm: React.FC = () => {
                       </div>
                       <div>
                         <Label htmlFor={`child-age-${index}`}>Âge *</Label>
-                        <Input
-                          id={`child-age-${index}`}
-                          type="number"
-                          min="0"
-                          max="18"
-                          value={child.age}
-                          onChange={(e) => handleChildChange(index, 'age', parseInt(e.target.value) || 0)}
-                          required
-                          className="mt-1"
-                        />
+                        <Select
+                          value={child.age.toString()}
+                          onValueChange={(value) => handleChildChange(index, 'age', parseInt(value))}
+                        >
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Sélectionner l'âge" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.from({ length: 11 }, (_, i) => (
+                              <SelectItem key={i} value={i.toString()}>
+                                {i === 0 ? 'Moins de 1 an' : `${i} an${i > 1 ? 's' : ''}`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="md:col-span-2">
                         <Label htmlFor={`child-allergies-${index}`}>Allergies et particularités</Label>
@@ -491,9 +519,10 @@ const DetailedBookingForm: React.FC = () => {
                   <Input
                     id="emergency-phone"
                     value={emergencyPhone}
-                    onChange={(e) => setEmergencyPhone(e.target.value)}
+                    onChange={(e) => setEmergencyPhone(formatPhoneNumber(e.target.value))}
                     placeholder="06 12 34 56 78"
                     className="mt-1"
+                    maxLength={14} // XX XX XX XX XX = 14 caractères max
                   />
                 </div>
               </div>
