@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCustomToast } from '@/components/ui/custom-toaster';
 import { BookingService } from '@/lib/booking-service';
+import { EmailService } from '@/lib/email-service';
 import { getServiceTypeName } from '@/lib/service-utils';
 import { formatDuration } from '@/lib/duration-utils';
 import { 
@@ -46,7 +47,8 @@ import {
   Trash2,
   RotateCcw,
   Trash,
-  CheckSquare
+  CheckSquare,
+  Mail
 } from 'lucide-react';
 import ConfirmDialog from '@/components/ui/confirm-dialog';
 import { supabase } from '@/lib/supabase';
@@ -117,6 +119,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
   const [isDetailDialogOpen, setIsDetailDialogOpen] = useState(false);
   const [isStatusDialogOpen, setIsStatusDialogOpen] = useState(false);
   const [isNoteDialogOpen, setIsNoteDialogOpen] = useState(false);
+  const [isDetailedFormDialogOpen, setIsDetailedFormDialogOpen] = useState(false);
   
   // États pour la sélection multiple
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set());
@@ -1105,6 +1108,84 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
     setIsNoteDialogOpen(true);
   };
 
+  const openDetailedFormDialog = (request: BookingRequestSummary) => {
+    setSelectedRequest(request);
+    setIsDetailedFormDialogOpen(true);
+  };
+
+  const handleSendDetailedForm = async () => {
+    if (!selectedRequest) return;
+    
+    try {
+      // Générer un token unique pour le formulaire détaillé
+      const formToken = crypto.randomUUID();
+      
+      // Sauvegarder le token dans la base de données
+      const { error: tokenError } = await supabase
+        .from('booking_requests')
+        .update({ 
+          detailed_form_token: formToken,
+          detailed_form_sent_at: new Date().toISOString()
+        })
+        .eq('id', selectedRequest.id);
+
+      if (tokenError) {
+        throw new Error('Erreur lors de la génération du token');
+      }
+
+      // Envoyer l'email avec le lien vers le formulaire détaillé
+      const formUrl = `${window.location.origin}/detailed-booking-form/${formToken}`;
+      
+      // Récupérer les données complètes de la réservation pour l'email
+      const { data: fullBookingData, error: fetchError } = await supabase
+        .from('booking_requests')
+        .select('*')
+        .eq('id', selectedRequest.id)
+        .single();
+
+      if (fetchError || !fullBookingData) {
+        throw new Error('Erreur lors de la récupération des données de la réservation');
+      }
+
+      // Mapper les données brutes vers le format attendu par le service email
+      const mappedBookingData = {
+        id: fullBookingData.id,
+        parentName: fullBookingData.parent_name,
+        parentEmail: fullBookingData.parent_email,
+        parentPhone: fullBookingData.parent_phone,
+        serviceType: fullBookingData.service_type,
+        requestedDate: fullBookingData.requested_date,
+        startTime: fullBookingData.start_time,
+        endTime: fullBookingData.end_time,
+        childrenCount: fullBookingData.children_count,
+        status: fullBookingData.status,
+        createdAt: fullBookingData.created_at,
+        updatedAt: fullBookingData.updated_at
+      };
+
+      // Envoyer l'email
+      const emailResult = await EmailService.sendDetailedFormEmail(mappedBookingData, formUrl);
+      
+      if (emailResult.error) {
+        throw new Error(emailResult.error);
+      }
+      
+      toast({
+        title: 'Email envoyé',
+        description: 'Le formulaire détaillé a été envoyé au client',
+        variant: 'default',
+      });
+      
+      setIsDetailedFormDialogOpen(false);
+    } catch (error) {
+      toast({
+        title: 'Erreur',
+        description: 'Erreur lors de l\'envoi du formulaire détaillé',
+        variant: 'destructive',
+      });
+    }
+  };
+
   const getStatusIcon = (status: AllBookingStatus) => {
     switch (status) {
       case 'pending':
@@ -1457,6 +1538,18 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                             >
                               <MessageSquare className="h-4 w-4" />
                             </Button>
+                            
+                            {request.status === 'contacted' && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                onClick={() => openDetailedFormDialog(request)}
+                                className="w-10 h-10 p-0 flex items-center justify-center text-green-600 hover:text-green-700 hover:bg-green-50"
+                                title="Envoyer le formulaire détaillé"
+                              >
+                                <Mail className="h-4 w-4" />
+                              </Button>
+                            )}
                             
                             <Button
                               variant="outline"
@@ -2055,38 +2148,40 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
       {/* Dialog d'ajout de note */}
       <Dialog open={isNoteDialogOpen} onOpenChange={setIsNoteDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Ajouter une note administrative</DialogTitle>
+        <DialogContent className="w-[95vw] max-w-md max-h-[80vh] overflow-y-auto p-4 rounded-xl">
+          <DialogHeader className="pb-3">
+            <DialogTitle className="text-lg">Ajouter une note administrative</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="adminNote">Note</Label>
+              <Label htmlFor="adminNote" className="text-sm font-medium text-gray-500">Note</Label>
               <Textarea
                 id="adminNote"
                 value={adminNote}
                 onChange={(e) => setAdminNote(e.target.value)}
                 placeholder="Note administrative..."
-                className="mt-1"
+                className="mt-1 text-sm"
                 rows={4}
               />
             </div>
             
-            <div className="flex justify-end space-x-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
               <Button
                 variant="outline"
                 onClick={() => setIsNoteDialogOpen(false)}
                 disabled={isUpdating}
+                className="h-9 text-sm"
               >
                 Annuler
               </Button>
               <Button
                 onClick={handleAddNote}
                 disabled={isUpdating || !adminNote.trim()}
+                className="h-9 text-sm"
               >
                 {isUpdating ? (
                   <>
-                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                     Ajout...
                   </>
                 ) : (
@@ -2095,6 +2190,56 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
               </Button>
             </div>
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Dialog d'envoi du formulaire détaillé */}
+      <Dialog open={isDetailedFormDialogOpen} onOpenChange={setIsDetailedFormDialogOpen}>
+        <DialogContent className="w-[95vw] max-w-md max-h-[80vh] overflow-y-auto p-4 rounded-xl">
+          <DialogHeader className="pb-3">
+            <DialogTitle className="text-lg flex items-center gap-2">
+              <Mail className="h-5 w-5 text-green-600" />
+              Envoyer le formulaire détaillé
+            </DialogTitle>
+          </DialogHeader>
+          {selectedRequest && (
+            <div className="space-y-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-3">
+                <p className="text-sm text-green-800">
+                  Un email sera envoyé à <strong>{selectedRequest.parentName}</strong> avec un lien vers un formulaire détaillé pour compléter sa réservation.
+                </p>
+              </div>
+              
+              <div className="text-sm text-gray-600">
+                <p className="mb-2">Le formulaire détaillé permettra au client de renseigner :</p>
+                <ul className="list-disc list-inside space-y-1 text-xs">
+                  <li>L'adresse complète de la garde</li>
+                  <li>Les prénoms de chaque enfant</li>
+                  <li>Les âges des enfants</li>
+                  <li>Les allergies et particularités</li>
+                  <li>Les préférences et goûts</li>
+                  <li>Des commentaires supplémentaires</li>
+                </ul>
+              </div>
+              
+              <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
+                <Button
+                  variant="outline"
+                  onClick={() => setIsDetailedFormDialogOpen(false)}
+                  className="h-9 text-sm"
+                >
+                  Annuler
+                </Button>
+                <Button
+                  onClick={handleSendDetailedForm}
+                  className="h-9 text-sm bg-green-600 hover:bg-green-700"
+                >
+                  <Mail className="h-4 w-4 mr-2" />
+                  Envoyer l'email
+                </Button>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
