@@ -165,7 +165,9 @@ const DetailedBookingForm: React.FC = () => {
         setChildren(initialChildren);
         
         // Pré-remplir les champs existants
-        setAddress(data.parent_address || '');
+        // Ne pas pré-remplir l'adresse si elle contient le texte par défaut
+        const defaultAddressText = 'À préciser lors du contact';
+        setAddress(data.parent_address && data.parent_address !== defaultAddressText ? data.parent_address : '');
         setAdditionalInfo(data.special_instructions || '');
         setEmergencyContact(data.emergency_contact || '');
         setEmergencyPhone(data.emergency_phone || '');
