@@ -36,7 +36,6 @@ const BookingConfirmed: React.FC = () => {
             
             <div className="space-y-2 text-sm text-muted-foreground">
               <p>Nous avons bien reçu tous les détails de votre réservation.</p>
-              <p>Notre équipe vous contactera prochainement pour finaliser les derniers détails.</p>
             </div>
             
             <div className="pt-4">
