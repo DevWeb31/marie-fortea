@@ -63,6 +63,18 @@ interface DetailedBookingData {
 const DetailedBookingForm: React.FC = () => {
   const { token } = useParams<{ token: string }>();
   const navigate = useNavigate();
+
+  // Fonction pour mapper les codes de service vers des noms lisibles
+  const getServiceDisplayName = (serviceCode: string) => {
+    const serviceNames: { [key: string]: string } = {
+      'mariage': 'Mariage',
+      'urgence': 'Garde d\'urgence',
+      'soiree': 'Soirée parents',
+      'weekend': 'Week-end/Vacances',
+      'autre': 'Autre événement'
+    };
+    return serviceNames[serviceCode] || serviceCode;
+  };
   
   const [bookingData, setBookingData] = useState<DetailedBookingData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -94,10 +106,22 @@ const DetailedBookingForm: React.FC = () => {
           .select('*')
           .eq('detailed_form_token', token)
           .eq('status', 'contacted')
+          .is('detailed_form_completed_at', null) // S'assurer que le formulaire n'a pas déjà été soumis
           .single();
 
         if (error || !data) {
-          setError('Réservation non trouvée ou token invalide');
+          // Vérifier si le formulaire a déjà été soumis
+          const { data: existingData } = await supabase
+            .from('booking_requests')
+            .select('detailed_form_completed_at, status')
+            .eq('detailed_form_token', token)
+            .single();
+            
+          if (existingData?.detailed_form_completed_at) {
+            setError('Ce formulaire a déjà été soumis. Votre réservation est confirmée.');
+          } else {
+            setError('Réservation non trouvée ou token invalide');
+          }
           setLoading(false);
           return;
         }
@@ -144,8 +168,33 @@ const DetailedBookingForm: React.FC = () => {
     e.preventDefault();
     if (!bookingData) return;
 
+    // Validation des champs requis
+    if (!address.trim()) {
+      setError('L\'adresse est requise');
+      return;
+    }
+
+    // Vérifier que tous les enfants ont un nom et un âge
+    const invalidChildren = children.filter(child => !child.name.trim() || child.age <= 0);
+    if (invalidChildren.length > 0) {
+      setError('Veuillez renseigner le nom et l\'âge de tous les enfants');
+      return;
+    }
+
     setSubmitting(true);
+    setError(null); // Réinitialiser les erreurs
     try {
+      // Récupérer l'ID du statut "confirmee"
+      const { data: statusData, error: statusError } = await supabase
+        .from('booking_statuses')
+        .select('id')
+        .eq('code', 'confirmee')
+        .single();
+
+      if (statusError || !statusData) {
+        throw new Error('Erreur lors de la récupération du statut');
+      }
+
       // Préparer les données à mettre à jour
       const updateData = {
         parent_address: address,
@@ -159,7 +208,8 @@ const DetailedBookingForm: React.FC = () => {
         preferred_contact_method: preferredContactMethod,
         contact_notes: contactNotes,
         detailed_form_completed_at: new Date().toISOString(),
-        status: 'confirmed', // Changer le statut à confirmé
+        status: 'confirmed', // Garder l'ancien système pour compatibilité
+        status_id: statusData.id, // Utiliser le nouveau système de statuts
         updated_at: new Date().toISOString()
       };
 
@@ -176,7 +226,7 @@ const DetailedBookingForm: React.FC = () => {
       navigate('/booking-confirmed', { 
         state: { 
           bookingId: bookingData.id,
-          parentName: bookingData.parentName 
+          parentName: bookingData.parent_name 
         } 
       });
     } catch (err) {
@@ -187,7 +237,7 @@ const DetailedBookingForm: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Chargement du formulaire...</p>
@@ -198,8 +248,8 @@ const DetailedBookingForm: React.FC = () => {
 
   if (error || !bookingData) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <Card className="w-full max-w-md">
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+        <Card className="w-full max-w-md bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-red-500 mb-4">
@@ -219,7 +269,7 @@ const DetailedBookingForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* En-tête */}
         <div className="mb-8">
@@ -237,13 +287,13 @@ const DetailedBookingForm: React.FC = () => {
               Compléter votre réservation
             </h1>
             <p className="text-gray-600">
-              Bonjour {bookingData.parentName}, veuillez compléter les détails de votre réservation
+              Bonjour {bookingData.parent_name}, veuillez compléter les détails de votre réservation
             </p>
           </div>
         </div>
 
         {/* Résumé de la réservation */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
@@ -254,30 +304,42 @@ const DetailedBookingForm: React.FC = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <Label className="text-sm font-medium text-gray-500">Type de service</Label>
-                <p className="font-medium">{bookingData.serviceType}</p>
+                <p className="font-medium">{getServiceDisplayName(bookingData.service_type) || 'Service personnalisé'}</p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Date</Label>
-                <p className="font-medium">{new Date(bookingData.requestedDate).toLocaleDateString('fr-FR')}</p>
+                <p className="font-medium">{new Date(bookingData.requested_date).toLocaleDateString('fr-FR')}</p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Horaires</Label>
                 <p className="font-medium">
-                  {bookingData.startTime} - {bookingData.endTime}
+                  {bookingData.start_time} - {bookingData.end_time}
                 </p>
               </div>
               <div>
                 <Label className="text-sm font-medium text-gray-500">Nombre d'enfants</Label>
-                <p className="font-medium">{bookingData.childrenCount}</p>
+                <p className="font-medium">{bookingData.children_count}</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
+        {/* Affichage des erreurs */}
+        {error && (
+          <Card className="mb-8 border-red-200/50 bg-red-50/70 backdrop-blur-sm shadow-lg">
+            <CardContent className="pt-6">
+              <div className="flex items-center gap-2 text-red-600">
+                <CheckCircle className="h-5 w-5" />
+                <p className="font-medium">{error}</p>
+              </div>
+            </CardContent>
+          </Card>
+        )}
+
         {/* Formulaire détaillé */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Adresse */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5" />
@@ -300,7 +362,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Informations sur les enfants */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Baby className="h-5 w-5" />
@@ -378,7 +440,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Contact d'urgence */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -412,7 +474,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Instructions spéciales */}
-          <Card>
+          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
@@ -477,7 +539,7 @@ const DetailedBookingForm: React.FC = () => {
           <div className="text-center">
             <Button
               type="submit"
-              disabled={submitting || !address.trim()}
+              disabled={submitting}
               className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
             >
               {submitting ? (
