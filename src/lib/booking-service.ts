@@ -14,6 +14,12 @@ export class BookingService {
   // Créer une nouvelle demande de réservation
   static async createBookingRequest(data: CreateBookingRequest): Promise<{ data: BookingRequest | null; error: string | null }> {
     try {
+      console.log('🔍 DEBUG BOOKING SERVICE - Données reçues:', {
+        serviceType: data.serviceType,
+        serviceTypeType: typeof data.serviceType,
+        allData: data
+      });
+
       // Validation des données
       const validationError = this.validateBookingData(data);
       if (validationError) {
@@ -83,8 +89,11 @@ export class BookingService {
         estimated_total: estimatedTotal // Prix calculé et inclus directement
       };
       
-
-
+      console.log('🔍 DEBUG BOOKING SERVICE - Données à insérer en base:', {
+        service_type: bookingData.service_type,
+        service_typeType: typeof bookingData.service_type,
+        allBookingData: bookingData
+      });
 
       const { data: result, error } = await supabase
         .from('booking_requests')
@@ -146,12 +155,28 @@ export class BookingService {
   // Récupérer toutes les demandes actives (pour l'administration)
   static async getAllBookingRequests(): Promise<{ data: BookingRequestSummary[] | null; error: string | null }> {
     try {
+      console.log('🔍 DEBUG BOOKING SERVICE - getAllBookingRequests appelé');
+      
       const { data, error } = await supabase
         .from('active_booking_requests')
         .select('*')
         .order('created_at', { ascending: false });
+        
+      console.log('🔍 DEBUG BOOKING SERVICE - Réponse Supabase getAllBookingRequests:', {
+        dataLength: data?.length || 0,
+        error: error?.message || 'Aucune erreur',
+        errorCode: error?.code,
+        errorDetails: error?.details,
+        firstRecord: data?.[0] ? {
+          id: data[0].id,
+          service_type: data[0].service_type,
+          parent_name: data[0].parent_name
+        } : 'Aucune donnée',
+        allData: data
+      });
 
       if (error) {
+        console.error('🔍 DEBUG BOOKING SERVICE - Erreur Supabase:', error);
         return { data: null, error: 'Erreur lors de la récupération des demandes' };
       }
 
@@ -173,6 +198,14 @@ export class BookingService {
         estimatedTotal: row.estimated_total
       }));
       
+      console.log('🔍 DEBUG BOOKING SERVICE - Données mappées:', {
+        summariesLength: summaries.length,
+        firstSummary: summaries[0] ? {
+          id: summaries[0].id,
+          serviceType: summaries[0].serviceType,
+          parentName: summaries[0].parentName
+        } : 'Aucune donnée mappée'
+      });
 
       return { data: summaries, error: null };
     } catch (error) {

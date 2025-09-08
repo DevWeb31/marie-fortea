@@ -1,4 +1,7 @@
 import React, { useState, useEffect } from 'react';
+
+// Log global pour vérifier que le fichier est chargé
+console.log('🔍 DEBUG ADMIN - Fichier AdminBookingManager.tsx chargé');
 import { 
   BookingRequest, 
   BookingStatusCode,
@@ -10,6 +13,7 @@ import {
 } from '../types/booking-status';
 import { supabase } from '../lib/supabase';
 import { formatDuration } from '../lib/duration-utils';
+import { getServiceTypeName } from '../lib/service-utils';
 import { Button } from './ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
@@ -56,6 +60,8 @@ interface StatusCount {
 }
 
 const AdminBookingManager: React.FC = () => {
+  console.log('🔍 DEBUG ADMIN - Composant AdminBookingManager monté');
+  
   const [bookings, setBookings] = useState<BookingWithStatus[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState<string>('all');
@@ -69,6 +75,7 @@ const AdminBookingManager: React.FC = () => {
 
   // Charger les réservations avec leurs statuts
   const loadBookings = async () => {
+    console.log('🔍 DEBUG ADMIN - Fonction loadBookings appelée');
     try {
       setLoading(true);
       
@@ -84,10 +91,18 @@ const AdminBookingManager: React.FC = () => {
         error: error?.message || 'Aucune erreur',
         firstRecord: data?.[0] ? {
           id: data[0].id,
+          service_type: data[0].service_type,
+          service_typeType: typeof data[0].service_type,
+          parent_name: data[0].parent_name,
           duration_hours: data[0].duration_hours,
           start_time: data[0].start_time,
           end_time: data[0].end_time
-        } : 'Aucune donnée'
+        } : 'Aucune donnée',
+        allServiceTypes: data?.map(record => ({
+          id: record.id,
+          service_type: record.service_type,
+          parent_name: record.parent_name
+        })) || []
       });
 
       if (error) {
@@ -100,6 +115,8 @@ const AdminBookingManager: React.FC = () => {
         console.log('🔍 DEBUG PROD - Données brutes booking:', {
           id: booking.id,
           parent_name: booking.parent_name,
+          service_type: booking.service_type,
+          service_typeType: typeof booking.service_type,
           start_time: booking.start_time,
           end_time: booking.end_time,
           duration_hours: booking.duration_hours,
@@ -145,9 +162,24 @@ const AdminBookingManager: React.FC = () => {
         };
       });
 
+      console.log('🔍 DEBUG ADMIN - Réservations mappées:', {
+        totalBookings: mappedBookings.length,
+        firstBooking: mappedBookings[0] ? {
+          id: mappedBookings[0].id,
+          serviceType: mappedBookings[0].serviceType,
+          serviceTypeType: typeof mappedBookings[0].serviceType,
+          parentName: mappedBookings[0].parentName
+        } : 'Aucune réservation',
+        allServiceTypes: mappedBookings.map(b => ({
+          id: b.id,
+          serviceType: b.serviceType,
+          parentName: b.parentName
+        }))
+      });
+
       setBookings(mappedBookings);
     } catch (error) {
-      // Erreur silencieuse
+      console.error('🔍 DEBUG ADMIN - Erreur lors du chargement:', error);
     } finally {
       setLoading(false);
     }
@@ -213,8 +245,26 @@ const AdminBookingManager: React.FC = () => {
     return timeString.substring(0, 5);
   };
 
+  // Fonction locale pour ajouter des logs de debug
+  const getServiceTypeNameWithLogs = (serviceCode: string) => {
+    console.log('🔍 DEBUG ADMIN - Conversion service type:', {
+      serviceCode: serviceCode,
+      serviceCodeType: typeof serviceCode
+    });
+    
+    const result = getServiceTypeName(serviceCode);
+    
+    console.log('🔍 DEBUG ADMIN - Résultat conversion:', {
+      serviceCode: serviceCode,
+      result: result
+    });
+    
+    return result;
+  };
+
   // Charger les données au montage
   useEffect(() => {
+    console.log('🔍 DEBUG ADMIN - useEffect déclenché - chargement des données');
     loadBookings();
     loadStatusCounts();
   }, []);
@@ -224,6 +274,12 @@ const AdminBookingManager: React.FC = () => {
     loadBookings();
     loadStatusCounts();
   };
+
+  console.log('🔍 DEBUG ADMIN - Rendu du composant', {
+    loading: loading,
+    bookingsCount: bookings.length,
+    filteredBookingsCount: filteredBookings.length
+  });
 
   return (
     <div className="p-6 max-w-7xl mx-auto space-y-6">
@@ -237,10 +293,23 @@ const AdminBookingManager: React.FC = () => {
             Gérer le statut et le suivi de toutes les réservations
           </p>
         </div>
-        <Button onClick={handleRefresh} variant="outline" size="sm">
-          <RefreshCw className="w-4 h-4 mr-2" />
-          Actualiser
-        </Button>
+        <div className="flex gap-2">
+          <Button onClick={handleRefresh} variant="outline" size="sm">
+            <RefreshCw className="w-4 h-4 mr-2" />
+            Actualiser
+          </Button>
+          <Button 
+            onClick={() => {
+              console.log('🔍 TEST - Bouton de test cliqué');
+              alert('Test console - vérifiez la console du navigateur');
+            }} 
+            variant="outline" 
+            size="sm"
+            className="bg-yellow-100"
+          >
+            Test Console
+          </Button>
+        </div>
       </div>
 
       {/* Vue d'ensemble des statuts */}
@@ -339,7 +408,16 @@ const AdminBookingManager: React.FC = () => {
           ) : (
             <ScrollArea className="h-[600px]">
               <div className="space-y-4">
-                {filteredBookings.map((booking) => (
+                {filteredBookings.map((booking) => {
+                  console.log('🔍 DEBUG ADMIN - Rendu réservation:', {
+                    id: booking.id,
+                    serviceType: booking.serviceType,
+                    serviceTypeType: typeof booking.serviceType,
+                    parentName: booking.parentName,
+                    convertedName: getServiceTypeNameWithLogs(booking.serviceType)
+                  });
+                  
+                  return (
                   <div
                     key={booking.id}
                     className="border rounded-lg p-4 hover:shadow-md transition-shadow"
@@ -375,8 +453,8 @@ const AdminBookingManager: React.FC = () => {
                           </div>
                           
                           <div>
-                            <Label className="text-xs text-gray-500">Service</Label>
-                            <p className="font-medium">{booking.serviceType}</p>
+                            <Label className="text-xs text-gray-500">Type de garde</Label>
+                            <p className="font-medium">{getServiceTypeNameWithLogs(booking.serviceType)}</p>
                             <p className="text-sm text-gray-600">
                               {formatDate(booking.requestedDate)}
                             </p>
@@ -436,7 +514,8 @@ const AdminBookingManager: React.FC = () => {
                       </div>
                     </div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </ScrollArea>
           </CardContent>
@@ -560,8 +639,8 @@ const AdminBookingManager: React.FC = () => {
                     <h3 className="font-semibold mb-3">Détails de la réservation</h3>
                     <div className="space-y-2">
                       <div>
-                        <Label className="text-sm text-gray-500">Service</Label>
-                        <p className="font-medium">{selectedBooking.serviceType}</p>
+                        <Label className="text-sm text-gray-500">Type de garde</Label>
+                        <p className="font-medium">{getServiceTypeNameWithLogs(selectedBooking.serviceType)}</p>
                       </div>
                       <div>
                         <Label className="text-sm text-gray-500">Date</Label>

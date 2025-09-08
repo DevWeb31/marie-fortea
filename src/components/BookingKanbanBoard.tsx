@@ -8,6 +8,7 @@ import {
 } from '../types/booking-status';
 import { supabase } from '../lib/supabase';
 import { formatDuration } from '../lib/duration-utils';
+import { getServiceTypeName } from '../lib/service-utils';
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
 import { Badge } from './ui/badge';
 import { Button } from './ui/button';
@@ -117,9 +118,24 @@ const BookingKanbanBoard: React.FC = () => {
         };
       });
 
+      console.log('🔍 DEBUG KANBAN - Réservations mappées:', {
+        totalBookings: mappedBookings.length,
+        firstBooking: mappedBookings[0] ? {
+          id: mappedBookings[0].id,
+          serviceType: mappedBookings[0].serviceType,
+          serviceTypeType: typeof mappedBookings[0].serviceType,
+          parentName: mappedBookings[0].parentName
+        } : 'Aucune réservation',
+        allServiceTypes: mappedBookings.map(b => ({
+          id: b.id,
+          serviceType: b.serviceType,
+          parentName: b.parentName
+        }))
+      });
+
       setBookings(mappedBookings);
     } catch (error) {
-      // Erreur silencieuse
+      console.error('🔍 DEBUG KANBAN - Erreur lors du chargement:', error);
     } finally {
       setLoading(false);
     }
@@ -159,6 +175,7 @@ const BookingKanbanBoard: React.FC = () => {
   const formatTime = (timeString: string) => {
     return timeString.substring(0, 5);
   };
+
 
   // Obtenir l'icône pour un statut
   const getStatusIcon = (statusCode: string) => {
@@ -282,7 +299,7 @@ const BookingKanbanBoard: React.FC = () => {
                                   {booking.parentName}
                                 </h4>
                                 <p className="text-xs text-gray-600 mb-1">
-                                  {booking.serviceType}
+                                  {getServiceTypeName(booking.serviceType)}
                                 </p>
                                 <p className="text-xs text-gray-500">
                                   {formatDate(booking.requestedDate)} • {formatTime(booking.startTime)}-{formatTime(booking.endTime)}
@@ -478,8 +495,8 @@ const BookingKanbanBoard: React.FC = () => {
                 <h3 className="font-semibold mb-2">Réservation</h3>
                 <div className="grid grid-cols-2 gap-4 text-sm">
                   <div>
-                    <span className="text-gray-500">Service:</span>
-                    <p className="font-medium">{selectedBooking.serviceType}</p>
+                    <span className="text-gray-500">Type de garde:</span>
+                    <p className="font-medium">{getServiceTypeName(selectedBooking.serviceType)}</p>
                   </div>
                   <div>
                     <span className="text-gray-500">Date:</span>
