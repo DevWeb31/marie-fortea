@@ -70,7 +70,6 @@ const BookingKanbanBoard: React.FC = () => {
       // Mapper les données de snake_case vers camelCase
       const mappedBookings = (data || []).map((booking: any) => {
         // DEBUG: Log des données brutes pour la production
-        console.log('🔍 DEBUG PROD KANBAN - Données brutes booking:', {
           id: booking.id,
           parent_name: booking.parent_name,
           start_time: booking.start_time,
@@ -118,7 +117,6 @@ const BookingKanbanBoard: React.FC = () => {
         };
       });
 
-      console.log('🔍 DEBUG KANBAN - Réservations mappées:', {
         totalBookings: mappedBookings.length,
         firstBooking: mappedBookings[0] ? {
           id: mappedBookings[0].id,
@@ -135,7 +133,6 @@ const BookingKanbanBoard: React.FC = () => {
 
       setBookings(mappedBookings);
     } catch (error) {
-      console.error('🔍 DEBUG KANBAN - Erreur lors du chargement:', error);
     } finally {
       setLoading(false);
     }

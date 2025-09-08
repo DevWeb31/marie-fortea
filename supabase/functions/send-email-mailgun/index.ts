@@ -37,7 +37,6 @@ serve(async (req) => {
     
     // Fallback: simulation en développement local si pas de configuration
     if (!mailgunApiKey || !mailgunDomain) {
-      console.log('Mailgun non configuré, simulation en mode développement');
       
       // Retourner une simulation de succès pour le développement
       return new Response(

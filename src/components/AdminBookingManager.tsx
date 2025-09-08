@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-// Log global pour vérifier que le fichier est chargé
-console.log('🔍 DEBUG ADMIN - Fichier AdminBookingManager.tsx chargé');
 import { 
   BookingRequest, 
   BookingStatusCode,
@@ -60,7 +58,6 @@ interface StatusCount {
 }
 
 const AdminBookingManager: React.FC = () => {
-  console.log('🔍 DEBUG ADMIN - Composant AdminBookingManager monté');
   
   const [bookings, setBookings] = useState<BookingWithStatus[]>([]);
   const [loading, setLoading] = useState(true);
@@ -75,35 +72,14 @@ const AdminBookingManager: React.FC = () => {
 
   // Charger les réservations avec leurs statuts
   const loadBookings = async () => {
-    console.log('🔍 DEBUG ADMIN - Fonction loadBookings appelée');
     try {
       setLoading(true);
       
-      console.log('🔍 DEBUG PROD - Début du chargement des réservations...');
       
       const { data, error } = await supabase
         .from('booking_requests_with_status')
         .select('*')
         .order('created_at', { ascending: false });
-      
-      console.log('🔍 DEBUG PROD - Réponse Supabase:', {
-        data: data?.length || 0,
-        error: error?.message || 'Aucune erreur',
-        firstRecord: data?.[0] ? {
-          id: data[0].id,
-          service_type: data[0].service_type,
-          service_typeType: typeof data[0].service_type,
-          parent_name: data[0].parent_name,
-          duration_hours: data[0].duration_hours,
-          start_time: data[0].start_time,
-          end_time: data[0].end_time
-        } : 'Aucune donnée',
-        allServiceTypes: data?.map(record => ({
-          id: record.id,
-          service_type: record.service_type,
-          parent_name: record.parent_name
-        })) || []
-      });
 
       if (error) {
         return;
@@ -112,7 +88,6 @@ const AdminBookingManager: React.FC = () => {
       // Mapper les données de snake_case vers camelCase
       const mappedBookings = (data || []).map((booking: any) => {
         // DEBUG: Log des données brutes pour la production
-        console.log('🔍 DEBUG PROD - Données brutes booking:', {
           id: booking.id,
           parent_name: booking.parent_name,
           service_type: booking.service_type,
@@ -135,51 +110,35 @@ const AdminBookingManager: React.FC = () => {
           startTime: booking.start_time,
           endTime: booking.end_time,
           durationHours: booking.duration_hours,
-        childrenCount: booking.children_count,
-        childrenDetails: booking.children_details,
-        childrenAges: booking.children_ages,
-        specialInstructions: booking.special_instructions,
-        emergencyContact: booking.emergency_contact,
-        emergencyPhone: booking.emergency_phone,
-        preferredContactMethod: booking.preferred_contact_method,
-        contactNotes: booking.contact_notes,
-        captchaVerified: booking.captcha_verified,
-        ipAddress: booking.ip_address,
-        userAgent: booking.user_agent,
-        utmSource: booking.utm_source,
-        utmMedium: booking.utm_medium,
-        utmCampaign: booking.utm_campaign,
-        estimatedTotal: booking.estimated_total, // Mapper le prix estimé
-        deletedAt: booking.deleted_at,
-        archivedAt: booking.archived_at,
-        statusCode: booking.status_code,
-        statusName: booking.status_name,
-        statusColor: booking.status_color,
-        statusIcon: booking.status_icon,
-        statusDescription: booking.status_description,
-        serviceName: booking.service_name,
-        basePrice: booking.base_price
+          childrenCount: booking.children_count,
+          childrenDetails: booking.children_details,
+          childrenAges: booking.children_ages,
+          specialInstructions: booking.special_instructions,
+          emergencyContact: booking.emergency_contact,
+          emergencyPhone: booking.emergency_phone,
+          preferredContactMethod: booking.preferred_contact_method,
+          contactNotes: booking.contact_notes,
+          captchaVerified: booking.captcha_verified,
+          ipAddress: booking.ip_address,
+          userAgent: booking.user_agent,
+          utmSource: booking.utm_source,
+          utmMedium: booking.utm_medium,
+          utmCampaign: booking.utm_campaign,
+          estimatedTotal: booking.estimated_total, // Mapper le prix estimé
+          deletedAt: booking.deleted_at,
+          archivedAt: booking.archived_at,
+          statusCode: booking.status_code,
+          statusName: booking.status_name,
+          statusColor: booking.status_color,
+          statusIcon: booking.status_icon,
+          statusDescription: booking.status_description,
+          serviceName: booking.service_name,
+          basePrice: booking.base_price
         };
-      });
-
-      console.log('🔍 DEBUG ADMIN - Réservations mappées:', {
-        totalBookings: mappedBookings.length,
-        firstBooking: mappedBookings[0] ? {
-          id: mappedBookings[0].id,
-          serviceType: mappedBookings[0].serviceType,
-          serviceTypeType: typeof mappedBookings[0].serviceType,
-          parentName: mappedBookings[0].parentName
-        } : 'Aucune réservation',
-        allServiceTypes: mappedBookings.map(b => ({
-          id: b.id,
-          serviceType: b.serviceType,
-          parentName: b.parentName
-        }))
       });
 
       setBookings(mappedBookings);
     } catch (error) {
-      console.error('🔍 DEBUG ADMIN - Erreur lors du chargement:', error);
     } finally {
       setLoading(false);
     }
@@ -285,14 +244,12 @@ const AdminBookingManager: React.FC = () => {
 
   // Fonction locale pour ajouter des logs de debug
   const getServiceTypeNameWithLogs = (serviceCode: string) => {
-    console.log('🔍 DEBUG ADMIN - Conversion service type:', {
       serviceCode: serviceCode,
       serviceCodeType: typeof serviceCode
     });
     
     const result = getServiceTypeName(serviceCode);
     
-    console.log('🔍 DEBUG ADMIN - Résultat conversion:', {
       serviceCode: serviceCode,
       result: result
     });
@@ -302,7 +259,6 @@ const AdminBookingManager: React.FC = () => {
 
   // Charger les données au montage
   useEffect(() => {
-    console.log('🔍 DEBUG ADMIN - useEffect déclenché - chargement des données');
     loadBookings();
     loadStatusCounts();
   }, []);
@@ -313,7 +269,6 @@ const AdminBookingManager: React.FC = () => {
     loadStatusCounts();
   };
 
-  console.log('🔍 DEBUG ADMIN - Rendu du composant', {
     loading: loading,
     bookingsCount: bookings.length,
     filteredBookingsCount: filteredBookings.length
@@ -338,7 +293,6 @@ const AdminBookingManager: React.FC = () => {
           </Button>
           <Button 
             onClick={() => {
-              console.log('🔍 TEST - Bouton de test cliqué');
               alert('Test console - vérifiez la console du navigateur');
             }} 
             variant="outline" 
@@ -447,7 +401,6 @@ const AdminBookingManager: React.FC = () => {
             <ScrollArea className="h-[600px]">
               <div className="space-y-4">
                 {filteredBookings.map((booking) => {
-                  console.log('🔍 DEBUG ADMIN - Rendu réservation:', {
                     id: booking.id,
                     serviceType: booking.serviceType,
                     serviceTypeType: typeof booking.serviceType,

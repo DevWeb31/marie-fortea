@@ -9,6 +9,7 @@ import { Textarea } from './ui/textarea';
 import { Checkbox } from './ui/checkbox';
 import { Badge } from './ui/badge';
 import { Separator } from './ui/separator';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/select';
 import { 
   MapPin, 
   User, 
@@ -69,11 +70,58 @@ const DetailedBookingForm: React.FC = () => {
     const serviceNames: { [key: string]: string } = {
       'mariage': 'Mariage',
       'urgence': 'Garde d\'urgence',
+      'emergency_care': 'Garde d\'urgence',
       'soiree': 'Soirée parents',
       'weekend': 'Week-end/Vacances',
       'autre': 'Autre événement'
     };
     return serviceNames[serviceCode] || serviceCode;
+  };
+
+  // Fonction pour formater les horaires
+  const formatTime = (timeString: string) => {
+    if (!timeString) return '';
+    // Si c'est déjà au format HH:mm, on le retourne tel quel
+    if (timeString.match(/^\d{2}:\d{2}$/)) {
+      return timeString.replace(':', ' h ');
+    }
+    // Si c'est au format HH:mm:ss, on enlève les secondes
+    if (timeString.match(/^\d{2}:\d{2}:\d{2}$/)) {
+      return timeString.substring(0, 5).replace(':', ' h ');
+    }
+    // Sinon, on essaie de parser la date/heure
+    try {
+      const date = new Date(timeString);
+      return date.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      }).replace(':', ' h ');
+    } catch {
+      return timeString;
+    }
+  };
+
+  // Fonction pour formater le numéro de téléphone
+  const formatPhoneNumber = (value: string) => {
+    // Supprimer tous les caractères non numériques
+    const numbers = value.replace(/\D/g, '');
+    
+    // Limiter à 10 chiffres
+    const limitedNumbers = numbers.slice(0, 10);
+    
+    // Formater en XX XX XX XX XX
+    if (limitedNumbers.length <= 2) {
+      return limitedNumbers;
+    } else if (limitedNumbers.length <= 4) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2)}`;
+    } else if (limitedNumbers.length <= 6) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4)}`;
+    } else if (limitedNumbers.length <= 8) {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4, 6)} ${limitedNumbers.slice(6)}`;
+    } else {
+      return `${limitedNumbers.slice(0, 2)} ${limitedNumbers.slice(2, 4)} ${limitedNumbers.slice(4, 6)} ${limitedNumbers.slice(6, 8)} ${limitedNumbers.slice(8)}`;
+    }
   };
   
   const [bookingData, setBookingData] = useState<DetailedBookingData | null>(null);
@@ -140,7 +188,9 @@ const DetailedBookingForm: React.FC = () => {
         setChildren(initialChildren);
         
         // Pré-remplir les champs existants
-        setAddress(data.parent_address || '');
+        // Ne pas pré-remplir l'adresse si elle contient le texte par défaut
+        const defaultAddressText = 'À préciser lors du contact';
+        setAddress(data.parent_address && data.parent_address !== defaultAddressText ? data.parent_address : '');
         setAdditionalInfo(data.special_instructions || '');
         setEmergencyContact(data.emergency_contact || '');
         setEmergencyPhone(data.emergency_phone || '');
@@ -174,10 +224,10 @@ const DetailedBookingForm: React.FC = () => {
       return;
     }
 
-    // Vérifier que tous les enfants ont un nom et un âge
-    const invalidChildren = children.filter(child => !child.name.trim() || child.age <= 0);
+    // Vérifier que tous les enfants ont un nom et un âge sélectionné
+    const invalidChildren = children.filter(child => !child.name.trim() || child.age === 0);
     if (invalidChildren.length > 0) {
-      setError('Veuillez renseigner le nom et l\'âge de tous les enfants');
+      setError('Veuillez renseigner le nom et sélectionner l\'âge de tous les enfants');
       return;
     }
 
@@ -249,7 +299,7 @@ const DetailedBookingForm: React.FC = () => {
   if (error || !bookingData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-background/80 backdrop-blur-sm border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-red-500 mb-4">
@@ -275,8 +325,8 @@ const DetailedBookingForm: React.FC = () => {
         <div className="mb-8">
           <Button 
             onClick={() => navigate('/')} 
-            variant="ghost" 
-            className="mb-4"
+            variant="outline" 
+            className="mb-4 bg-white/80 hover:bg-white/90 text-gray-700 border-gray-200 hover:border-gray-300 dark:bg-transparent dark:hover:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour à l'accueil
@@ -293,7 +343,7 @@ const DetailedBookingForm: React.FC = () => {
         </div>
 
         {/* Résumé de la réservation */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-background/80 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
@@ -313,7 +363,7 @@ const DetailedBookingForm: React.FC = () => {
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Horaires</Label>
                 <p className="font-medium">
-                  {bookingData.start_time} - {bookingData.end_time}
+                  {formatTime(bookingData.start_time)} - {formatTime(bookingData.end_time)}
                 </p>
               </div>
               <div>
@@ -326,7 +376,7 @@ const DetailedBookingForm: React.FC = () => {
 
         {/* Affichage des erreurs */}
         {error && (
-          <Card className="mb-8 border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+          <Card className="mb-8 border-red-200/50 bg-red-50/80 backdrop-blur-sm dark:border-red-800/50 dark:bg-red-950/80">
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <CheckCircle className="h-5 w-5" />
@@ -339,7 +389,7 @@ const DetailedBookingForm: React.FC = () => {
         {/* Formulaire détaillé */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Adresse */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5" />
@@ -362,7 +412,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Informations sur les enfants */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Baby className="h-5 w-5" />
@@ -388,16 +438,21 @@ const DetailedBookingForm: React.FC = () => {
                       </div>
                       <div>
                         <Label htmlFor={`child-age-${index}`}>Âge *</Label>
-                        <Input
-                          id={`child-age-${index}`}
-                          type="number"
-                          min="0"
-                          max="18"
-                          value={child.age}
-                          onChange={(e) => handleChildChange(index, 'age', parseInt(e.target.value) || 0)}
-                          required
-                          className="mt-1"
-                        />
+                        <Select
+                          value={child.age.toString()}
+                          onValueChange={(value) => handleChildChange(index, 'age', parseInt(value))}
+                        >
+                          <SelectTrigger className="mt-1">
+                            <SelectValue placeholder="Sélectionner l'âge" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {Array.from({ length: 11 }, (_, i) => (
+                              <SelectItem key={i} value={i.toString()}>
+                                {i === 0 ? 'Moins de 1 an' : `${i} an${i > 1 ? 's' : ''}`}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
                       </div>
                       <div className="md:col-span-2">
                         <Label htmlFor={`child-allergies-${index}`}>Allergies et particularités</Label>
@@ -440,7 +495,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Contact d'urgence */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -464,9 +519,10 @@ const DetailedBookingForm: React.FC = () => {
                   <Input
                     id="emergency-phone"
                     value={emergencyPhone}
-                    onChange={(e) => setEmergencyPhone(e.target.value)}
+                    onChange={(e) => setEmergencyPhone(formatPhoneNumber(e.target.value))}
                     placeholder="06 12 34 56 78"
                     className="mt-1"
+                    maxLength={14} // XX XX XX XX XX = 14 caractères max
                   />
                 </div>
               </div>
@@ -474,7 +530,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Instructions spéciales */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />

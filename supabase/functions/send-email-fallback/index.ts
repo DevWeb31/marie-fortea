@@ -58,7 +58,6 @@ serve(async (req) => {
     // Vérifier que les paramètres SMTP essentiels sont présents
     if (!smtpConfig.smtp_host || !smtpConfig.smtp_username || !smtpConfig.smtp_password) {
       // Fallback : simulation
-      console.log('Configuration SMTP incomplète, simulation de l\'envoi');
       return new Response(
         JSON.stringify({ 
           success: true, 

@@ -238,13 +238,6 @@ ID de la demande : ${bookingRequest.id}
 
       // En développement local, utiliser directement la simulation pour éviter les problèmes CORS
       if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-        console.log('Mode développement local - simulation de l\'envoi d\'email');
-        console.log('Email qui serait envoyé:', {
-          to: emailData.to,
-          subject: emailData.subject,
-          formUrl: formUrl
-        });
-        
         // Simuler un délai d'envoi
         await new Promise(resolve => setTimeout(resolve, 1000));
         
@@ -256,14 +249,12 @@ ID de la demande : ${bookingRequest.id}
         await this.sendEmailViaMailgun(emailData);
         return { data: true, error: null };
       } catch (mailgunError) {
-        console.log('Mailgun failed, trying fallback SMTP:', mailgunError);
-        
         // Essayer le fallback SMTP
         try {
           await this.sendEmailViaFallback(emailData);
           return { data: true, error: null };
         } catch (fallbackError) {
-          console.log('Fallback SMTP failed, trying Inbucket:', fallbackError);
+          // Continuer vers Inbucket
         }
       }
 

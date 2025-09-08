@@ -675,11 +675,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    console.log('🔍 DEBUG FORM - Soumission du formulaire:', {
-      serviceType: formData.serviceType,
-      serviceTypeType: typeof formData.serviceType,
-      allFormData: formData
-    });
     
     if (validateFormData()) {
       setShowSummaryModal(true);
@@ -704,11 +699,6 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       captchaToken: 'verified' // Token de captcha vérifié
     };
 
-    console.log('🔍 DEBUG FORM - Données envoyées à BookingService:', {
-      serviceType: bookingData.serviceType,
-      serviceTypeType: typeof bookingData.serviceType,
-      allBookingData: bookingData
-    });
 
     try {
       const result = await BookingService.createBookingRequest(bookingData);
