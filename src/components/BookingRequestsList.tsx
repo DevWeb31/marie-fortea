@@ -64,6 +64,44 @@ const formatTimeFrench = (time: string): string => {
   return time;
 };
 
+// Formater la date et heure de création avec texte explicite
+const formatCreationDateTime = (dateString: string) => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffInHours = Math.floor((now.getTime() - date.getTime())) / (1000 * 60 * 60);
+  
+  const timeString = date.toLocaleTimeString('fr-FR', { 
+    hour: '2-digit', 
+    minute: '2-digit' 
+  });
+  
+  // Si c'est aujourd'hui
+  if (date.toDateString() === now.toDateString()) {
+    return `Demande faite aujourd'hui à ${timeString}`;
+  }
+  
+  // Si c'est hier
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  if (date.toDateString() === yesterday.toDateString()) {
+    return `Demande faite hier à ${timeString}`;
+  }
+  
+  // Si c'est dans les 7 derniers jours
+  if (diffInHours < 168) {
+    const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+    return `Demande faite le ${dayName} à ${timeString}`;
+  }
+  
+  // Sinon, afficher la date complète
+  const fullDateString = date.toLocaleDateString('fr-FR', { 
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+  return `Demande faite le ${fullDateString} à ${timeString}`;
+};
+
 
 interface BookingRequestsListProps {
   className?: string;
@@ -1348,6 +1386,9 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                   {getStatusIcon(request.status as AllBookingStatus)}
                                   <span className="ml-1">{formatBookingStatus(request.status as AllBookingStatus)}</span>
                                 </Badge>
+                                <span className="text-xs text-gray-400 ml-auto">
+                                  {formatCreationDateTime(request.createdAt)}
+                                </span>
                               </div>
                               
                               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-sm text-gray-600 dark:text-gray-400">
@@ -1822,43 +1863,128 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
       {/* Dialog de détails */}
       <Dialog open={isDetailDialogOpen} onOpenChange={setIsDetailDialogOpen}>
-        <DialogContent className="max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Détails de la demande</DialogTitle>
+        <DialogContent className="w-[95vw] max-w-3xl max-h-[85vh] overflow-y-auto p-4 rounded-xl">
+          <DialogHeader className="pb-3">
+            <DialogTitle className="text-lg">Détails de la demande</DialogTitle>
           </DialogHeader>
           {selectedRequest && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
+              {/* En-tête avec statut et date */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
-                  <Label className="text-sm font-medium text-gray-500">Statut</Label>
-                  <Badge className={`mt-1 ${getStatusColor(selectedRequest.status)}`}>
-                    {formatBookingStatus(selectedRequest.status as AllBookingStatus)}
-                  </Badge>
+                  <Label className="text-xs font-medium text-gray-500">Statut</Label>
+                  <div className="mt-1">
+                    <Badge className={`text-xs ${getStatusColor(selectedRequest.status)}`}>
+                      {formatBookingStatus(selectedRequest.status as AllBookingStatus)}
+                    </Badge>
+                  </div>
                 </div>
                 <div>
-                  <Label className="text-sm font-medium text-gray-500">Date de création</Label>
-                  <p className="mt-1">{formatDate(selectedRequest.createdAt)}</p>
+                  <Label className="text-xs font-medium text-gray-500">Date de création</Label>
+                  <p className="mt-1 text-xs text-gray-600">{formatCreationDateTime(selectedRequest.createdAt)}</p>
                 </div>
               </div>
               
-              <div className="border-t pt-4">
-                <h4 className="font-medium mb-2">Informations de contact</h4>
-                <div className="space-y-2">
-                  <p><strong>Nom:</strong> {selectedRequest.parentName}</p>
-                  <p><strong>Téléphone:</strong> {selectedRequest.parentPhone}</p>
+              {/* Informations de contact */}
+              <div className="border-t pt-3">
+                <h4 className="font-medium mb-2 flex items-center gap-2 text-sm">
+                  <Phone className="h-3 w-3" />
+                  Contact
+                </h4>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Nom</Label>
+                    <p className="mt-1 text-sm font-medium">{selectedRequest.parentName}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Téléphone</Label>
+                    <p className="mt-1 text-sm">
+                      <a 
+                        href={`tel:${selectedRequest.parentPhone}`}
+                        className="text-blue-600 hover:text-blue-800 hover:underline"
+                      >
+                        {selectedRequest.parentPhone}
+                      </a>
+                    </p>
+                  </div>
+                  {selectedRequest.parentEmail && (
+                    <div className="sm:col-span-2">
+                      <Label className="text-xs font-medium text-gray-500">Email</Label>
+                      <p className="mt-1 text-sm text-blue-600 hover:text-blue-800">
+                        <a href={`mailto:${selectedRequest.parentEmail}`}>
+                          {selectedRequest.parentEmail}
+                        </a>
+                      </p>
+                    </div>
+                  )}
                 </div>
               </div>
               
-              <div className="border-t pt-4">
-                <h4 className="font-medium mb-2">Détails de la garde</h4>
-                <div className="space-y-2">
-                  <p><strong>Type de garde:</strong> {getServiceTypeName(selectedRequest.serviceType)}</p>
-                  <p><strong>Date:</strong> {formatDate(selectedRequest.requestedDate)}</p>
-                  <p><strong>Heures:</strong> {formatTimeFrench(selectedRequest.startTime)} à {formatTimeFrench(selectedRequest.endTime)}</p>
-                  <p><strong>Durée:</strong> {formatDuration(selectedRequest.durationHours)}</p>
-                  <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€</p>
+              {/* Détails de la garde */}
+              <div className="border-t pt-3">
+                <h4 className="font-medium mb-2 flex items-center gap-2 text-sm">
+                  <Calendar className="h-3 w-3" />
+                  Garde
+                </h4>
+                <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Type</Label>
+                    <p className="mt-1 text-sm">{getServiceTypeName(selectedRequest.serviceType)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Date</Label>
+                    <p className="mt-1 text-sm">{formatDate(selectedRequest.requestedDate)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Heures</Label>
+                    <p className="mt-1 text-sm">{formatTimeFrench(selectedRequest.startTime)}-{formatTimeFrench(selectedRequest.endTime)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Durée</Label>
+                    <p className="mt-1 text-sm">{formatDuration(selectedRequest.durationHours)}</p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Prix</Label>
+                    <p className="mt-1 text-sm font-medium text-green-600">
+                      {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€
+                    </p>
+                  </div>
+                  <div>
+                    <Label className="text-xs font-medium text-gray-500">Enfants</Label>
+                    <p className="mt-1 text-sm">{selectedRequest.childrenCount}</p>
+                  </div>
                 </div>
               </div>
+
+              {/* Informations supplémentaires si disponibles */}
+              {(selectedRequest.childrenDetails || selectedRequest.specialInstructions || selectedRequest.contactNotes) && (
+                <div className="border-t pt-3">
+                  <h4 className="font-medium mb-2 flex items-center gap-2 text-sm">
+                    <MessageSquare className="h-3 w-3" />
+                    Détails
+                  </h4>
+                  <div className="space-y-2">
+                    {selectedRequest.childrenDetails && (
+                      <div>
+                        <Label className="text-xs font-medium text-gray-500">Enfants</Label>
+                        <p className="mt-1 text-xs text-gray-700">{selectedRequest.childrenDetails}</p>
+                      </div>
+                    )}
+                    {selectedRequest.specialInstructions && (
+                      <div>
+                        <Label className="text-xs font-medium text-gray-500">Instructions</Label>
+                        <p className="mt-1 text-xs text-gray-700">{selectedRequest.specialInstructions}</p>
+                      </div>
+                    )}
+                    {selectedRequest.contactNotes && (
+                      <div>
+                        <Label className="text-xs font-medium text-gray-500">Notes</Label>
+                        <p className="mt-1 text-xs text-gray-700">{selectedRequest.contactNotes}</p>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </DialogContent>
@@ -1866,16 +1992,16 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
 
       {/* Dialog de mise à jour de statut */}
       <Dialog open={isStatusDialogOpen} onOpenChange={setIsStatusDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Mettre à jour le statut</DialogTitle>
+        <DialogContent className="w-[95vw] max-w-md max-h-[80vh] overflow-y-auto p-4 rounded-xl">
+          <DialogHeader className="pb-3">
+            <DialogTitle className="text-lg">Mettre à jour le statut</DialogTitle>
           </DialogHeader>
           <div className="space-y-4">
             <div>
-              <Label htmlFor="newStatus">Nouveau statut</Label>
-                              <Select value={newStatus} onValueChange={(value) => setNewStatus(value as AllBookingStatus)}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue />
+              <Label htmlFor="newStatus" className="text-sm font-medium text-gray-500">Nouveau statut</Label>
+              <Select value={newStatus} onValueChange={(value) => setNewStatus(value as AllBookingStatus)}>
+                <SelectTrigger className="mt-1 h-9">
+                  <SelectValue placeholder="Sélectionner un statut" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="pending">En attente</SelectItem>
@@ -1888,32 +2014,34 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
             </div>
             
             <div>
-              <Label htmlFor="statusNote">Note (optionnel)</Label>
+              <Label htmlFor="statusNote" className="text-sm font-medium text-gray-500">Note (optionnel)</Label>
               <Textarea
                 id="statusNote"
                 value={statusNote}
                 onChange={(e) => setStatusNote(e.target.value)}
                 placeholder="Note sur le changement de statut..."
-                className="mt-1"
+                className="mt-1 text-sm"
                 rows={3}
               />
             </div>
             
-            <div className="flex justify-end space-x-2">
+            <div className="flex flex-col sm:flex-row justify-end gap-2 pt-2">
               <Button
                 variant="outline"
                 onClick={() => setIsStatusDialogOpen(false)}
                 disabled={isUpdating}
+                className="h-9 text-sm"
               >
                 Annuler
               </Button>
               <Button
                 onClick={handleStatusUpdate}
                 disabled={isUpdating}
+                className="h-9 text-sm"
               >
                 {isUpdating ? (
                   <>
-                    <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
+                    <div className="mr-2 h-3 w-3 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
                     Mise à jour...
                   </>
                 ) : (
