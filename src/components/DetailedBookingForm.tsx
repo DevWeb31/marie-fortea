@@ -69,11 +69,36 @@ const DetailedBookingForm: React.FC = () => {
     const serviceNames: { [key: string]: string } = {
       'mariage': 'Mariage',
       'urgence': 'Garde d\'urgence',
+      'emergency_care': 'Garde d\'urgence',
       'soiree': 'Soirée parents',
       'weekend': 'Week-end/Vacances',
       'autre': 'Autre événement'
     };
     return serviceNames[serviceCode] || serviceCode;
+  };
+
+  // Fonction pour formater les horaires
+  const formatTime = (timeString: string) => {
+    if (!timeString) return '';
+    // Si c'est déjà au format HH:mm, on le retourne tel quel
+    if (timeString.match(/^\d{2}:\d{2}$/)) {
+      return timeString.replace(':', ' h ');
+    }
+    // Si c'est au format HH:mm:ss, on enlève les secondes
+    if (timeString.match(/^\d{2}:\d{2}:\d{2}$/)) {
+      return timeString.substring(0, 5).replace(':', ' h ');
+    }
+    // Sinon, on essaie de parser la date/heure
+    try {
+      const date = new Date(timeString);
+      return date.toLocaleTimeString('fr-FR', { 
+        hour: '2-digit', 
+        minute: '2-digit',
+        hour12: false 
+      }).replace(':', ' h ');
+    } catch {
+      return timeString;
+    }
   };
   
   const [bookingData, setBookingData] = useState<DetailedBookingData | null>(null);
@@ -249,7 +274,7 @@ const DetailedBookingForm: React.FC = () => {
   if (error || !bookingData) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Card className="w-full max-w-md">
+        <Card className="w-full max-w-md bg-background/80 backdrop-blur-sm border-border/50">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-red-500 mb-4">
@@ -293,7 +318,7 @@ const DetailedBookingForm: React.FC = () => {
         </div>
 
         {/* Résumé de la réservation */}
-        <Card className="mb-8">
+        <Card className="mb-8 bg-background/80 backdrop-blur-sm border-border/50">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
@@ -313,7 +338,7 @@ const DetailedBookingForm: React.FC = () => {
               <div>
                 <Label className="text-sm font-medium text-muted-foreground">Horaires</Label>
                 <p className="font-medium">
-                  {bookingData.start_time} - {bookingData.end_time}
+                  {formatTime(bookingData.start_time)} - {formatTime(bookingData.end_time)}
                 </p>
               </div>
               <div>
@@ -326,7 +351,7 @@ const DetailedBookingForm: React.FC = () => {
 
         {/* Affichage des erreurs */}
         {error && (
-          <Card className="mb-8 border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
+          <Card className="mb-8 border-red-200/50 bg-red-50/80 backdrop-blur-sm dark:border-red-800/50 dark:bg-red-950/80">
             <CardContent className="pt-6">
               <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <CheckCircle className="h-5 w-5" />
@@ -339,7 +364,7 @@ const DetailedBookingForm: React.FC = () => {
         {/* Formulaire détaillé */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Adresse */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5" />
@@ -362,7 +387,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Informations sur les enfants */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Baby className="h-5 w-5" />
@@ -440,7 +465,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Contact d'urgence */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -474,7 +499,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Instructions spéciales */}
-          <Card>
+          <Card className="bg-background/80 backdrop-blur-sm border-border/50">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
