@@ -176,6 +176,44 @@ const BookingKanbanBoard: React.FC = () => {
     return timeString.substring(0, 5);
   };
 
+  // Formater la date et heure de création avec texte explicite
+  const formatCreationDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const now = new Date();
+    const diffInHours = Math.floor((now.getTime() - date.getTime())) / (1000 * 60 * 60);
+    
+    const timeString = date.toLocaleTimeString('fr-FR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+    
+    // Si c'est aujourd'hui
+    if (date.toDateString() === now.toDateString()) {
+      return `Demande faite aujourd'hui à ${timeString}`;
+    }
+    
+    // Si c'est hier
+    const yesterday = new Date(now);
+    yesterday.setDate(yesterday.getDate() - 1);
+    if (date.toDateString() === yesterday.toDateString()) {
+      return `Demande faite hier à ${timeString}`;
+    }
+    
+    // Si c'est dans les 7 derniers jours
+    if (diffInHours < 168) {
+      const dayName = date.toLocaleDateString('fr-FR', { weekday: 'long' });
+      return `Demande faite le ${dayName} à ${timeString}`;
+    }
+    
+    // Sinon, afficher la date complète
+    const dateString = date.toLocaleDateString('fr-FR', { 
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    return `Demande faite le ${dateString} à ${timeString}`;
+  };
+
 
   // Obtenir l'icône pour un statut
   const getStatusIcon = (statusCode: string) => {
@@ -288,9 +326,14 @@ const BookingKanbanBoard: React.FC = () => {
                                     {booking.statusName}
                                   </Badge>
                                 </div>
-                                <span className="text-xs text-gray-500">
-                                  #{booking.id.slice(0, 6)}
-                                </span>
+                                <div className="text-right">
+                                  <span className="text-xs text-gray-500">
+                                    #{booking.id.slice(0, 6)}
+                                  </span>
+                                  <div className="text-xs text-gray-400">
+                                    {formatCreationDateTime(booking.createdAt)}
+                                  </div>
+                                </div>
                               </div>
                               
                               {/* Informations principales */}

@@ -14,6 +14,8 @@ import PricingManagement from '@/pages/PricingManagement';
 import AdminLayout from '@/components/AdminLayout';
 import ProtectedRoute from '@/components/ProtectedRoute';
 import TestEmail from '@/pages/TestEmail';
+import DetailedBookingForm from '@/components/DetailedBookingForm';
+import BookingConfirmed from '@/pages/BookingConfirmed';
 import Footer from '@/components/Footer';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
@@ -93,6 +95,8 @@ function AppContent() {
           <Route path="/about" element={<About />} />
           <Route path="/booking" element={<Booking />} />
           <Route path="/test-email" element={<TestEmail />} />
+          <Route path="/detailed-booking-form/:token" element={<DetailedBookingForm />} />
+          <Route path="/booking-confirmed" element={<BookingConfirmed />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>

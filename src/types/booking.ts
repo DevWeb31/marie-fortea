@@ -146,6 +146,7 @@ export interface BookingRequestSummary {
   status: string;
   createdAt: string;
   parentName: string;
+  parentEmail?: string;
   parentPhone: string;
   serviceType: string;
   requestedDate: string;
@@ -153,6 +154,9 @@ export interface BookingRequestSummary {
   endTime: string;
   durationHours: number;
   childrenCount: number;
+  childrenDetails?: string;
+  specialInstructions?: string;
+  contactNotes?: string;
   serviceName: string;
   basePrice: number;
   estimatedTotal: number;

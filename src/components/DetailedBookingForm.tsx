@@ -1,721 +1,500 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Checkbox } from '@/components/ui/checkbox';
-import { Badge } from '@/components/ui/badge';
-import { useToast } from '@/hooks/use-toast';
+import { useParams, useNavigate } from 'react-router-dom';
+import { supabase } from '../lib/supabase';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Input } from './ui/input';
+import { Label } from './ui/label';
+import { Textarea } from './ui/textarea';
+import { Checkbox } from './ui/checkbox';
+import { Badge } from './ui/badge';
+import { Separator } from './ui/separator';
 import { 
-  Calendar, 
-  Clock, 
-  Baby, 
   MapPin, 
-  Phone, 
-  AlertTriangle, 
+  User, 
+  Baby, 
   Heart, 
+  MessageSquare, 
   CheckCircle,
-  Plus,
-  Trash2
+  ArrowLeft,
+  Calendar,
+  Clock
 } from 'lucide-react';
-import { FormDatePicker } from '@/components/ui/date-picker';
 
 interface ChildDetail {
-  id: string;
-  childOrder: number;
-  firstName: string;
-  lastName: string;
-  birthDate: string;
+  name: string;
+  age: number;
   allergies: string;
-  medicalConditions: string;
-  medications: string;
-  dietaryRestrictions: string;
+  preferences: string;
   specialNeeds: string;
-  favoriteActivities: string;
-  comfortItems: string;
-  emergencyContactName: string;
-  emergencyContactPhone: string;
-  emergencyContactRelationship: string;
 }
 
-interface DetailedBookingFormProps {
-  bookingRequestId: string;
+interface DetailedBookingData {
+  id: string;
+  parentName: string;
+  parentEmail: string;
+  parentPhone: string;
+  serviceType: string;
+  requestedDate: string;
+  startTime: string;
+  endTime: string;
+  durationHours: number;
   childrenCount: number;
-  onSuccess?: () => void;
-  className?: string;
+  childrenDetails: string;
+  childrenAges: string;
+  specialInstructions: string;
+  emergencyContact: string;
+  emergencyPhone: string;
+  preferredContactMethod: string;
+  contactNotes: string;
+  captchaVerified: boolean;
+  ipAddress: string;
+  userAgent: string;
+  source: string;
+  utmSource: string;
+  utmMedium: string;
+  utmCampaign: string;
+  estimatedTotal: number;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-const DetailedBookingForm: React.FC<DetailedBookingFormProps> = ({ 
-  bookingRequestId, 
-  childrenCount, 
-  onSuccess, 
-  className = '' 
-}) => {
-  const { toast } = useToast();
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 3;
+const DetailedBookingForm: React.FC = () => {
+  const { token } = useParams<{ token: string }>();
+  const navigate = useNavigate();
+  
+  const [bookingData, setBookingData] = useState<DetailedBookingData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  
+  // Données du formulaire
+  const [address, setAddress] = useState('');
+  const [children, setChildren] = useState<ChildDetail[]>([]);
+  const [additionalInfo, setAdditionalInfo] = useState('');
+  const [emergencyContact, setEmergencyContact] = useState('');
+  const [emergencyPhone, setEmergencyPhone] = useState('');
+  const [preferredContactMethod, setPreferredContactMethod] = useState('phone');
+  const [specialInstructions, setSpecialInstructions] = useState('');
+  const [contactNotes, setContactNotes] = useState('');
 
-  const [formData, setFormData] = useState({
-    // Informations de l'événement
-    eventLocation: '',
-    eventAddress: '',
-    eventPostalCode: '',
-    eventCity: '',
-    eventNotes: '',
-    
-    // Horaires confirmés
-    confirmedStartDate: '',
-    confirmedStartTime: '',
-    confirmedEndDate: '',
-    confirmedEndTime: '',
-    
-    // Instructions spéciales
-    specialInstructions: '',
-    arrivalInstructions: '',
-    departureInstructions: '',
-    emergencyProcedures: '',
-    
-    // Contacts sur place
-    onSiteContactName: '',
-    onSiteContactPhone: '',
-    onSiteContactRole: '',
-    
-    // Informations supplémentaires
-    hasAllergies: false,
-    hasMedicalConditions: false,
-    hasSpecialNeeds: false,
-    requiresSpecialAttention: false
-  });
-
-  const [childrenDetails, setChildrenDetails] = useState<ChildDetail[]>([]);
-
-  // Initialiser les détails des enfants
+  // Charger les données de la réservation
   useEffect(() => {
-    const initialChildren: ChildDetail[] = Array.from({ length: childrenCount }, (_, index) => ({
-      id: `child-${index}`,
-      childOrder: index + 1,
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      allergies: '',
-      medicalConditions: '',
-      medications: '',
-      dietaryRestrictions: '',
-      specialNeeds: '',
-      favoriteActivities: '',
-      comfortItems: '',
-      emergencyContactName: '',
-      emergencyContactPhone: '',
-      emergencyContactRelationship: ''
-    }));
-    setChildrenDetails(initialChildren);
-  }, [childrenCount]);
+    const loadBookingData = async () => {
+      if (!token) {
+        setError('Token manquant');
+        setLoading(false);
+        return;
+      }
 
-  const handleInputChange = (field: string, value: string | boolean) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
-  };
+      try {
+        const { data, error } = await supabase
+          .from('booking_requests')
+          .select('*')
+          .eq('detailed_form_token', token)
+          .eq('status', 'contacted')
+          .single();
 
-  const handleChildChange = (childId: string, field: string, value: string) => {
-    setChildrenDetails(prev => 
-      prev.map(child => 
-        child.id === childId 
-          ? { ...child, [field]: value }
-          : child
-      )
-    );
-  };
+        if (error || !data) {
+          setError('Réservation non trouvée ou token invalide');
+          setLoading(false);
+          return;
+        }
 
-  const addChild = () => {
-    const newChild: ChildDetail = {
-      id: `child-${Date.now()}`,
-      childOrder: childrenDetails.length + 1,
-      firstName: '',
-      lastName: '',
-      birthDate: '',
-      allergies: '',
-      medicalConditions: '',
-      medications: '',
-      dietaryRestrictions: '',
-      specialNeeds: '',
-      favoriteActivities: '',
-      comfortItems: '',
-      emergencyContactName: '',
-      emergencyContactPhone: '',
-      emergencyContactRelationship: ''
+        setBookingData(data);
+        
+        // Initialiser les enfants
+        const childrenCount = data.children_count || 1;
+        const initialChildren: ChildDetail[] = Array.from({ length: childrenCount }, (_, index) => ({
+          name: '',
+          age: 0,
+          allergies: '',
+          preferences: '',
+          specialNeeds: ''
+        }));
+        setChildren(initialChildren);
+        
+        // Pré-remplir les champs existants
+        setAddress(data.parent_address || '');
+        setAdditionalInfo(data.special_instructions || '');
+        setEmergencyContact(data.emergency_contact || '');
+        setEmergencyPhone(data.emergency_phone || '');
+        setPreferredContactMethod(data.preferred_contact_method || 'phone');
+        setSpecialInstructions(data.special_instructions || '');
+        setContactNotes(data.contact_notes || '');
+        
+        setLoading(false);
+      } catch (err) {
+        setError('Erreur lors du chargement des données');
+        setLoading(false);
+      }
     };
-    setChildrenDetails(prev => [...prev, newChild]);
-  };
 
-  const removeChild = (childId: string) => {
-    if (childrenDetails.length > 1) {
-      setChildrenDetails(prev => prev.filter(child => child.id !== childId));
-    }
-  };
+    loadBookingData();
+  }, [token]);
 
-  const validateStep = (step: number): boolean => {
-    switch (step) {
-      case 1:
-        return !!(formData.eventLocation && formData.eventAddress && formData.eventCity);
-      case 2:
-        return !!(formData.confirmedStartDate && formData.confirmedStartTime && 
-                  formData.confirmedEndDate && formData.confirmedEndTime);
-      case 3:
-        return childrenDetails.every(child => 
-          child.firstName && child.birthDate
-        );
-      default:
-        return false;
-    }
-  };
-
-  const nextStep = () => {
-    if (validateStep(currentStep)) {
-      setCurrentStep(prev => Math.min(prev + 1, totalSteps));
-    } else {
-      toast({
-        title: 'Champs manquants',
-        description: 'Veuillez remplir tous les champs obligatoires avant de continuer.',
-        variant: 'destructive',
-      });
-    }
-  };
-
-  const prevStep = () => {
-    setCurrentStep(prev => Math.max(prev - 1, 1));
+  const handleChildChange = (index: number, field: keyof ChildDetail, value: string | number) => {
+    const updatedChildren = [...children];
+    updatedChildren[index] = { ...updatedChildren[index], [field]: value };
+    setChildren(updatedChildren);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateStep(currentStep)) {
-      toast({
-        title: 'Validation requise',
-        description: 'Veuillez compléter toutes les étapes avant de soumettre.',
-        variant: 'destructive',
-      });
-      return;
-    }
+    if (!bookingData) return;
 
-    setIsSubmitting(true);
-
+    setSubmitting(true);
     try {
-      // Ici, vous appelleriez votre service pour sauvegarder les données
-      // const result = await DetailedBookingService.saveDetails({
-      //   bookingRequestId,
-      //   formData,
-      //   childrenDetails
-      // });
+      // Préparer les données à mettre à jour
+      const updateData = {
+        parent_address: address,
+        children_details: children.map(child => 
+          `Nom: ${child.name}, Âge: ${child.age}, Allergies: ${child.allergies}, Préférences: ${child.preferences}, Besoins spéciaux: ${child.specialNeeds}`
+        ).join(' | '),
+        children_ages: children.map(child => child.age).join(', '),
+        special_instructions: specialInstructions,
+        emergency_contact: emergencyContact,
+        emergency_phone: emergencyPhone,
+        preferred_contact_method: preferredContactMethod,
+        contact_notes: contactNotes,
+        detailed_form_completed_at: new Date().toISOString(),
+        status: 'confirmed', // Changer le statut à confirmé
+        updated_at: new Date().toISOString()
+      };
 
-      // Simulation d'un appel API
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      const { error } = await supabase
+        .from('booking_requests')
+        .update(updateData)
+        .eq('id', bookingData.id);
 
-      toast({
-        title: 'Informations enregistrées !',
-        description: 'Tous les détails ont été sauvegardés avec succès.',
+      if (error) {
+        throw new Error('Erreur lors de la mise à jour');
+      }
+
+      // Rediriger vers une page de confirmation
+      navigate('/booking-confirmed', { 
+        state: { 
+          bookingId: bookingData.id,
+          parentName: bookingData.parentName 
+        } 
       });
-
-      onSuccess?.();
-    } catch (error) {
-      toast({
-        title: 'Erreur',
-        description: 'Une erreur est survenue lors de la sauvegarde.',
-        variant: 'destructive',
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch (err) {
+      setError('Erreur lors de la soumission du formulaire');
+      setSubmitting(false);
     }
   };
 
-  const renderStepIndicator = () => (
-    <div className="mb-8">
-      <div className="flex items-center justify-between">
-        {Array.from({ length: totalSteps }, (_, index) => (
-          <div key={index} className="flex items-center">
-            <div className={`flex items-center justify-center w-8 h-8 rounded-full border-2 ${
-              index + 1 < currentStep 
-                ? 'bg-green-500 border-green-500 text-white' 
-                : index + 1 === currentStep 
-                ? 'bg-blue-500 border-blue-500 text-white' 
-                : 'bg-gray-200 border-gray-300 text-gray-500'
-            }`}>
-              {index + 1 < currentStep ? (
-                <CheckCircle className="w-5 h-5" />
-              ) : (
-                <span className="text-sm font-medium">{index + 1}</span>
-              )}
-            </div>
-            {index < totalSteps - 1 && (
-              <div className={`w-16 h-1 mx-2 ${
-                index + 1 < currentStep ? 'bg-green-500' : 'bg-gray-300'
-              }`} />
-            )}
-          </div>
-        ))}
-      </div>
-      <div className="text-center mt-2 text-sm text-gray-600">
-        Étape {currentStep} sur {totalSteps}
-      </div>
-    </div>
-  );
-
-  const renderStep1 = () => (
-    <div className="space-y-6">
-      <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-        <MapPin className="mr-2 h-5 w-5 text-blue-600" />
-        Localisation de l'Événement
-      </h3>
-      
-      <div className="space-y-4">
-        <div>
-          <Label htmlFor="eventLocation" className="text-sm font-medium">
-            Lieu de l'événement *
-          </Label>
-          <Input
-            id="eventLocation"
-            value={formData.eventLocation}
-            onChange={(e) => handleInputChange('eventLocation', e.target.value)}
-            placeholder="Ex: Salle des fêtes, Restaurant, Domicile..."
-            required
-            className="mt-1"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="eventAddress" className="text-sm font-medium">
-            Adresse complète *
-          </Label>
-          <Textarea
-            id="eventAddress"
-            value={formData.eventAddress}
-            onChange={(e) => handleInputChange('eventAddress', e.target.value)}
-            placeholder="Numéro, rue, complément d'adresse..."
-            required
-            className="mt-1"
-            rows={3}
-          />
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="eventPostalCode" className="text-sm font-medium">
-              Code postal
-            </Label>
-            <Input
-              id="eventPostalCode"
-              value={formData.eventPostalCode}
-              onChange={(e) => handleInputChange('eventPostalCode', e.target.value)}
-              placeholder="75001"
-              className="mt-1"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="eventCity" className="text-sm font-medium">
-              Ville *
-            </Label>
-            <Input
-              id="eventCity"
-              value={formData.eventCity}
-              onChange={(e) => handleInputChange('eventCity', e.target.value)}
-              placeholder="Paris"
-              required
-              className="mt-1"
-            />
-          </div>
-        </div>
-
-        <div>
-          <Label htmlFor="eventNotes" className="text-sm font-medium">
-            Notes sur le lieu
-          </Label>
-          <Textarea
-            id="eventNotes"
-            value={formData.eventNotes}
-            onChange={(e) => handleInputChange('eventNotes', e.target.value)}
-            placeholder="Informations utiles sur l'accès, le parking, etc."
-            className="mt-1"
-            rows={2}
-          />
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Chargement du formulaire...</p>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 
-  const renderStep2 = () => (
-    <div className="space-y-6">
-      <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-        <Clock className="mr-2 h-5 w-5 text-green-600" />
-        Horaires Confirmés
-      </h3>
-      
-      <div className="space-y-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <FormDatePicker
-              id="confirmedStartDate"
-              label="Date de début"
-              value={formData.confirmedStartDate}
-              onChange={(value) => handleInputChange('confirmedStartDate', value)}
-              required
-              placeholder="Sélectionner une date"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="confirmedStartTime" className="text-sm font-medium">
-              Heure de début *
-            </Label>
-            <Input
-              id="confirmedStartTime"
-              type="time"
-              value={formData.confirmedStartTime}
-              onChange={(e) => handleInputChange('confirmedStartTime', e.target.value)}
-              required
-              className="mt-1"
-            />
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <FormDatePicker
-              id="confirmedEndDate"
-              label="Date de fin"
-              value={formData.confirmedEndDate}
-              onChange={(value) => handleInputChange('confirmedEndDate', value)}
-              required
-              placeholder="Sélectionner une date"
-            />
-          </div>
-          
-          <div>
-            <Label htmlFor="confirmedEndTime" className="text-sm font-medium">
-              Heure de fin *
-            </Label>
-            <Input
-              id="confirmedEndTime"
-              type="time"
-              value={formData.confirmedEndTime}
-              onChange={(e) => handleInputChange('confirmedEndTime', e.target.value)}
-              required
-              className="mt-1"
-            />
-          </div>
-        </div>
-
-        <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
-          <p className="text-sm text-blue-700 dark:text-blue-300">
-            <strong>Note :</strong> Ces horaires seront utilisés pour planifier la garde et la facturation.
-          </p>
-        </div>
+  if (error || !bookingData) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Card className="w-full max-w-md">
+          <CardContent className="pt-6">
+            <div className="text-center">
+              <div className="text-red-500 mb-4">
+                <CheckCircle className="h-12 w-12 mx-auto" />
+              </div>
+              <h2 className="text-xl font-semibold mb-2">Erreur</h2>
+              <p className="text-gray-600 mb-4">{error}</p>
+              <Button onClick={() => navigate('/')} variant="outline">
+                <ArrowLeft className="h-4 w-4 mr-2" />
+                Retour à l'accueil
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
-    </div>
-  );
-
-  const renderStep3 = () => (
-    <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h3 className="flex items-center text-lg font-semibold text-gray-900 dark:text-white">
-          <Baby className="mr-2 h-5 w-5 text-pink-600" />
-          Informations Détaillées des Enfants
-        </h3>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={addChild}
-          className="flex items-center"
-        >
-          <Plus className="mr-2 h-4 w-4" />
-          Ajouter un enfant
-        </Button>
-      </div>
-      
-      <div className="space-y-6">
-        {childrenDetails.map((child, index) => (
-          <div key={child.id} className="p-4 border border-gray-200 dark:border-gray-700 rounded-lg">
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-md font-medium text-gray-900 dark:text-white">
-                Enfant {child.childOrder}
-              </h4>
-              {childrenDetails.length > 1 && (
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeChild(child.id)}
-                  className="text-red-600 hover:text-red-700"
-                >
-                  <Trash2 className="w-4 h-4" />
-                </Button>
-              )}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <Label htmlFor={`firstName-${child.id}`} className="text-sm font-medium">
-                  Prénom *
-                </Label>
-                <Input
-                  id={`firstName-${child.id}`}
-                  value={child.firstName}
-                  onChange={(e) => handleChildChange(child.id, 'firstName', e.target.value)}
-                  placeholder="Prénom de l'enfant"
-                  required
-                  className="mt-1"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor={`lastName-${child.id}`} className="text-sm font-medium">
-                  Nom de famille
-                </Label>
-                <Input
-                  id={`lastName-${child.id}`}
-                  value={child.lastName}
-                  onChange={(e) => handleChildChange(child.id, 'lastName', e.target.value)}
-                  placeholder="Nom de famille"
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <FormDatePicker
-                  id={`birthDate-${child.id}`}
-                  label="Date de naissance"
-                  value={child.birthDate}
-                  onChange={(value) => handleChildChange(child.id, 'birthDate', value)}
-                  required
-                  placeholder="Sélectionner une date"
-                  maxDate={new Date().toISOString().split('T')[0]}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor={`allergies-${child.id}`} className="text-sm font-medium">
-                  Allergies
-                </Label>
-                <Input
-                  id={`allergies-${child.id}`}
-                  value={child.allergies}
-                  onChange={(e) => handleChildChange(child.id, 'allergies', e.target.value)}
-                  placeholder="Allergies alimentaires, environnementales..."
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <Label htmlFor={`medicalConditions-${child.id}`} className="text-sm font-medium">
-                  Conditions médicales
-                </Label>
-                <Textarea
-                  id={`medicalConditions-${child.id}`}
-                  value={child.medicalConditions}
-                  onChange={(e) => handleChildChange(child.id, 'medicalConditions', e.target.value)}
-                  placeholder="Conditions médicales importantes à connaître"
-                  className="mt-1"
-                  rows={2}
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor={`medications-${child.id}`} className="text-sm font-medium">
-                  Médicaments
-                </Label>
-                <Textarea
-                  id={`medications-${child.id}`}
-                  value={child.medications}
-                  onChange={(e) => handleChildChange(child.id, 'medications', e.target.value)}
-                  placeholder="Médicaments à administrer, posologie..."
-                  className="mt-1"
-                  rows={2}
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <Label htmlFor={`dietaryRestrictions-${child.id}`} className="text-sm font-medium">
-                  Restrictions alimentaires
-                </Label>
-                <Input
-                  id={`dietaryRestrictions-${child.id}`}
-                  value={child.dietaryRestrictions}
-                  onChange={(e) => handleChildChange(child.id, 'dietaryRestrictions', e.target.value)}
-                  placeholder="Végétarien, sans gluten, etc."
-                  className="mt-1"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor={`specialNeeds-${child.id}`} className="text-sm font-medium">
-                  Besoins spéciaux
-                </Label>
-                <Input
-                  id={`specialNeeds-${child.id}`}
-                  value={child.specialNeeds}
-                  onChange={(e) => handleChildChange(child.id, 'specialNeeds', e.target.value)}
-                  placeholder="Besoins particuliers, handicaps..."
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-              <div>
-                <Label htmlFor={`favoriteActivities-${child.id}`} className="text-sm font-medium">
-                  Activités préférées
-                </Label>
-                <Input
-                  id={`favoriteActivities-${child.id}`}
-                  value={child.favoriteActivities}
-                  onChange={(e) => handleChildChange(child.id, 'favoriteActivities', e.target.value)}
-                  placeholder="Jeux, activités, centres d'intérêt..."
-                  className="mt-1"
-                />
-              </div>
-              
-              <div>
-                <Label htmlFor={`comfortItems-${child.id}`} className="text-sm font-medium">
-                  Objets de réconfort
-                </Label>
-                <Input
-                  id={`comfortItems-${child.id}`}
-                  value={child.comfortItems}
-                  onChange={(e) => handleChildChange(child.id, 'comfortItems', e.target.value)}
-                  placeholder="Doudou, tétine, peluche..."
-                  className="mt-1"
-                />
-              </div>
-            </div>
-
-            <div className="border-t pt-4">
-              <h5 className="text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
-                Contact d'urgence spécifique à cet enfant
-              </h5>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                  <Label htmlFor={`emergencyContactName-${child.id}`} className="text-sm font-medium">
-                    Nom du contact
-                  </Label>
-                  <Input
-                    id={`emergencyContactName-${child.id}`}
-                    value={child.emergencyContactName}
-                    onChange={(e) => handleChildChange(child.id, 'emergencyContactName', e.target.value)}
-                    placeholder="Nom du contact d'urgence"
-                    className="mt-1"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor={`emergencyContactPhone-${child.id}`} className="text-sm font-medium">
-                    Téléphone
-                  </Label>
-                  <Input
-                    id={`emergencyContactPhone-${child.id}`}
-                    value={child.emergencyContactPhone}
-                    onChange={(e) => handleChildChange(child.id, 'emergencyContactPhone', e.target.value)}
-                    placeholder="Téléphone d'urgence"
-                    className="mt-1"
-                  />
-                </div>
-                
-                <div>
-                  <Label htmlFor={`emergencyContactRelationship-${child.id}`} className="text-sm font-medium">
-                    Relation
-                  </Label>
-                  <Input
-                    id={`emergencyContactRelationship-${child.id}`}
-                    value={child.emergencyContactRelationship}
-                    onChange={(e) => handleChildChange(child.id, 'emergencyContactRelationship', e.target.value)}
-                    placeholder="Père, mère, grand-parent..."
-                    className="mt-1"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-
-  const renderCurrentStep = () => {
-    switch (currentStep) {
-      case 1:
-        return renderStep1();
-      case 2:
-        return renderStep2();
-      case 3:
-        return renderStep3();
-      default:
-        return null;
-    }
-  };
+    );
+  }
 
   return (
-    <div className={`max-w-4xl mx-auto ${className}`}>
-      <div className="mb-8">
-        <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          Formulaire Détaillé de Réservation
-        </h2>
-        <p className="text-gray-600 dark:text-gray-400">
-          Complétez les informations détaillées pour finaliser votre réservation.
-        </p>
-      </div>
-
-      {renderStepIndicator()}
-
-      <form onSubmit={handleSubmit} className="space-y-8">
-        {renderCurrentStep()}
-
-        {/* Navigation entre les étapes */}
-        <div className="flex items-center justify-between pt-6 border-t">
-          <Button
-            type="button"
-            variant="outline"
-            onClick={prevStep}
-            disabled={currentStep === 1}
-            className="flex items-center"
+    <div className="min-h-screen bg-gray-50 py-8">
+      <div className="max-w-4xl mx-auto px-4">
+        {/* En-tête */}
+        <div className="mb-8">
+          <Button 
+            onClick={() => navigate('/')} 
+            variant="ghost" 
+            className="mb-4"
           >
-            Précédent
+            <ArrowLeft className="h-4 w-4 mr-2" />
+            Retour à l'accueil
           </Button>
+          
+          <div className="text-center">
+            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+              Compléter votre réservation
+            </h1>
+            <p className="text-gray-600">
+              Bonjour {bookingData.parentName}, veuillez compléter les détails de votre réservation
+            </p>
+          </div>
+        </div>
 
-          {currentStep < totalSteps ? (
-            <Button
-              type="button"
-              onClick={nextStep}
-              className="flex items-center"
-            >
-              Suivant
-              <span className="ml-2">→</span>
-            </Button>
-          ) : (
+        {/* Résumé de la réservation */}
+        <Card className="mb-8">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <Calendar className="h-5 w-5" />
+              Résumé de votre réservation
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label className="text-sm font-medium text-gray-500">Type de service</Label>
+                <p className="font-medium">{bookingData.serviceType}</p>
+              </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-500">Date</Label>
+                <p className="font-medium">{new Date(bookingData.requestedDate).toLocaleDateString('fr-FR')}</p>
+              </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-500">Horaires</Label>
+                <p className="font-medium">
+                  {bookingData.startTime} - {bookingData.endTime}
+                </p>
+              </div>
+              <div>
+                <Label className="text-sm font-medium text-gray-500">Nombre d'enfants</Label>
+                <p className="font-medium">{bookingData.childrenCount}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Formulaire détaillé */}
+        <form onSubmit={handleSubmit} className="space-y-8">
+          {/* Adresse */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MapPin className="h-5 w-5" />
+                Adresse de la garde
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div>
+                <Label htmlFor="address">Adresse complète *</Label>
+                <Input
+                  id="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  placeholder="123 rue de la Paix, 75001 Paris"
+                  required
+                  className="mt-1"
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Informations sur les enfants */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Baby className="h-5 w-5" />
+                Informations sur les enfants
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                {children.map((child, index) => (
+                  <div key={index} className="border rounded-lg p-4">
+                    <h4 className="font-medium mb-4">Enfant {index + 1}</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <Label htmlFor={`child-name-${index}`}>Prénom *</Label>
+                        <Input
+                          id={`child-name-${index}`}
+                          value={child.name}
+                          onChange={(e) => handleChildChange(index, 'name', e.target.value)}
+                          placeholder="Prénom de l'enfant"
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div>
+                        <Label htmlFor={`child-age-${index}`}>Âge *</Label>
+                        <Input
+                          id={`child-age-${index}`}
+                          type="number"
+                          min="0"
+                          max="18"
+                          value={child.age}
+                          onChange={(e) => handleChildChange(index, 'age', parseInt(e.target.value) || 0)}
+                          required
+                          className="mt-1"
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor={`child-allergies-${index}`}>Allergies et particularités</Label>
+                        <Textarea
+                          id={`child-allergies-${index}`}
+                          value={child.allergies}
+                          onChange={(e) => handleChildChange(index, 'allergies', e.target.value)}
+                          placeholder="Allergies alimentaires, médicamenteuses, particularités..."
+                          className="mt-1"
+                          rows={2}
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor={`child-preferences-${index}`}>Préférences et goûts</Label>
+                        <Textarea
+                          id={`child-preferences-${index}`}
+                          value={child.preferences}
+                          onChange={(e) => handleChildChange(index, 'preferences', e.target.value)}
+                          placeholder="Aliments préférés, activités, jeux..."
+                          className="mt-1"
+                          rows={2}
+                        />
+                      </div>
+                      <div className="md:col-span-2">
+                        <Label htmlFor={`child-special-needs-${index}`}>Besoins spéciaux</Label>
+                        <Textarea
+                          id={`child-special-needs-${index}`}
+                          value={child.specialNeeds}
+                          onChange={(e) => handleChildChange(index, 'specialNeeds', e.target.value)}
+                          placeholder="Médicaments, soins particuliers, habitudes..."
+                          className="mt-1"
+                          rows={2}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Contact d'urgence */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <User className="h-5 w-5" />
+                Contact d'urgence
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="emergency-contact">Nom du contact d'urgence</Label>
+                  <Input
+                    id="emergency-contact"
+                    value={emergencyContact}
+                    onChange={(e) => setEmergencyContact(e.target.value)}
+                    placeholder="Nom et prénom"
+                    className="mt-1"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="emergency-phone">Téléphone d'urgence</Label>
+                  <Input
+                    id="emergency-phone"
+                    value={emergencyPhone}
+                    onChange={(e) => setEmergencyPhone(e.target.value)}
+                    placeholder="06 12 34 56 78"
+                    className="mt-1"
+                  />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Instructions spéciales */}
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <MessageSquare className="h-5 w-5" />
+                Instructions et commentaires
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                <div>
+                  <Label htmlFor="special-instructions">Instructions spéciales</Label>
+                  <Textarea
+                    id="special-instructions"
+                    value={specialInstructions}
+                    onChange={(e) => setSpecialInstructions(e.target.value)}
+                    placeholder="Instructions particulières pour la garde..."
+                    className="mt-1"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="contact-notes">Notes de contact</Label>
+                  <Textarea
+                    id="contact-notes"
+                    value={contactNotes}
+                    onChange={(e) => setContactNotes(e.target.value)}
+                    placeholder="Informations supplémentaires..."
+                    className="mt-1"
+                    rows={3}
+                  />
+                </div>
+                <div>
+                  <Label>Méthode de contact préférée</Label>
+                  <div className="flex gap-4 mt-2">
+                    <label className="flex items-center space-x-2">
+                      <Checkbox
+                        checked={preferredContactMethod === 'phone'}
+                        onCheckedChange={() => setPreferredContactMethod('phone')}
+                      />
+                      <span className="text-sm">Téléphone</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <Checkbox
+                        checked={preferredContactMethod === 'email'}
+                        onCheckedChange={() => setPreferredContactMethod('email')}
+                      />
+                      <span className="text-sm">Email</span>
+                    </label>
+                    <label className="flex items-center space-x-2">
+                      <Checkbox
+                        checked={preferredContactMethod === 'sms'}
+                        onCheckedChange={() => setPreferredContactMethod('sms')}
+                      />
+                      <span className="text-sm">SMS</span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Bouton de soumission */}
+          <div className="text-center">
             <Button
               type="submit"
-              disabled={isSubmitting}
-              className="flex items-center"
+              disabled={submitting || !address.trim()}
+              className="bg-green-600 hover:bg-green-700 text-white px-8 py-3 text-lg"
             >
-              {isSubmitting ? (
+              {submitting ? (
                 <>
                   <div className="mr-2 h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent"></div>
-                  Enregistrement...
+                  Envoi en cours...
                 </>
               ) : (
                 <>
-                  <CheckCircle className="mr-2 h-5 w-5" />
-                  Finaliser la Réservation
+                  <CheckCircle className="h-5 w-5 mr-2" />
+                  Confirmer la réservation
                 </>
               )}
             </Button>
-          )}
-        </div>
-      </form>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };
