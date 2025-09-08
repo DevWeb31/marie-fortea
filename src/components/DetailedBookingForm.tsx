@@ -275,8 +275,8 @@ const DetailedBookingForm: React.FC = () => {
         <div className="mb-8">
           <Button 
             onClick={() => navigate('/')} 
-            variant="ghost" 
-            className="mb-4"
+            variant="outline" 
+            className="mb-4 bg-white/80 hover:bg-white/90 text-gray-700 border-gray-200 hover:border-gray-300 dark:bg-transparent dark:hover:bg-gray-800 dark:text-gray-300 dark:border-gray-600 dark:hover:border-gray-500"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Retour à l'accueil
