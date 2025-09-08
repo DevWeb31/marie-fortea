@@ -139,6 +139,7 @@ const Services = () => {
   };
 
   // Fonction pour obtenir les services dynamiques
+  
   const getDynamicServices = (pricingData: any) => {
     const additionalChildRate = pricingData.additionalChildRate || 5;
     

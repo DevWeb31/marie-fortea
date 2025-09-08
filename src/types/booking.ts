@@ -481,12 +481,50 @@ export const formatDate = (dateString: string): string => {
   
   try {
     const date = new Date(dateString);
-    return date.toLocaleDateString('fr-FR', {
+    const formatted = date.toLocaleDateString('fr-FR', {
       weekday: 'long',
       year: 'numeric',
       month: 'long',
       day: 'numeric'
     });
+    
+    // Raccourcir les jours de la semaine
+    const dayAbbreviations: Record<string, string> = {
+      'lundi': 'lun.',
+      'mardi': 'mar.',
+      'mercredi': 'mer.',
+      'jeudi': 'jeu.',
+      'vendredi': 'ven.',
+      'samedi': 'sam.',
+      'dimanche': 'dim.'
+    };
+    
+    // Raccourcir les mois
+    const monthAbbreviations: Record<string, string> = {
+      'janvier': 'jan.',
+      'février': 'fév.',
+      'mars': 'mars',
+      'avril': 'avr.',
+      'mai': 'mai',
+      'juin': 'juin',
+      'juillet': 'juil.',
+      'août': 'août',
+      'septembre': 'sept.',
+      'octobre': 'oct.',
+      'novembre': 'nov.',
+      'décembre': 'déc.'
+    };
+    
+    // Appliquer les abréviations
+    let result = formatted;
+    Object.entries(dayAbbreviations).forEach(([full, abbrev]) => {
+      result = result.replace(full, abbrev);
+    });
+    Object.entries(monthAbbreviations).forEach(([full, abbrev]) => {
+      result = result.replace(full, abbrev);
+    });
+    
+    return result;
   } catch (error) {
     console.error('Erreur lors du formatage de la date:', error);
     return dateString;

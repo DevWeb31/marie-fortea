@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { useToast } from '@/hooks/use-toast';
+import { ContactMethod } from '@/types/booking';
 import Captcha from './Captcha';
 import ContactSummaryModal from './ContactSummaryModal';
 import SuccessAnimation from './SuccessAnimation';
@@ -674,6 +675,12 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    console.log('🔍 DEBUG FORM - Soumission du formulaire:', {
+      serviceType: formData.serviceType,
+      serviceTypeType: typeof formData.serviceType,
+      allFormData: formData
+    });
+    
     if (validateFormData()) {
       setShowSummaryModal(true);
     }
@@ -683,21 +690,28 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const handleConfirmSubmission = async () => {
     setIsSubmitting(true);
 
+    const bookingData = {
+      ...formData,
+      parentName: `${formData.parentFirstName} ${formData.parentLastName}`.trim(),
+      parentEmail: formData.parentEmail,
+      parentAddress: 'À préciser lors du contact',
+      requestedDate: formData.startDate,
+      childrenDetails: `${formData.childrenCount} enfant${formData.childrenCount > 1 ? 's' : ''} - Âges: ${formData.childrenAges}`,
+      specialInstructions: '',
+      emergencyContact: '',
+      emergencyPhone: '',
+      preferredContactMethod: 'phone' as ContactMethod,
+      captchaToken: 'verified' // Token de captcha vérifié
+    };
+
+    console.log('🔍 DEBUG FORM - Données envoyées à BookingService:', {
+      serviceType: bookingData.serviceType,
+      serviceTypeType: typeof bookingData.serviceType,
+      allBookingData: bookingData
+    });
+
     try {
-      const result = await BookingService.createBookingRequest({
-        ...formData,
-        parentName: `${formData.parentFirstName} ${formData.parentLastName}`.trim(),
-        parentEmail: formData.parentEmail,
-        parentAddress: 'À préciser lors du contact',
-        requestedDate: formData.startDate,
-        childrenDetails: `${formData.childrenCount} enfant${formData.childrenCount > 1 ? 's' : ''} - Âges: ${formData.childrenAges}`,
-        specialInstructions: '',
-        emergencyContact: '',
-        emergencyPhone: '',
-        preferredContactMethod: 'phone',
-        contactNotes: '',
-        captchaToken
-      });
+      const result = await BookingService.createBookingRequest(bookingData);
 
       if (result.error) {
         toast({

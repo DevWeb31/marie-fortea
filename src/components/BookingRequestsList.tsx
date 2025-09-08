@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ import {
 } from '@/components/ui/dialog';
 import { useCustomToast } from '@/components/ui/custom-toaster';
 import { BookingService } from '@/lib/booking-service';
+import { getServiceTypeName } from '@/lib/service-utils';
 import { formatDuration } from '@/lib/duration-utils';
 import { 
   BookingRequestSummary, 
@@ -49,14 +51,14 @@ import {
 import ConfirmDialog from '@/components/ui/confirm-dialog';
 import { supabase } from '@/lib/supabase';
 
-// Fonction utilitaire pour formater les heures sans les secondes
-const formatTimeWithoutSeconds = (time: string): string => {
+// Fonction utilitaire pour formater les heures au format français (9h00)
+const formatTimeFrench = (time: string): string => {
   if (!time) return '';
   // Si le format est HH:MM:SS, on prend seulement HH:MM
   if (time.includes(':')) {
     const parts = time.split(':');
     if (parts.length >= 2) {
-      return `${parts[0]}:${parts[1]}`;
+      return `${parts[0]}h${parts[1]}`;
     }
   }
   return time;
@@ -68,6 +70,7 @@ interface BookingRequestsListProps {
 }
 
 const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '' }) => {
+  
   const { toast } = useCustomToast();
   const [requests, setRequests] = useState<BookingRequestSummary[]>([]);
   const [filteredRequests, setFilteredRequests] = useState<BookingRequestSummary[]>([]);
@@ -1103,6 +1106,7 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
     return statusBackgrounds[status] || 'bg-gray-50/60 dark:bg-gray-900/20';
   };
 
+
   return (
     <div className={`space-y-6 ${className}`}>
       {/* Filtres et recherche */}
@@ -1318,7 +1322,9 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                     )}
                   </div>
                   <div className="space-y-2">
-                    {filteredRequests.map((request) => (
+                    {filteredRequests.map((request) => {
+                      
+                      return (
                       <div
                         key={request.id}
                         className={`border rounded-xl p-4 transition-colors ${
@@ -1357,18 +1363,19 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 
                                 <div className="flex items-center space-x-2">
                                   <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                                  <span className="truncate">{formatTimeWithoutSeconds(request.startTime)} - {formatTimeWithoutSeconds(request.endTime)}</span>
+                                  <span className="truncate">{formatTimeFrench(request.startTime)} à {formatTimeFrench(request.endTime)}</span>
                                 </div>
                                 
                                 <div className="flex items-center space-x-2">
                                   <Baby className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                   <span className="truncate">{request.childrenCount} enfant{request.childrenCount > 1 ? 's' : ''}</span>
                                 </div>
+                                
                               </div>
                               
                               <div className="mt-3 flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 text-sm">
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Service: {request.serviceName}
+                                  Type de garde: {getServiceTypeName(request.serviceType)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
@@ -1430,7 +1437,8 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                           </div>
                         </div>
                       </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1565,18 +1573,19 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 
                                 <div className="flex items-center space-x-2">
                                   <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                                  <span className="truncate">{formatTimeWithoutSeconds(request.startTime)} - {formatTimeWithoutSeconds(request.endTime)}</span>
+                                  <span className="truncate">{formatTimeFrench(request.startTime)} à {formatTimeFrench(request.endTime)}</span>
                                 </div>
                                 
                                 <div className="flex items-center space-x-2">
                                   <Baby className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                   <span className="truncate">{request.childrenCount} enfant{request.childrenCount > 1 ? 's' : ''}</span>
                                 </div>
+                                
                               </div>
                               
                               <div className="mt-3 flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 text-sm">
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Service: {request.serviceName}
+                                  Type de garde: {getServiceTypeName(request.serviceType)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
@@ -1755,18 +1764,19 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
                                 
                                 <div className="flex items-center space-x-2">
                                   <Clock className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
-                                  <span className="truncate">{formatTimeWithoutSeconds(request.startTime)} - {formatTimeWithoutSeconds(request.endTime)}</span>
+                                  <span className="truncate">{formatTimeFrench(request.startTime)} à {formatTimeFrench(request.endTime)}</span>
                                 </div>
                                 
                                 <div className="flex items-center space-x-2">
                                   <Baby className="h-3 w-3 sm:h-4 sm:w-4 flex-shrink-0" />
                                   <span className="truncate">{request.childrenCount} enfant{request.childrenCount > 1 ? 's' : ''}</span>
                                 </div>
+                                
                               </div>
                               
                               <div className="mt-3 flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2 text-sm">
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
-                                  Service: {request.serviceName}
+                                  Type de garde: {getServiceTypeName(request.serviceType)}
                                 </span>
                                 <span className="hidden sm:inline text-gray-500 dark:text-gray-400">•</span>
                                 <span className="text-gray-500 dark:text-gray-400 truncate">
@@ -1840,11 +1850,11 @@ const BookingRequestsList: React.FC<BookingRequestsListProps> = ({ className = '
               </div>
               
               <div className="border-t pt-4">
-                <h4 className="font-medium mb-2">Détails du service</h4>
+                <h4 className="font-medium mb-2">Détails de la garde</h4>
                 <div className="space-y-2">
-                  <p><strong>Service:</strong> {selectedRequest.serviceName}</p>
+                  <p><strong>Type de garde:</strong> {getServiceTypeName(selectedRequest.serviceType)}</p>
                   <p><strong>Date:</strong> {formatDate(selectedRequest.requestedDate)}</p>
-                  <p><strong>Heures:</strong> {formatTimeWithoutSeconds(selectedRequest.startTime)} - {formatTimeWithoutSeconds(selectedRequest.endTime)}</p>
+                  <p><strong>Heures:</strong> {formatTimeFrench(selectedRequest.startTime)} à {formatTimeFrench(selectedRequest.endTime)}</p>
                   <p><strong>Durée:</strong> {formatDuration(selectedRequest.durationHours)}</p>
                   <p><strong>Prix estimé:</strong> {selectedRequest.estimatedTotal ? selectedRequest.estimatedTotal.toFixed(2) : '0.00'}€</p>
                 </div>

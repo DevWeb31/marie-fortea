@@ -19,6 +19,10 @@ import StatusChangeHistory from './StatusChangeHistory';
 
 const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
+  
+  console.log('🔍 DEBUG DASHBOARD - AdminDashboard rendu', {
+    activeTab: activeTab
+  });
 
   // Données de démonstration pour le tableau de bord
   const dashboardStats = {
