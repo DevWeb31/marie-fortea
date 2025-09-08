@@ -237,10 +237,10 @@ const DetailedBookingForm: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
+      <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
-          <p className="text-gray-600">Chargement du formulaire...</p>
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary mx-auto mb-4"></div>
+          <p className="text-muted-foreground">Chargement du formulaire...</p>
         </div>
       </div>
     );
@@ -248,15 +248,15 @@ const DetailedBookingForm: React.FC = () => {
 
   if (error || !bookingData) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 flex items-center justify-center">
-        <Card className="w-full max-w-md bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="w-full max-w-md">
           <CardContent className="pt-6">
             <div className="text-center">
               <div className="text-red-500 mb-4">
                 <CheckCircle className="h-12 w-12 mx-auto" />
               </div>
               <h2 className="text-xl font-semibold mb-2">Erreur</h2>
-              <p className="text-gray-600 mb-4">{error}</p>
+              <p className="text-muted-foreground mb-4">{error}</p>
               <Button onClick={() => navigate('/')} variant="outline">
                 <ArrowLeft className="h-4 w-4 mr-2" />
                 Retour à l'accueil
@@ -269,7 +269,7 @@ const DetailedBookingForm: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 py-8">
+    <div className="min-h-screen py-8">
       <div className="max-w-4xl mx-auto px-4">
         {/* En-tête */}
         <div className="mb-8">
@@ -283,17 +283,17 @@ const DetailedBookingForm: React.FC = () => {
           </Button>
           
           <div className="text-center">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            <h1 className="text-3xl font-bold mb-2">
               Compléter votre réservation
             </h1>
-            <p className="text-gray-600">
+            <p className="text-muted-foreground">
               Bonjour {bookingData.parent_name}, veuillez compléter les détails de votre réservation
             </p>
           </div>
         </div>
 
         {/* Résumé de la réservation */}
-        <Card className="mb-8 bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+        <Card className="mb-8">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Calendar className="h-5 w-5" />
@@ -303,21 +303,21 @@ const DetailedBookingForm: React.FC = () => {
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <Label className="text-sm font-medium text-gray-500">Type de service</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Type de service</Label>
                 <p className="font-medium">{getServiceDisplayName(bookingData.service_type) || 'Service personnalisé'}</p>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Date</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Date</Label>
                 <p className="font-medium">{new Date(bookingData.requested_date).toLocaleDateString('fr-FR')}</p>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Horaires</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Horaires</Label>
                 <p className="font-medium">
                   {bookingData.start_time} - {bookingData.end_time}
                 </p>
               </div>
               <div>
-                <Label className="text-sm font-medium text-gray-500">Nombre d'enfants</Label>
+                <Label className="text-sm font-medium text-muted-foreground">Nombre d'enfants</Label>
                 <p className="font-medium">{bookingData.children_count}</p>
               </div>
             </div>
@@ -326,9 +326,9 @@ const DetailedBookingForm: React.FC = () => {
 
         {/* Affichage des erreurs */}
         {error && (
-          <Card className="mb-8 border-red-200/50 bg-red-50/70 backdrop-blur-sm shadow-lg">
+          <Card className="mb-8 border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-950">
             <CardContent className="pt-6">
-              <div className="flex items-center gap-2 text-red-600">
+              <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
                 <CheckCircle className="h-5 w-5" />
                 <p className="font-medium">{error}</p>
               </div>
@@ -339,7 +339,7 @@ const DetailedBookingForm: React.FC = () => {
         {/* Formulaire détaillé */}
         <form onSubmit={handleSubmit} className="space-y-8">
           {/* Adresse */}
-          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-5 w-5" />
@@ -362,7 +362,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Informations sur les enfants */}
-          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Baby className="h-5 w-5" />
@@ -440,7 +440,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Contact d'urgence */}
-          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <User className="h-5 w-5" />
@@ -474,7 +474,7 @@ const DetailedBookingForm: React.FC = () => {
           </Card>
 
           {/* Instructions spéciales */}
-          <Card className="bg-white/70 backdrop-blur-sm border-white/20 shadow-lg">
+          <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MessageSquare className="h-5 w-5" />
