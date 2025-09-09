@@ -527,4 +527,226 @@ L'équipe Marie Fortea
       return { data: null, error: 'Erreur inattendue lors de l\'envoi de l\'email' };
     }
   }
+
+  // Envoyer un email d'export de données
+  static async sendDataExportEmail(userEmail: string, downloadUrl: string, hasData: boolean): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const emailData = this.prepareDataExportEmail(userEmail, downloadUrl, hasData);
+
+      // Essayer d'envoyer via Mailgun d'abord
+      try {
+        await this.sendEmailViaMailgun(emailData);
+        return { data: true, error: null };
+      } catch (mailgunError) {
+        console.warn('Erreur Mailgun, tentative avec fallback:', mailgunError);
+        
+        // Essayer le fallback SMTP
+        try {
+          await this.sendEmailViaFallback(emailData);
+          return { data: true, error: null };
+        } catch (fallbackError) {
+          console.warn('Erreur fallback, utilisation de la simulation:', fallbackError);
+        }
+      }
+
+      // Dernier recours : simulation locale
+      const { error } = await this.sendEmailViaInbucket(emailData);
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de l\'envoi de l\'email' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de l\'envoi de l\'email' };
+    }
+  }
+
+  // Préparer le contenu de l'email d'export de données
+  private static prepareDataExportEmail(userEmail: string, downloadUrl: string, hasData: boolean): EmailData {
+    const subject = hasData 
+      ? 'Vos données personnelles - Marie Fortea' 
+      : 'Demande d\'export de données - Marie Fortea';
+
+    const html = hasData ? `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Vos données personnelles</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: white; padding: 30px; border: 1px solid #e0e0e0; }
+          .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+          .button { display: inline-block; background: #667eea; color: white; padding: 15px 30px; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 20px 0; }
+          .button:hover { background: #5a6fd8; }
+          .alert { background: #e3f2fd; border: 1px solid #2196f3; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          .warning { background: #fff3cd; border: 1px solid #ffc107; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Vos données personnelles</h1>
+            <p>Marie Fortea - Services de garde d'enfants</p>
+          </div>
+          
+          <div class="content">
+            <h2>Bonjour,</h2>
+            
+            <p>Vous avez demandé l'export de vos données personnelles. Nous avons préparé un fichier contenant toutes les informations que nous détenons vous concernant.</p>
+            
+            <div class="alert">
+              <strong>🔒 Lien sécurisé de téléchargement</strong><br>
+              Cliquez sur le bouton ci-dessous pour télécharger vos données. Ce lien est personnel et sécurisé.
+            </div>
+            
+            <div style="text-align: center;">
+              <a href="${downloadUrl}" class="button">Télécharger mes données</a>
+            </div>
+            
+            <div class="warning">
+              <strong>⚠️ Important :</strong>
+              <ul>
+                <li>Ce lien expire dans 24 heures pour votre sécurité</li>
+                <li>Il ne peut être utilisé qu'une seule fois</li>
+                <li>Vos données sont au format JSON</li>
+              </ul>
+            </div>
+            
+            <h3>Que contient votre export ?</h3>
+            <ul>
+              <li>📋 Toutes vos réservations et demandes</li>
+              <li>👶 Les détails de vos enfants</li>
+              <li>📞 Vos informations de contact</li>
+              <li>📝 Vos préférences et commentaires</li>
+              <li>🔐 L'historique de vos consentements RGPD</li>
+            </ul>
+            
+            <p>Si vous avez des questions concernant vos données ou si vous rencontrez des difficultés avec le téléchargement, n'hésitez pas à nous contacter.</p>
+            
+            <p>Cordialement,<br><strong>L'équipe Marie Fortea</strong></p>
+          </div>
+          
+          <div class="footer">
+            <p>Cet email a été envoyé automatiquement suite à votre demande d'export de données.</p>
+            <p>Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    ` : `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Demande d'export de données</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: white; padding: 30px; border: 1px solid #e0e0e0; }
+          .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+          .info { background: #e3f2fd; border: 1px solid #2196f3; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>Demande d'export de données</h1>
+            <p>Marie Fortea - Services de garde d'enfants</p>
+          </div>
+          
+          <div class="content">
+            <h2>Bonjour,</h2>
+            
+            <p>Vous avez demandé l'export de vos données personnelles pour l'adresse email : <strong>${userEmail}</strong></p>
+            
+            <div class="info">
+              <strong>ℹ️ Information importante</strong><br>
+              Aucune donnée personnelle n'a été trouvée pour cette adresse email dans notre système.
+            </div>
+            
+            <p>Cela peut signifier que :</p>
+            <ul>
+              <li>Vous n'avez jamais effectué de réservation sur notre site</li>
+              <li>Vos données ont déjà été supprimées (conservation limitée à 2 mois après la fin de la garde)</li>
+              <li>L'adresse email utilisée ne correspond pas à celle de vos réservations</li>
+            </ul>
+            
+            <p>Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez effectuer une réservation, n'hésitez pas à nous contacter.</p>
+            
+            <p>Cordialement,<br><strong>L'équipe Marie Fortea</strong></p>
+          </div>
+          
+          <div class="footer">
+            <p>Cet email a été envoyé automatiquement suite à votre demande d'export de données.</p>
+            <p>Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const text = hasData ? `
+Vos données personnelles - Marie Fortea
+
+Bonjour,
+
+Vous avez demandé l'export de vos données personnelles. Nous avons préparé un fichier contenant toutes les informations que nous détenons vous concernant.
+
+Lien de téléchargement sécurisé : ${downloadUrl}
+
+IMPORTANT :
+- Ce lien expire dans 24 heures pour votre sécurité
+- Il ne peut être utilisé qu'une seule fois
+- Vos données sont au format JSON
+
+Que contient votre export ?
+- Toutes vos réservations et demandes
+- Les détails de vos enfants
+- Vos informations de contact
+- Vos préférences et commentaires
+- L'historique de vos consentements RGPD
+
+Si vous avez des questions concernant vos données ou si vous rencontrez des difficultés avec le téléchargement, n'hésitez pas à nous contacter.
+
+Cordialement,
+L'équipe Marie Fortea
+
+Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00
+    ` : `
+Demande d'export de données - Marie Fortea
+
+Bonjour,
+
+Vous avez demandé l'export de vos données personnelles pour l'adresse email : ${userEmail}
+
+INFORMATION IMPORTANTE :
+Aucune donnée personnelle n'a été trouvée pour cette adresse email dans notre système.
+
+Cela peut signifier que :
+- Vous n'avez jamais effectué de réservation sur notre site
+- Vos données ont déjà été supprimées (conservation limitée à 2 mois après la fin de la garde)
+- L'adresse email utilisée ne correspond pas à celle de vos réservations
+
+Si vous pensez qu'il s'agit d'une erreur ou si vous souhaitez effectuer une réservation, n'hésitez pas à nous contacter.
+
+Cordialement,
+L'équipe Marie Fortea
+
+Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00
+    `;
+
+    return {
+      to: userEmail,
+      subject: subject,
+      html: html,
+      text: text
+    };
+  }
 }
