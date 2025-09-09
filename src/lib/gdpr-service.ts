@@ -1,4 +1,5 @@
 import { supabase } from './supabase';
+import { EmailService } from './email-service';
 
 export interface ConsentPreferences {
   necessary: boolean;
@@ -174,6 +175,12 @@ export class GDPRService {
     error?: string;
   }> {
     try {
+      // Vérifier d'abord si l'utilisateur a des données
+      const checkResult = await this.checkUserDataExists(request.userEmail);
+      if (checkResult.error) {
+        return { success: false, error: checkResult.error };
+      }
+
       // Générer un token sécurisé
       const token = this.generateSecureToken();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 heures
@@ -193,11 +200,22 @@ export class GDPRService {
         return { success: false, error: tokenError.message };
       }
 
-      // Envoyer l'email avec le lien (ici on simule, en production il faudrait un vrai service d'email)
+      // Envoyer l'email avec le lien sécurisé
       const downloadUrl = `${window.location.origin}/data-download/${token}`;
       
-      // TODO: Intégrer avec un service d'email réel (Mailgun, SendGrid, etc.)
-      console.log(`Email envoyé à ${request.userEmail} avec le lien: ${downloadUrl}`);
+      // Utiliser le service d'email pour envoyer l'email d'export
+      const emailResult = await EmailService.sendDataExportEmail(
+        request.userEmail, 
+        downloadUrl, 
+        checkResult.hasData
+      );
+
+      if (emailResult.error) {
+        console.error('Erreur lors de l\'envoi de l\'email d\'export:', emailResult.error);
+        return { success: false, error: `Erreur lors de l'envoi de l'email: ${emailResult.error}` };
+      }
+
+      console.log(`Email d'export envoyé à ${request.userEmail} avec le lien: ${downloadUrl}`);
 
       // Enregistrer l'audit
       await supabase
@@ -208,7 +226,9 @@ export class GDPRService {
           table_name: 'secure_download_tokens',
           metadata: {
             token: token,
-            expires_at: expiresAt.toISOString()
+            expires_at: expiresAt.toISOString(),
+            has_data: checkResult.hasData,
+            email_sent: true
           }
         });
 
