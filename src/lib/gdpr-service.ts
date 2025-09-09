@@ -181,7 +181,30 @@ export class GDPRService {
         return { success: false, error: checkResult.error };
       }
 
-      // Générer un token sécurisé
+      // SÉCURITÉ : Ne pas envoyer d'email si l'adresse n'existe pas en base
+      if (!checkResult.hasData) {
+        console.log(`Tentative d'export pour une adresse email inexistante: ${request.userEmail}`);
+        
+        // Enregistrer l'audit pour traçabilité (sans envoyer d'email)
+        await supabase
+          .from('data_access_audit')
+          .insert({
+            user_email: request.userEmail,
+            action: 'export_request_denied',
+            table_name: 'booking_requests',
+            metadata: {
+              reason: 'email_not_found_in_database',
+              data_count: 0,
+              email_sent: false
+            }
+          });
+
+        // Retourner un succès mais sans envoyer d'email
+        // L'utilisateur verra le message de succès mais ne recevra pas d'email
+        return { success: true };
+      }
+
+      // L'utilisateur a des données, procéder à l'export
       const token = this.generateSecureToken();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 heures
 
@@ -207,7 +230,7 @@ export class GDPRService {
       const emailResult = await EmailService.sendDataExportEmail(
         request.userEmail, 
         downloadUrl, 
-        checkResult.hasData
+        true // hasData est toujours true ici car on a vérifié plus haut
       );
 
       if (emailResult.error) {
@@ -227,7 +250,8 @@ export class GDPRService {
           metadata: {
             token: token,
             expires_at: expiresAt.toISOString(),
-            has_data: checkResult.hasData,
+            has_data: true,
+            data_count: checkResult.dataCount,
             email_sent: true
           }
         });

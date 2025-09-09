@@ -120,8 +120,8 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
         });
       } else {
         toast({
-          title: "Email envoyé",
-          description: "Un email a été envoyé. Si aucune donnée n'est trouvée pour cette adresse, vous recevrez un message d'information.",
+          title: "Demande traitée",
+          description: "Aucune donnée trouvée pour cette adresse email. Aucun email n'a été envoyé pour des raisons de sécurité.",
         });
       }
 
