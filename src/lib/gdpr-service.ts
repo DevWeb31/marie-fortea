@@ -484,18 +484,23 @@ export class GDPRService {
         return { success: false, error: `Erreur lors de l'envoi de la demande: ${emailResult.error}` };
       }
 
-      // Marquer les réservations pour suppression
-      const { error: updateError } = await supabase
-        .from('booking_requests')
-        .update({
-          deletion_requested: true,
-          deletion_requested_at: new Date().toISOString(),
-          deletion_reason: request.reason
-        })
-        .eq('parent_email', request.userEmail);
+      // Marquer les réservations pour suppression (optionnel - peut échouer à cause des politiques RLS)
+      try {
+        const { error: updateError } = await supabase
+          .from('booking_requests')
+          .update({
+            deletion_requested: true,
+            deletion_requested_at: new Date().toISOString(),
+            deletion_reason: request.reason
+          })
+          .eq('parent_email', request.userEmail);
 
-      if (updateError) {
-        // Ne pas faire échouer la demande si la mise à jour des réservations échoue
+        if (updateError) {
+          // Log l'erreur mais ne pas faire échouer la demande
+          // L'email sera quand même envoyé à l'équipe pour traitement manuel
+        }
+      } catch (updateError) {
+        // Ignorer les erreurs de mise à jour - l'équipe traitera manuellement
       }
 
       // Enregistrer l'audit

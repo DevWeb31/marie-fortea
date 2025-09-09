@@ -839,6 +839,7 @@ Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00
               <h3>📝 Actions à effectuer :</h3>
               <ol>
                 <li>Vérifier l'identité de l'utilisateur</li>
+                <li>Marquer les réservations pour suppression (si pas déjà fait automatiquement)</li>
                 <li>Supprimer toutes les données associées à cette adresse email</li>
                 <li>Confirmer la suppression par email à l'utilisateur</li>
                 <li>Mettre à jour les logs d'audit</li>
@@ -874,9 +875,10 @@ INFORMATIONS DE LA DEMANDE :
 
 ACTIONS À EFFECTUER :
 1. Vérifier l'identité de l'utilisateur
-2. Supprimer toutes les données associées à cette adresse email
-3. Confirmer la suppression par email à l'utilisateur
-4. Mettre à jour les logs d'audit
+2. Marquer les réservations pour suppression (si pas déjà fait automatiquement)
+3. Supprimer toutes les données associées à cette adresse email
+4. Confirmer la suppression par email à l'utilisateur
+5. Mettre à jour les logs d'audit
 
 Délai recommandé : Traitement dans les 30 jours conformément au RGPD.
 
