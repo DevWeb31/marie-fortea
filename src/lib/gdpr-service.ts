@@ -183,8 +183,6 @@ export class GDPRService {
 
       // SÉCURITÉ : Ne pas envoyer d'email si l'adresse n'existe pas en base
       if (!checkResult.hasData) {
-        console.log(`Tentative d'export pour une adresse email inexistante: ${request.userEmail}`);
-        
         // Enregistrer l'audit pour traçabilité (sans envoyer d'email)
         await supabase
           .from('data_access_audit')
@@ -234,11 +232,8 @@ export class GDPRService {
       );
 
       if (emailResult.error) {
-        console.error('Erreur lors de l\'envoi de l\'email d\'export:', emailResult.error);
         return { success: false, error: `Erreur lors de l'envoi de l'email: ${emailResult.error}` };
       }
-
-      console.log(`Email d'export envoyé à ${request.userEmail} avec le lien: ${downloadUrl}`);
 
       // Enregistrer l'audit
       await supabase
@@ -258,7 +253,6 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la demande d\'export:', error);
       return { success: false, error: 'Erreur lors de la demande d\'export' };
     }
   }

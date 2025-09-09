@@ -91,13 +91,6 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
       setRequestCount(prev => prev + 1);
       setLastRequestTime(Date.now());
 
-      // Vérifier d'abord si l'email existe en base de données
-      const checkResult = await GDPRService.checkUserDataExists(email);
-      
-      if (checkResult.error) {
-        throw new Error(checkResult.error);
-      }
-
       // Utiliser le service GDPR pour envoyer un email avec lien de téléchargement
       const result = await GDPRService.requestDataExport({
         userEmail: email,
@@ -112,18 +105,11 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
         throw new Error('Erreur lors de l\'envoi de l\'email');
       }
 
-      // Message adapté selon la présence de données
-      if (checkResult.hasData) {
-        toast({
-          title: "Email envoyé",
-          description: "Un email avec un lien sécurisé pour télécharger vos données a été envoyé à votre adresse email.",
-        });
-      } else {
-        toast({
-          title: "Demande traitée",
-          description: "Aucune donnée trouvée pour cette adresse email. Aucun email n'a été envoyé pour des raisons de sécurité.",
-        });
-      }
+      // Message uniforme pour tous les utilisateurs
+      toast({
+        title: "Demande traitée",
+        description: "Si votre adresse email existe dans notre base de données, vous recevrez un email avec un lien sécurisé pour télécharger vos données.",
+      });
 
       // Réinitialiser le formulaire
       setEmail('');
