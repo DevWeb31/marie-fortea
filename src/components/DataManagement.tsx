@@ -32,10 +32,7 @@ interface DataManagementProps {
 
 const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
   const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [reason, setReason] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [action, setAction] = useState<'export' | 'delete' | null>(null);
   const [lastRequestTime, setLastRequestTime] = useState<number>(0);
   const [requestCount, setRequestCount] = useState<number>(0);
   const { toast } = useToast();
@@ -129,72 +126,8 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
     }
   };
 
-  const handleDataDeletion = async () => {
-    if (!email.trim() || !reason.trim()) {
-      toast({
-        title: "⚠️ Informations manquantes",
-        description: "Veuillez saisir votre email et la raison de la suppression.",
-        variant: "destructive",
-        duration: 4000,
-      });
-      return;
-    }
-
-    // Vérifier la protection anti-spam
-    if (!checkSpamProtection()) {
-      return;
-    }
-
-    setIsLoading(true);
-    try {
-      // Incrémenter le compteur de demandes
-      setRequestCount(prev => prev + 1);
-      setLastRequestTime(Date.now());
-
-      // Utiliser le service GDPR pour demander la suppression
-      const result = await GDPRService.requestDataDeletion({
-        userEmail: email,
-        userPhone: phone,
-        reason: reason
-      });
-
-      if (result.error) {
-        throw new Error(result.error);
-      }
-
-      if (!result.success) {
-        throw new Error('Erreur lors de la demande de suppression');
-      }
-
-      toast({
-        title: "✅ Demande de suppression enregistrée",
-        description: "Votre demande de suppression sera traitée prochainement par notre équipe. Vous recevrez une confirmation par email.",
-        duration: 5000,
-      });
-
-      // Réinitialiser le formulaire
-      setEmail('');
-      setPhone('');
-      setReason('');
-
-    } catch (error) {
-      console.error('Erreur lors de la suppression:', error);
-      toast({
-        title: "❌ Erreur lors de la demande",
-        description: error instanceof Error ? error.message : "Une erreur est survenue lors du traitement de votre demande de suppression. Veuillez réessayer.",
-        variant: "destructive",
-        duration: 5000,
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   const resetForm = () => {
     setEmail('');
-    setPhone('');
-    setReason('');
-    setAction(null);
   };
 
   return (
@@ -288,7 +221,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
           </CardHeader>
           <CardContent className="space-y-4">
             <p className="text-sm text-gray-600 dark:text-gray-400">
-              Demandez la suppression de toutes vos données personnelles. Cette action est irréversible.
+              Pour demander la suppression de vos données personnelles, veuillez nous contacter directement par email.
             </p>
 
             <Alert className="border-red-200 bg-red-50 dark:bg-red-900/20">
@@ -299,55 +232,83 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
               </AlertDescription>
             </Alert>
 
-            <div className="space-y-3">
-              <div>
-                <Label htmlFor="delete-email">Adresse email *</Label>
-                <Input
-                  id="delete-email"
-                  type="email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="votre@email.com"
-                />
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                <h4 className="font-semibold text-gray-900 dark:text-white mb-2">
+                  📧 Modèle d'email de suppression
+                </h4>
+                <div className="space-y-2 text-sm">
+                  <div>
+                    <strong>Destinataire :</strong> contact@marie-fortea.fr
+                  </div>
+                  <div>
+                    <strong>Objet :</strong> Demande de suppression de mes données personnelles
+                  </div>
+                  <div className="mt-3">
+                    <strong>Contenu suggéré :</strong>
+                  </div>
+                  <div className="bg-white dark:bg-gray-800 p-3 rounded border text-xs font-mono whitespace-pre-line">
+{`Bonjour,
+
+Je souhaite demander la suppression de toutes mes données personnelles associées à mon compte.
+
+Mes informations :
+- Nom : [Votre nom]
+- Email : [Votre adresse email]
+- Téléphone : [Votre numéro de téléphone]
+
+Raison de la suppression : [Expliquez brièvement pourquoi vous souhaitez supprimer vos données]
+
+Je confirme que je comprends que cette action est irréversible et que je ne pourrai plus accéder à mes réservations passées.
+
+Cordialement,
+[Votre nom]`}
+                  </div>
+                </div>
               </div>
 
-              <div>
-                <Label htmlFor="delete-phone">Numéro de téléphone</Label>
-                <Input
-                  id="delete-phone"
-                  type="tel"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  placeholder="06 12 34 56 78"
-                />
-              </div>
+              <div className="flex items-center gap-2 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <Mail className="h-5 w-5 text-blue-600" />
+                <div className="flex-1">
+                  <div className="text-sm font-medium text-blue-900 dark:text-blue-100">
+                    Envoyer votre demande par email
+                  </div>
+                  <div className="text-xs text-blue-700 dark:text-blue-300">
+                    contact@marie-fortea.fr
+                  </div>
+                </div>
+                <Button
+                  size="sm"
+                  onClick={() => {
+                    const subject = encodeURIComponent("Demande de suppression de mes données personnelles");
+                    const body = encodeURIComponent(`Bonjour,
 
-              <div>
-                <Label htmlFor="delete-reason">Raison de la suppression *</Label>
-                <Textarea
-                  id="delete-reason"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  placeholder="Expliquez pourquoi vous souhaitez supprimer vos données..."
-                  rows={3}
-                />
+Je souhaite demander la suppression de toutes mes données personnelles associées à mon compte.
+
+Mes informations :
+- Nom : [Votre nom]
+- Email : [Votre adresse email]
+- Téléphone : [Votre numéro de téléphone]
+
+Raison de la suppression : [Expliquez brièvement pourquoi vous souhaitez supprimer vos données]
+
+Je confirme que je comprends que cette action est irréversible et que je ne pourrai plus accéder à mes réservations passées.
+
+Cordialement,
+[Votre nom]`);
+                    window.open(`mailto:contact@marie-fortea.fr?subject=${subject}&body=${body}`);
+                  }}
+                >
+                  <Mail className="h-4 w-4 mr-1" />
+                  Ouvrir email
+                </Button>
               </div>
             </div>
-
-            <Button 
-              onClick={handleDataDeletion}
-              disabled={isLoading}
-              variant="destructive"
-              className="w-full"
-            >
-              <Trash2 className="h-4 w-4 mr-2" />
-              {isLoading ? 'Suppression en cours...' : 'Demander la suppression'}
-            </Button>
 
             <Alert>
               <Shield className="h-4 w-4" />
               <AlertDescription>
-                Votre demande sera transmise à notre équipe qui traitera la suppression de vos données dans les plus brefs délais. 
+                Votre demande sera traitée par notre équipe dans les plus brefs délais. 
                 Vous recevrez une confirmation par email une fois la suppression effectuée.
               </AlertDescription>
             </Alert>
@@ -355,7 +316,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
             <Alert className="border-orange-200 bg-orange-50 dark:bg-orange-900/20">
               <Clock className="h-4 w-4 text-orange-600" />
               <AlertDescription className="text-orange-800 dark:text-orange-200">
-                <strong>Protection anti-spam :</strong> Maximum 3 demandes par heure pour éviter les abus.
+                <strong>Délai de traitement :</strong> Maximum 30 jours conformément au RGPD.
               </AlertDescription>
             </Alert>
           </CardContent>
@@ -381,7 +342,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
                 </div>
                 <div className="flex justify-between">
                   <span>Suppression des données</span>
-                  <Badge variant="outline">Sous 30 jours</Badge>
+                  <Badge variant="outline">Email manuel</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Conservation automatique</span>
