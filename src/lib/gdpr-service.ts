@@ -68,7 +68,6 @@ export class GDPRService {
           });
 
         if (error) {
-          console.error('Erreur lors de l\'enregistrement du consentement:', error);
           return { success: false, error: error.message };
         }
       }
@@ -79,7 +78,6 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde des préférences:', error);
       return { success: false, error: 'Erreur lors de la sauvegarde des préférences' };
     }
   }
@@ -130,7 +128,6 @@ export class GDPRService {
 
       return { data: preferences };
     } catch (error) {
-      console.error('Erreur lors de la récupération des préférences:', error);
       return { data: null, error: 'Erreur lors de la récupération des préférences' };
     }
   }
@@ -162,7 +159,6 @@ export class GDPRService {
         dataCount: bookingCount 
       };
     } catch (error) {
-      console.error('Erreur lors de la vérification des données:', error);
       return { hasData: false, error: 'Erreur lors de la vérification des données' };
     }
   }
@@ -181,7 +177,28 @@ export class GDPRService {
         return { success: false, error: checkResult.error };
       }
 
-      // Générer un token sécurisé
+      // SÉCURITÉ : Ne pas envoyer d'email si l'adresse n'existe pas en base
+      if (!checkResult.hasData) {
+        // Enregistrer l'audit pour traçabilité (sans envoyer d'email)
+        await supabase
+          .from('data_access_audit')
+          .insert({
+            user_email: request.userEmail,
+            action: 'export_request_denied',
+            table_name: 'booking_requests',
+            metadata: {
+              reason: 'email_not_found_in_database',
+              data_count: 0,
+              email_sent: false
+            }
+          });
+
+        // Retourner un succès mais sans envoyer d'email
+        // L'utilisateur verra le message de succès mais ne recevra pas d'email
+        return { success: true };
+      }
+
+      // L'utilisateur a des données, procéder à l'export
       const token = this.generateSecureToken();
       const expiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000); // 24 heures
 
@@ -207,15 +224,12 @@ export class GDPRService {
       const emailResult = await EmailService.sendDataExportEmail(
         request.userEmail, 
         downloadUrl, 
-        checkResult.hasData
+        true // hasData est toujours true ici car on a vérifié plus haut
       );
 
       if (emailResult.error) {
-        console.error('Erreur lors de l\'envoi de l\'email d\'export:', emailResult.error);
         return { success: false, error: `Erreur lors de l'envoi de l'email: ${emailResult.error}` };
       }
-
-      console.log(`Email d'export envoyé à ${request.userEmail} avec le lien: ${downloadUrl}`);
 
       // Enregistrer l'audit
       await supabase
@@ -227,14 +241,14 @@ export class GDPRService {
           metadata: {
             token: token,
             expires_at: expiresAt.toISOString(),
-            has_data: checkResult.hasData,
+            has_data: true,
+            data_count: checkResult.dataCount,
             email_sent: true
           }
         });
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la demande d\'export:', error);
       return { success: false, error: 'Erreur lors de la demande d\'export' };
     }
   }
@@ -284,7 +298,6 @@ export class GDPRService {
 
       return { data: result.data };
     } catch (error) {
-      console.error('Erreur lors de la validation du token:', error);
       return { data: null, error: 'Erreur lors de la validation du token' };
     }
   }
@@ -308,7 +321,6 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de l\'invalidation du token:', error);
       return { success: false, error: 'Erreur lors de l\'invalidation du token' };
     }
   }
@@ -369,7 +381,7 @@ export class GDPRService {
           .in('booking_request_id', bookingIds);
 
         if (childrenError) {
-          console.warn('Erreur lors de la récupération des détails des enfants:', childrenError);
+          // Ignorer l'erreur et continuer sans les détails des enfants
         } else {
           childrenDetails = children || [];
         }
@@ -382,7 +394,7 @@ export class GDPRService {
         .eq('user_email', request.userEmail);
 
       if (consentsError) {
-        console.warn('Erreur lors de la récupération des consentements:', consentsError);
+        // Ignorer l'erreur et continuer sans les consentements
       }
 
       // Préparer les données d'export
@@ -435,7 +447,6 @@ export class GDPRService {
 
       return { data: exportData };
     } catch (error) {
-      console.error('Erreur lors de l\'export des données:', error);
       return { data: null, error: 'Erreur lors de l\'export des données' };
     }
   }
@@ -462,18 +473,34 @@ export class GDPRService {
         return { success: false, error: error.message };
       }
 
-      // Marquer les réservations pour suppression
-      const { error: updateError } = await supabase
-        .from('booking_requests')
-        .update({
-          deletion_requested: true,
-          deletion_requested_at: new Date().toISOString(),
-          deletion_reason: request.reason
-        })
-        .eq('parent_email', request.userEmail);
+      // Envoyer un email à contact@marie-fortea.fr avec la demande
+      const emailResult = await EmailService.sendDataDeletionRequest(
+        request.userEmail,
+        request.userPhone || '',
+        request.reason
+      );
 
-      if (updateError) {
-        console.warn('Erreur lors de la mise à jour des réservations:', updateError);
+      if (emailResult.error) {
+        return { success: false, error: `Erreur lors de l'envoi de la demande: ${emailResult.error}` };
+      }
+
+      // Marquer les réservations pour suppression (optionnel - peut échouer à cause des politiques RLS)
+      try {
+        const { error: updateError } = await supabase
+          .from('booking_requests')
+          .update({
+            deletion_requested: true,
+            deletion_requested_at: new Date().toISOString(),
+            deletion_reason: request.reason
+          })
+          .eq('parent_email', request.userEmail);
+
+        if (updateError) {
+          // Log l'erreur mais ne pas faire échouer la demande
+          // L'email sera quand même envoyé à l'équipe pour traitement manuel
+        }
+      } catch (updateError) {
+        // Ignorer les erreurs de mise à jour - l'équipe traitera manuellement
       }
 
       // Enregistrer l'audit
@@ -485,13 +512,13 @@ export class GDPRService {
           table_name: 'booking_requests',
           metadata: {
             reason: request.reason,
-            phone: request.userPhone
+            phone: request.userPhone,
+            email_sent: true
           }
         });
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la demande de suppression:', error);
       return { success: false, error: 'Erreur lors de la demande de suppression' };
     }
   }
@@ -519,7 +546,6 @@ export class GDPRService {
 
       return { data: data?.consent_given || false };
     } catch (error) {
-      console.error('Erreur lors de la vérification du consentement:', error);
       return { data: null, error: 'Erreur lors de la vérification du consentement' };
     }
   }
@@ -544,7 +570,7 @@ export class GDPRService {
 
       return { data: data || [] };
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'historique:', error);
+      // console.error('Erreur lors de la récupération de l\'historique:', error);
       return { data: null, error: 'Erreur lors de la récupération de l\'historique' };
     }
   }
@@ -569,7 +595,7 @@ export class GDPRService {
 
       return { data: data || [] };
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'historique:', error);
+      // console.error('Erreur lors de la récupération de l\'historique:', error);
       return { data: null, error: 'Erreur lors de la récupération de l\'historique' };
     }
   }
@@ -590,7 +616,7 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors du nettoyage des données:', error);
+      // console.error('Erreur lors du nettoyage des données:', error);
       return { success: false, error: 'Erreur lors du nettoyage des données' };
     }
   }
