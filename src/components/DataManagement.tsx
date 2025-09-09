@@ -73,9 +73,10 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
   const handleDataExport = async () => {
     if (!email.trim()) {
       toast({
-        title: "Email requis",
+        title: "⚠️ Email requis",
         description: "Veuillez saisir votre adresse email pour recevoir vos données.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
@@ -105,10 +106,11 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
         throw new Error('Erreur lors de l\'envoi de l\'email');
       }
 
-      // Message uniforme pour tous les utilisateurs
+      // Message uniforme pour tous les utilisateurs avec snackbar
       toast({
-        title: "Demande traitée",
-        description: "Si votre adresse email existe dans notre base de données, vous recevrez un email avec un lien sécurisé pour télécharger vos données.",
+        title: "✅ Demande d'export traitée",
+        description: "Si votre adresse email existe dans notre base de données, vous recevrez un email avec un lien sécurisé pour télécharger vos données dans les prochaines minutes.",
+        duration: 6000, // 6 secondes pour laisser le temps de lire
       });
 
       // Réinitialiser le formulaire
@@ -117,9 +119,10 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
     } catch (error) {
       console.error('Erreur lors de l\'export:', error);
       toast({
-        title: "Erreur d'envoi",
-        description: error instanceof Error ? error.message : "Une erreur est survenue lors de l'envoi de l'email.",
+        title: "❌ Erreur lors de la demande",
+        description: error instanceof Error ? error.message : "Une erreur est survenue lors du traitement de votre demande. Veuillez réessayer.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsLoading(false);
@@ -129,9 +132,10 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
   const handleDataDeletion = async () => {
     if (!email.trim() || !reason.trim()) {
       toast({
-        title: "Informations manquantes",
+        title: "⚠️ Informations manquantes",
         description: "Veuillez saisir votre email et la raison de la suppression.",
         variant: "destructive",
+        duration: 4000,
       });
       return;
     }
@@ -163,8 +167,9 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
       }
 
       toast({
-        title: "Demande de suppression enregistrée",
-        description: "Vos données seront supprimées immédiatement.",
+        title: "✅ Demande de suppression enregistrée",
+        description: "Vos données seront supprimées immédiatement. Vous recevrez une confirmation par email.",
+        duration: 5000,
       });
 
       // Réinitialiser le formulaire
@@ -175,9 +180,10 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
     } catch (error) {
       console.error('Erreur lors de la suppression:', error);
       toast({
-        title: "Erreur de suppression",
-        description: error instanceof Error ? error.message : "Une erreur est survenue lors de la demande de suppression.",
+        title: "❌ Erreur lors de la demande",
+        description: error instanceof Error ? error.message : "Une erreur est survenue lors du traitement de votre demande de suppression. Veuillez réessayer.",
         variant: "destructive",
+        duration: 5000,
       });
     } finally {
       setIsLoading(false);
