@@ -749,4 +749,148 @@ Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00
       text: text
     };
   }
+
+  // Envoyer une demande de suppression de données
+  static async sendDataDeletionRequest(
+    userEmail: string, 
+    userPhone: string, 
+    reason: string
+  ): Promise<{ data: boolean | null; error: string | null }> {
+    try {
+      const emailData = this.prepareDataDeletionEmail(userEmail, userPhone, reason);
+
+      // Essayer d'envoyer via Mailgun d'abord
+      try {
+        await this.sendEmailViaMailgun(emailData);
+        return { data: true, error: null };
+      } catch (mailgunError) {
+        console.warn('Erreur Mailgun, tentative avec fallback:', mailgunError);
+        
+        // Essayer le fallback SMTP
+        try {
+          await this.sendEmailViaFallback(emailData);
+          return { data: true, error: null };
+        } catch (fallbackError) {
+          console.warn('Erreur fallback, utilisation de la simulation:', fallbackError);
+        }
+      }
+
+      // Dernier recours : simulation locale
+      const { error } = await this.sendEmailViaInbucket(emailData);
+
+      if (error) {
+        return { data: null, error: 'Erreur lors de l\'envoi de l\'email' };
+      }
+
+      return { data: true, error: null };
+    } catch (error) {
+      return { data: null, error: 'Erreur inattendue lors de l\'envoi de l\'email' };
+    }
+  }
+
+  // Préparer le contenu de l'email de demande de suppression
+  private static prepareDataDeletionEmail(userEmail: string, userPhone: string, reason: string): EmailData {
+    const subject = 'Demande de suppression de données - Marie Fortea';
+    const timestamp = new Date().toLocaleString('fr-FR');
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Demande de suppression de données</title>
+        <style>
+          body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+          .header { background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%); color: white; padding: 30px; text-align: center; border-radius: 10px 10px 0 0; }
+          .content { background: white; padding: 30px; border: 1px solid #e0e0e0; }
+          .footer { background: #f8f9fa; padding: 20px; text-align: center; border-radius: 0 0 10px 10px; font-size: 12px; color: #666; }
+          .alert { background: #fef2f2; border: 1px solid #fecaca; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          .info { background: #f0f9ff; border: 1px solid #bae6fd; padding: 15px; border-radius: 5px; margin: 20px 0; }
+          .details { background: #f9fafb; border: 1px solid #e5e7eb; padding: 15px; border-radius: 5px; margin: 20px 0; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="header">
+            <h1>🗑️ Demande de suppression de données</h1>
+            <p>Marie Fortea - Services de garde d'enfants</p>
+          </div>
+          
+          <div class="content">
+            <h2>Nouvelle demande de suppression</h2>
+            
+            <div class="alert">
+              <strong>⚠️ Action requise :</strong> Un utilisateur a demandé la suppression de ses données personnelles.
+            </div>
+            
+            <div class="details">
+              <h3>📋 Informations de la demande :</h3>
+              <ul>
+                <li><strong>Email utilisateur :</strong> ${userEmail}</li>
+                <li><strong>Téléphone :</strong> ${userPhone || 'Non renseigné'}</li>
+                <li><strong>Date de la demande :</strong> ${timestamp}</li>
+                <li><strong>Raison :</strong> ${reason}</li>
+              </ul>
+            </div>
+            
+            <div class="info">
+              <h3>📝 Actions à effectuer :</h3>
+              <ol>
+                <li>Vérifier l'identité de l'utilisateur</li>
+                <li>Supprimer toutes les données associées à cette adresse email</li>
+                <li>Confirmer la suppression par email à l'utilisateur</li>
+                <li>Mettre à jour les logs d'audit</li>
+              </ol>
+            </div>
+            
+            <p><strong>Délai recommandé :</strong> Traitement dans les 30 jours conformément au RGPD.</p>
+            
+            <p>Cordialement,<br><strong>Système automatique Marie Fortea</strong></p>
+          </div>
+          
+          <div class="footer">
+            <p>Cet email a été généré automatiquement suite à une demande de suppression de données.</p>
+            <p>Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00</p>
+          </div>
+        </div>
+      </body>
+      </html>
+    `;
+
+    const text = `
+Demande de suppression de données - Marie Fortea
+
+NOUVELLE DEMANDE DE SUPPRESSION
+
+Un utilisateur a demandé la suppression de ses données personnelles.
+
+INFORMATIONS DE LA DEMANDE :
+- Email utilisateur : ${userEmail}
+- Téléphone : ${userPhone || 'Non renseigné'}
+- Date de la demande : ${timestamp}
+- Raison : ${reason}
+
+ACTIONS À EFFECTUER :
+1. Vérifier l'identité de l'utilisateur
+2. Supprimer toutes les données associées à cette adresse email
+3. Confirmer la suppression par email à l'utilisateur
+4. Mettre à jour les logs d'audit
+
+Délai recommandé : Traitement dans les 30 jours conformément au RGPD.
+
+Cordialement,
+Système automatique Marie Fortea
+
+Marie Fortea - contact@marie-fortea.fr - 07 84 97 64 00
+    `;
+
+    return {
+      to: 'contact@marie-fortea.fr',
+      subject: subject,
+      html: html,
+      text: text
+    };
+  }
 }

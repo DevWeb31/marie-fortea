@@ -168,7 +168,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
 
       toast({
         title: "✅ Demande de suppression enregistrée",
-        description: "Vos données seront supprimées immédiatement. Vous recevrez une confirmation par email.",
+        description: "Votre demande de suppression sera traitée prochainement par notre équipe. Vous recevrez une confirmation par email.",
         duration: 5000,
       });
 
@@ -347,8 +347,8 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
             <Alert>
               <Shield className="h-4 w-4" />
               <AlertDescription>
-                Vos données seront supprimées immédiatement après votre demande. 
-                Elles sont également automatiquement supprimées 2 mois après la fin de la garde.
+                Votre demande sera transmise à notre équipe qui traitera la suppression de vos données dans les plus brefs délais. 
+                Vous recevrez une confirmation par email une fois la suppression effectuée.
               </AlertDescription>
             </Alert>
 
@@ -381,7 +381,7 @@ const DataManagement: React.FC<DataManagementProps> = ({ className = "" }) => {
                 </div>
                 <div className="flex justify-between">
                   <span>Suppression des données</span>
-                  <Badge variant="outline">Immédiat</Badge>
+                  <Badge variant="outline">Sous 30 jours</Badge>
                 </div>
                 <div className="flex justify-between">
                   <span>Conservation automatique</span>

@@ -480,6 +480,17 @@ export class GDPRService {
         return { success: false, error: error.message };
       }
 
+      // Envoyer un email à contact@marie-fortea.fr avec la demande
+      const emailResult = await EmailService.sendDataDeletionRequest(
+        request.userEmail,
+        request.userPhone || '',
+        request.reason
+      );
+
+      if (emailResult.error) {
+        return { success: false, error: `Erreur lors de l'envoi de la demande: ${emailResult.error}` };
+      }
+
       // Marquer les réservations pour suppression
       const { error: updateError } = await supabase
         .from('booking_requests')
@@ -491,7 +502,7 @@ export class GDPRService {
         .eq('parent_email', request.userEmail);
 
       if (updateError) {
-        console.warn('Erreur lors de la mise à jour des réservations:', updateError);
+        // Ne pas faire échouer la demande si la mise à jour des réservations échoue
       }
 
       // Enregistrer l'audit
@@ -503,13 +514,13 @@ export class GDPRService {
           table_name: 'booking_requests',
           metadata: {
             reason: request.reason,
-            phone: request.userPhone
+            phone: request.userPhone,
+            email_sent: true
           }
         });
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la demande de suppression:', error);
       return { success: false, error: 'Erreur lors de la demande de suppression' };
     }
   }
