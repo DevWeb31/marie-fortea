@@ -68,7 +68,6 @@ export class GDPRService {
           });
 
         if (error) {
-          console.error('Erreur lors de l\'enregistrement du consentement:', error);
           return { success: false, error: error.message };
         }
       }
@@ -79,7 +78,6 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de la sauvegarde des préférences:', error);
       return { success: false, error: 'Erreur lors de la sauvegarde des préférences' };
     }
   }
@@ -130,7 +128,6 @@ export class GDPRService {
 
       return { data: preferences };
     } catch (error) {
-      console.error('Erreur lors de la récupération des préférences:', error);
       return { data: null, error: 'Erreur lors de la récupération des préférences' };
     }
   }
@@ -162,7 +159,6 @@ export class GDPRService {
         dataCount: bookingCount 
       };
     } catch (error) {
-      console.error('Erreur lors de la vérification des données:', error);
       return { hasData: false, error: 'Erreur lors de la vérification des données' };
     }
   }
@@ -302,7 +298,6 @@ export class GDPRService {
 
       return { data: result.data };
     } catch (error) {
-      console.error('Erreur lors de la validation du token:', error);
       return { data: null, error: 'Erreur lors de la validation du token' };
     }
   }
@@ -326,7 +321,6 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors de l\'invalidation du token:', error);
       return { success: false, error: 'Erreur lors de l\'invalidation du token' };
     }
   }
@@ -387,7 +381,7 @@ export class GDPRService {
           .in('booking_request_id', bookingIds);
 
         if (childrenError) {
-          console.warn('Erreur lors de la récupération des détails des enfants:', childrenError);
+          // Ignorer l'erreur et continuer sans les détails des enfants
         } else {
           childrenDetails = children || [];
         }
@@ -400,7 +394,7 @@ export class GDPRService {
         .eq('user_email', request.userEmail);
 
       if (consentsError) {
-        console.warn('Erreur lors de la récupération des consentements:', consentsError);
+        // Ignorer l'erreur et continuer sans les consentements
       }
 
       // Préparer les données d'export
@@ -453,7 +447,6 @@ export class GDPRService {
 
       return { data: exportData };
     } catch (error) {
-      console.error('Erreur lors de l\'export des données:', error);
       return { data: null, error: 'Erreur lors de l\'export des données' };
     }
   }
@@ -548,7 +541,6 @@ export class GDPRService {
 
       return { data: data?.consent_given || false };
     } catch (error) {
-      console.error('Erreur lors de la vérification du consentement:', error);
       return { data: null, error: 'Erreur lors de la vérification du consentement' };
     }
   }
@@ -573,7 +565,7 @@ export class GDPRService {
 
       return { data: data || [] };
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'historique:', error);
+      // console.error('Erreur lors de la récupération de l\'historique:', error);
       return { data: null, error: 'Erreur lors de la récupération de l\'historique' };
     }
   }
@@ -598,7 +590,7 @@ export class GDPRService {
 
       return { data: data || [] };
     } catch (error) {
-      console.error('Erreur lors de la récupération de l\'historique:', error);
+      // console.error('Erreur lors de la récupération de l\'historique:', error);
       return { data: null, error: 'Erreur lors de la récupération de l\'historique' };
     }
   }
@@ -619,7 +611,7 @@ export class GDPRService {
 
       return { success: true };
     } catch (error) {
-      console.error('Erreur lors du nettoyage des données:', error);
+      // console.error('Erreur lors du nettoyage des données:', error);
       return { success: false, error: 'Erreur lors du nettoyage des données' };
     }
   }
