@@ -20,6 +20,7 @@ import { PricingService } from '@/lib/pricing-service';
 import { calculateDurationHours } from '@/lib/duration-utils';
 import { Calendar, Baby, User, CheckCircle, AlertCircle, Calculator } from 'lucide-react';
 import { FormDatePicker } from '@/components/ui/date-picker';
+import ConsentCheckbox from './ConsentCheckbox';
 
 interface BookingFormProps {
   onSuccess?: () => void;
@@ -98,6 +99,7 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
   const [formData, setFormData] = useState({
     parentFirstName: '',
     parentLastName: '',
+    consentGiven: false,
     parentPhone: '',
     parentEmail: '',
     serviceType: '',
@@ -503,6 +505,16 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
       toast({
         title: 'Vérification requise',
         description: 'Veuillez compléter la vérification de sécurité avant d\'envoyer votre demande.',
+        variant: 'destructive',
+      });
+      return false;
+    }
+
+    // Validation du consentement RGPD
+    if (!formData.consentGiven) {
+      toast({
+        title: 'Consentement requis',
+        description: 'Vous devez accepter le traitement de vos données personnelles pour continuer.',
         variant: 'destructive',
       });
       return false;
@@ -1500,6 +1512,13 @@ const BookingForm: React.FC<BookingFormProps> = ({ onSuccess, className = '' }) 
             });
           }}
           resetTrigger={captchaResetTrigger}
+        />
+
+        {/* Consentement RGPD */}
+        <ConsentCheckbox
+          checked={formData.consentGiven}
+          onCheckedChange={(checked) => setFormData(prev => ({ ...prev, consentGiven: checked }))}
+          required={true}
         />
 
         {/* Message d'information */}

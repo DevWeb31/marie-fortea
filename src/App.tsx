@@ -16,7 +16,13 @@ import ProtectedRoute from '@/components/ProtectedRoute';
 import TestEmail from '@/pages/TestEmail';
 import DetailedBookingForm from '@/components/DetailedBookingForm';
 import BookingConfirmed from '@/pages/BookingConfirmed';
+import PrivacyPolicy from '@/pages/PrivacyPolicy';
+import DataManagementPage from '@/pages/DataManagementPage';
+import CookiesPolicy from '@/pages/CookiesPolicy';
+import DataDownload from '@/pages/DataDownload';
 import Footer from '@/components/Footer';
+import CookieBanner from '@/components/CookieBanner';
+import GDPRConsent from '@/components/GDPRConsent';
 import { useScrollToTop } from '@/hooks/use-scroll-to-top';
 import { ScrollToTopButton } from '@/components/ScrollToTopButton';
 import MouseTrail from '@/components/MouseTrail';
@@ -97,11 +103,19 @@ function AppContent() {
           <Route path="/test-email" element={<TestEmail />} />
           <Route path="/detailed-booking-form/:token" element={<DetailedBookingForm />} />
           <Route path="/booking-confirmed" element={<BookingConfirmed />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/data-management" element={<DataManagementPage />} />
+          <Route path="/cookies-policy" element={<CookiesPolicy />} />
+          <Route path="/data-download/:token" element={<DataDownload />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </main>
       <Footer />
       <ScrollToTopButton />
+      
+      {/* Composants RGPD */}
+      <CookieBanner />
+      <GDPRConsent />
     </div>
   );
 }
